@@ -1,6 +1,3 @@
-# Render Blueprint Specification for Hike.ai
-# Docs: https://docs.render.com/blueprint-spec
-
 services:
   - type: web
     name: hike-ai
@@ -14,19 +11,14 @@ services:
     numInstances: 1
     healthCheckPath: /
     envVars:
-      # Auto-generated secrets
       - key: SECRET_KEY
         generateValue: true
       - key: SESSION_SECRET
         generateValue: true
-
-      # Database connection (auto-linked)
       - key: DATABASE_URL
         fromDatabase:
           name: hike-db
           property: connectionString
-
-      # API Keys (set these in the Render Dashboard)
       - key: GOOGLE_API_KEY
         sync: false
       - key: GROQ_API_KEY
@@ -41,16 +33,12 @@ services:
         sync: false
       - key: BYTEZ_API_KEY
         sync: false
-
-      # Google OAuth (optional, set in Dashboard)
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
         sync: false
-
-      # Runtime config
       - key: PYTHON_VERSION
         value: "3.11.9"
       - key: BACKEND_URL
@@ -64,4 +52,4 @@ databases:
     databaseName: hike_ai
     user: hike_user
     plan: free
-    ipAllowList: [] # Allow all IPs (for free tier)
+    ipAllowList: []
