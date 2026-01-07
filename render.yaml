@@ -2,7 +2,6 @@ services:
   - type: web
     name: hike-ai
     env: docker
-    region: singapore
     plan: free
     branch: main
     numInstances: 1
@@ -18,7 +17,6 @@ services:
         generateValue: true
       - key: RELEASE_VERSION
         value: 1.0.0
-      # The following keys must be added in the Render Dashboard securely
       - key: GOOGLE_API_KEY
         sync: false
       - key: GROQ_API_KEY
@@ -39,4 +37,3 @@ databases:
     databaseName: hike_ai
     user: hike_user
     plan: free
-    region: singapore
