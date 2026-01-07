@@ -5,8 +5,8 @@ services:
     plan: free
     branch: main
     rootDir: main
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: uvicorn unified_ai:app --host 0.0.0.0 --port $PORT --workers 1
+    buildCommand: python -m pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn unified_ai:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
     numInstances: 1
     healthCheckPath: /
