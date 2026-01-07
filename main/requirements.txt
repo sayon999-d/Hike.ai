@@ -1,9 +1,9 @@
 fastapi
-uvicorn
+uvicorn[standard]
 python-dotenv
 requests
 httpx
-pydantic
+pydantic[email]
 sqlalchemy
 python-jose[cryptography]
 passlib[bcrypt]
@@ -11,7 +11,7 @@ bcrypt
 python-multipart
 websockets
 itsdangerous
-# AI & ML
+starlette
 google-generativeai
 sentence-transformers
 numpy
@@ -19,6 +19,4 @@ openai
 aiohttp
 redis
 authlib
-confluent-kafka
-pathway
 tavily-python
