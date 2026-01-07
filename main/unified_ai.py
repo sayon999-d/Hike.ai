@@ -3426,8 +3426,14 @@ orchestrator = GeminiOrchestrator()
 class NewsSystem:
     def __init__(self):
         self.news_index = []
-        self.model = SentenceTransformer(EMBEDDING_MODEL)
+        self._model = None
         self.seen_urls = set()
+
+    @property
+    def model(self):
+        if self._model is None:
+            self._model = SentenceTransformer(EMBEDDING_MODEL)
+        return self._model
 
     def fetch_news(self):
         if not NEWSAPI_KEY:
@@ -3629,7 +3635,13 @@ class RegretSystem:
             "Repair relationship": "relationships", "End relationship": "relationships"
         }
         self.ollama_url = "http://localhost:11434"
-        self.encoder = SentenceTransformer("all-MiniLM-L6-v2")
+        self._encoder = None
+
+    @property
+    def encoder(self):
+        if self._encoder is None:
+            self._encoder = SentenceTransformer("all-MiniLM-L6-v2")
+        return self._encoder
 
     def call_ollama(self, prompt: str) -> Optional[str]:
         try:
