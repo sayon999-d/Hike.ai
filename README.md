@@ -11,6 +11,51 @@ Hike.ai is an advanced AI platform that orchestrates multiple AI systems to prov
 - **Unified Orchestration**: Uses Google Gemini to coordinate all subsystems based on user intent.
 - **Project Board**: Manage personal projects with timeline risk analysis.
 
+## System Architecture
+
+The system follows a modular, micro-orchestration architecture where **Google Gemini** acts as the central brain, coordinating specialized sub-systems.
+
+```mermaid
+graph TD
+    User[User Interface] -->|HTTP/REST| API[FastAPI Backend]
+    API -->|Auth & Rate Limit| Orch[Gemini Orchestrator]
+    
+    Orch -->|Intent: Research| Tavily[Tavily Search API]
+    Orch -->|Intent: News| News[NewsFlow System]
+    Orch -->|Intent: Debate| Debate[Debate Arena]
+    Orch -->|Intent: Regret| Regret[Regret Analysis AI]
+    Orch -->|Intent: Empathy| Empathy[Empathetic Engine]
+    
+    News -->|Fetch| NewsAPI[NewsAPI.org]
+    News -->|Vector Store| Embed[Sentence Transformers]
+    
+    Debate -->|Groq| LLM1[Llama 3]
+    Debate -->|OpenRouter| LLM2[DeepSeek]
+    Debate -->|Chutes| LLM3[Mistral]
+    
+    Empathy -->|User Selection| SelectedLLM[LLM Provider]
+    Regret -->|Analysis| RegretLLM[Complex Reasoning Model]
+    
+    Tavily -->|Data| Orch
+    News -->|Context| Orch
+    Debate -->|Perspectives| Orch
+    Regret -->|Prediction| Orch
+    Empathy -->|Draft| Orch
+    
+    Orch -->|Synthesis| Response[Final Cohesive Response]
+    Response --> User
+```
+
+### Components
+
+1.  **Frontend**: A responsive HTML/JS interface with real-time updates, project management, and settings control.
+2.  **Orchestrator (Gemini 1.5)**: Analyzes user intent (e.g., "Should I buy this?", "I feel sad") and routes the request to the appropriate specialized agents.
+3.  **Specialized Agents**:
+    *   **NewsFlow**: Runs a background thread fetching global news every 60s, vectorizes it, and enables semantic search.
+    *   **Debate Arena**: Spawns multiple AI personas (via Groq, OpenRouter) to debate a topic from conflicting viewpoints.
+    *   **Regret AI**: Uses advanced reasoning to predict long-term emotional and practical regret of a decision.
+    *   **Empathetic Engine**: Detects micro-emotions and tailors the response tone (Supportive, Tough Love, Analytical).
+
 ## Tech Stack
 
 - **Backend**: FastAPI, Python 3.10
