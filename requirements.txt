@@ -17,7 +17,6 @@ sentence-transformers
 numpy
 openai
 aiohttp
-# Integration (Optional but included in code)
 redis
 authlib
 confluent-kafka
