@@ -3634,7 +3634,6 @@ class RegretSystem:
             "Start exercising": "health", "Improve diet": "health",
             "Repair relationship": "relationships", "End relationship": "relationships"
         }
-        self.ollama_url = "http://localhost:11434"
         self._encoder = None
 
     @property
@@ -3643,23 +3642,21 @@ class RegretSystem:
             self._encoder = SentenceTransformer("all-MiniLM-L6-v2")
         return self._encoder
 
-    def call_ollama(self, prompt: str) -> Optional[str]:
-        try:
-            res = requests.post(f"{self.ollama_url}/api/generate", 
-                              json={"model": "mistral", "prompt": prompt, "stream": False}, timeout=5)
-            if res.status_code == 200: return res.json().get("response")
-        except: return None
-
     def predict_outcome(self, context: str, action: str) -> float:
-        prompt = f"Context: {context}. Action: {action}. Rate outcome -10 to +10. Return ONLY number."
-        resp = self.call_ollama(prompt)
-        if resp:
-            try:
-                import re
-                nums = re.findall(r'-?\d+\.?\d*', resp)
-                if nums: return max(-10, min(10, float(nums[0])))
-            except: pass
-        return random.uniform(-5, 5)
+        context_lower = context.lower()
+        positive_words = ["good", "great", "happy", "success", "improve", "better", "love", "excited"]
+        negative_words = ["bad", "sad", "fail", "worse", "hate", "worried", "stressed", "anxious"]
+        
+        score = 0
+        for word in positive_words:
+            if word in context_lower:
+                score += 2
+        for word in negative_words:
+            if word in context_lower:
+                score -= 2
+        
+        score += random.uniform(-3, 3)
+        return max(-10, min(10, score))
 
     def make_decision(self, user_id: str, context: str, emotion: str) -> Dict:
         possible_actions = list(self.actions.keys())
