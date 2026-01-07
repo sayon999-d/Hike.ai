@@ -3488,7 +3488,10 @@ class NewsSystem:
                 summary = '. '.join(sentences[:3])
 
             if summary:
-                embedding = self.model.encode([summary], normalize_embeddings=True)[0]
+                embedding = []
+                if self.model is not None:
+                    embedding = self.model.encode([summary], normalize_embeddings=True)[0].tolist()
+                
                 self.news_index.append({
                     "text": summary,
                     "url": url,
@@ -3497,7 +3500,7 @@ class NewsSystem:
                     "urlToImage": article.get("urlToImage"),
                     "publishedAt": article.get("publishedAt"),
                     "source": article.get("source"),
-                    "embedding": embedding.tolist(),
+                    "embedding": embedding,
                     "fetched_at": fetched_at,
                     "is_realtime": True,
                     "processed_at": datetime.utcnow().isoformat()
