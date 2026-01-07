@@ -10,7 +10,12 @@ import threading
 import hashlib
 import secrets
 import httpx
-import redis
+try:
+    import redis
+    REDIS_AVAILABLE = True
+except ImportError:
+    redis = None
+    REDIS_AVAILABLE = False
 import bcrypt
 import requests
 import numpy as np
@@ -3021,13 +3026,15 @@ def get_db():
     finally:
         db.close()
 
-try:
-    redis_db = redis.Redis.from_url(REDIS_URL, decode_responses=True)
-    redis_db.ping()
-    logger.info("Redis connected")
-except Exception as e:
-    logger.warning(f"Redis connection failed: {e}. Some features may be degraded.")
-    redis_db = None  # Handle gracefully in code
+redis_db = None
+if REDIS_AVAILABLE:
+    try:
+        redis_db = redis.Redis.from_url(REDIS_URL, decode_responses=True)
+        redis_db.ping()
+        logger.info("Redis connected")
+    except Exception as e:
+        logger.warning(f"Redis connection failed: {e}. Some features may be degraded.")
+        redis_db = None
 
 class User(Base):
     __tablename__ = "users"
