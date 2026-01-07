@@ -3298,7 +3298,7 @@ class GeminiOrchestrator:
         self.gemini_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
         if self.gemini_key and GENAI_AVAILABLE:
             genai.configure(api_key=self.gemini_key)
-            self.model = genai.GenerativeModel("gemini-1.5-flash")
+            self.model = genai.GenerativeModel("gemini-pro")
             logger.info("Gemini Orchestrator initialized")
         else:
             self.model = None
@@ -3466,7 +3466,7 @@ class NewsSystem:
             import google.generativeai as genai
             if not GOOGLE_API_KEY: raise Exception("No API Key")
             genai.configure(api_key=GOOGLE_API_KEY)
-            model = genai.GenerativeModel("gemini-1.5-flash")
+            model = genai.GenerativeModel("gemini-pro")
             response = model.generate_content(f"Summarize in 2-3 sentences: {text[:4000]}")
             return response.text.strip()
         except Exception:
@@ -3607,7 +3607,7 @@ class EmpatheticSystem:
         return "I'm having trouble connecting to my thought centers, but I'm here listening."
 
     def generate_response(self, message: str, emotion: str, strategy: str, selected_model: str = "auto") -> str:
-        opt_msg = TokenOptimizer.optimize_context(message, max_chars=1000)
+        opt_msg = TokenOptimizer.optimize_context(message, max_tokens=250)
         
         prompt = f"""You are an empathetic AI. 
         User message: "{opt_msg}"
