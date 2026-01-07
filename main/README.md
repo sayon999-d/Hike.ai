@@ -13,99 +13,102 @@ Hike.ai is an AI platform that orchestrates multiple AI systems for decision sup
 
 ## System Architecture
 
-```
-                                    HIKE.AI SYSTEM ARCHITECTURE
-                                    ===========================
+```mermaid
+flowchart TB
+    subgraph Client
+        UI[Web Interface]
+    end
 
-    +-------------------+
-    |   User Browser    |
-    |   (HTML/CSS/JS)   |
-    +--------+----------+
-             |
-             | HTTP/REST + WebSocket
-             v
-    +--------+----------+
-    |    FastAPI        |
-    |    Backend        |
-    |                   |
-    | - Auth Middleware |
-    | - Rate Limiter    |
-    | - Session Manager |
-    +--------+----------+
-             |
-             v
-    +--------+----------+
-    |     GEMINI        |
-    |   ORCHESTRATOR    |
-    |                   |
-    | Analyzes intent   |
-    | Routes to agents  |
-    | Synthesizes final |
-    | response          |
-    +--------+----------+
-             |
-             +------------------+------------------+------------------+
-             |                  |                  |                  |
-             v                  v                  v                  v
-    +--------+------+  +-------+-------+  +-------+-------+  +-------+-------+
-    |   NEWSFLOW    |  |  DEBATE AI    |  |  REGRET AI    |  | EMPATHETIC AI |
-    |               |  |               |  |               |  |               |
-    | - NewsAPI     |  | - Groq        |  | - Decision    |  | - Emotion     |
-    | - Vector DB   |  | - OpenRouter  |  |   Analysis    |  |   Detection   |
-    | - Embeddings  |  | - Chutes      |  | - Outcome     |  | - Strategy    |
-    | - Summaries   |  | - Bytez       |  |   Prediction  |  |   Selection   |
-    +-------+-------+  +-------+-------+  +-------+-------+  +-------+-------+
-            |                  |                  |                  |
-            +------------------+------------------+------------------+
-                               |
-                               v
-                      +--------+----------+
-                      |  UNIFIED RESPONSE |
-                      |                   |
-                      | Combined insights |
-                      | from all agents   |
-                      +-------------------+
+    subgraph Backend
+        API[FastAPI Server]
+        Auth[Authentication]
+        Rate[Rate Limiter]
+    end
 
+    subgraph Orchestration
+        Gemini[Gemini Orchestrator]
+    end
 
-    EXTERNAL SERVICES                     DATA LAYER
-    =================                     ==========
+    subgraph Agents
+        News[NewsFlow Agent]
+        Debate[Debate Agent]
+        Regret[Regret Agent]
+        Empathy[Empathy Agent]
+    end
 
-    +-------------+                       +-------------+
-    | NewsAPI.org |                       |   SQLite    |
-    +-------------+                       | (Users, DB) |
-                                          +-------------+
-    +-------------+
-    | Tavily API  |                       +-------------+
-    | (Research)  |                       |    Redis    |
-    +-------------+                       |  (Cache)    |
-                                          +-------------+
-    +-------------+
-    | Google OAuth|
-    +-------------+
+    subgraph Providers
+        Groq[Groq]
+        OpenRouter[OpenRouter]
+        Chutes[Chutes]
+        Bytez[Bytez]
+    end
 
+    subgraph External
+        NewsAPI[NewsAPI]
+        Tavily[Tavily Search]
+        GoogleAuth[Google OAuth]
+    end
 
-    AI PROVIDERS (For Debate/Empathy)
-    =================================
+    subgraph Storage
+        SQLite[(SQLite)]
+        Redis[(Redis Cache)]
+    end
 
-    +-------------+  +-------------+  +-------------+  +-------------+
-    |    Groq     |  | OpenRouter  |  |   Chutes    |  |   Bytez     |
-    | Llama 3.3   |  | DeepSeek R1 |  | Mistral 3.1 |  | Llama 3.1   |
-    +-------------+  +-------------+  +-------------+  +-------------+
+    UI --> API
+    API --> Auth
+    Auth --> Rate
+    Rate --> Gemini
+
+    Gemini --> News
+    Gemini --> Debate
+    Gemini --> Regret
+    Gemini --> Empathy
+
+    News --> NewsAPI
+    Debate --> Groq
+    Debate --> OpenRouter
+    Debate --> Chutes
+    Debate --> Bytez
+    Empathy --> Groq
+
+    Gemini --> Tavily
+    API --> GoogleAuth
+    API --> SQLite
+    API --> Redis
 ```
 
-### Data Flow
+### Request Processing Flow
 
-1. User sends a message through the web interface
-2. FastAPI receives the request and validates the session
-3. Gemini Orchestrator analyzes the message intent
-4. Based on intent, relevant agents are activated:
-   - Research queries go to Tavily API
-   - News context comes from NewsFlow
-   - Decisions trigger Regret AI analysis
-   - Debate questions spawn multi-model responses
-   - All messages get empathetic processing
-5. Orchestrator synthesizes all agent outputs into a unified response
-6. Response is returned to the user with metadata
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant A as API
+    participant O as Orchestrator
+    participant N as NewsFlow
+    participant D as Debate AI
+    participant E as Empathy AI
+    participant R as Regret AI
+
+    U->>A: Send Message
+    A->>O: Analyze Intent
+    O->>O: Determine Required Agents
+
+    par Parallel Processing
+        O->>N: Fetch Context
+        O->>D: Get Perspectives
+        O->>E: Process Emotion
+        O->>R: Analyze Decision
+    end
+
+    N-->>O: News Data
+    D-->>O: Debate Results
+    E-->>O: Empathy Response
+    R-->>O: Regret Analysis
+
+    O->>O: Synthesize Response
+    O-->>A: Unified Response
+    A-->>U: Final Answer
+```
 
 ### Agent Responsibilities
 
@@ -116,6 +119,16 @@ Hike.ai is an AI platform that orchestrates multiple AI systems for decision sup
 | Debate AI | Multi-perspective analysis | Groq, OpenRouter, Chutes, Bytez |
 | Regret AI | Decision outcome prediction | Reasoning Models |
 | Empathetic AI | Emotion detection, adaptive response | User-selected LLM |
+
+### AI Provider Matrix
+
+| Provider | Model | Use Case |
+|----------|-------|----------|
+| Groq | Llama 3.3 70B | Fast inference, Debate |
+| OpenRouter | DeepSeek R1 | Complex reasoning |
+| Chutes | Mistral Small 3.1 | Balanced performance |
+| Bytez | Llama 3.1 8B | Lightweight tasks |
+| Gemini | 1.5 Flash | Orchestration |
 
 ## Tech Stack
 
