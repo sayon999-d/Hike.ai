@@ -1,0 +1,25 @@
+fastapi
+uvicorn
+python-dotenv
+requests
+httpx
+pydantic
+sqlalchemy
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt
+python-multipart
+websockets
+itsdangerous
+# AI & ML
+google-generativeai
+sentence-transformers
+numpy
+openai
+aiohttp
+# Integration (Optional but included in code)
+redis
+authlib
+confluent-kafka
+pathway
+tavily-python
