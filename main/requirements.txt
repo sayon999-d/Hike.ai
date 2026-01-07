@@ -13,10 +13,8 @@ websockets
 itsdangerous
 starlette
 google-generativeai
-sentence-transformers
 numpy
 openai
 aiohttp
-redis
 authlib
 tavily-python

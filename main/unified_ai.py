@@ -31,7 +31,12 @@ from jose import jwt, JWTError
 from authlib.integrations.starlette_client import OAuth
 from starlette.middleware.sessions import SessionMiddleware
 from starlette.config import Config
-from sentence_transformers import SentenceTransformer
+try:
+    from sentence_transformers import SentenceTransformer
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
+    SentenceTransformer = None
 
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Float
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
@@ -3431,7 +3436,7 @@ class NewsSystem:
 
     @property
     def model(self):
-        if self._model is None:
+        if self._model is None and SENTENCE_TRANSFORMERS_AVAILABLE:
             self._model = SentenceTransformer(EMBEDDING_MODEL)
         return self._model
 
@@ -3638,7 +3643,7 @@ class RegretSystem:
 
     @property
     def encoder(self):
-        if self._encoder is None:
+        if self._encoder is None and SENTENCE_TRANSFORMERS_AVAILABLE:
             self._encoder = SentenceTransformer("all-MiniLM-L6-v2")
         return self._encoder
 
