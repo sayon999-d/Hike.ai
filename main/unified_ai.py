@@ -3845,7 +3845,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization", "X-CSRF-Token"],
 )
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["localhost", "127.0.0.1", "0.0.0.0"])
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 app.add_middleware(SecurityMiddleware)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET)
