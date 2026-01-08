@@ -1,3 +1,11 @@
+import multiprocessing
+# Fix for semaphore leak warning on macOS
+if __name__ != "__main__":
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        pass
+
 import os
 import time
 import json
@@ -511,7 +519,7 @@ HTML_CONTENT = r"""<!DOCTYPE html>
 
     async function loadNews() {
       const grid=document.getElementById('newsGrid');
-      try { const r=await fetch('/api/news/latest'), articles=await r.json(); if(!articles||articles.length===0){grid.innerHTML='<p>No news.</p>';return;} grid.innerHTML='<div class="news-grid">'+articles.map(a=>'<div class="news-card" onclick="window.open(\''+a.url+'\',\'_blank\')"><div class="news-image" style="background-image:url(\''+a.urlToImage+'\')"></div><div class="news-content"><div class="news-title">'+a.title+'</div><div class="news-summary">'+(a.description||'')+'</div></div></div>').join('')+'</div>'; } catch(e){grid.innerHTML='<p style="color:#ef4444;">Failed.</p>';}
+      try { const r=await fetch('/api/news/latest'), articles=await r.json(); if(!articles||articles.length===0){grid.innerHTML='<p>No news.</p>';return;} grid.innerHTML='<div class="news-grid">'+articles.map(a=>'<div class="news-card" onclick="window.open(\''+a.url+'\',\'_blank\')"><div class="news-image" style="'+(a.urlToImage?'background-image:url(\''+a.urlToImage+'\')':'background:#374151')+'"></div><div class="news-content"><div class="news-title">'+a.title+'</div><div class="news-summary">'+(a.description||'')+'</div></div></div>').join('')+'</div>'; } catch(e){grid.innerHTML='<p style="color:#ef4444;">Failed.</p>';}
     }
 
     // Projects
