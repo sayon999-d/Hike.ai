@@ -2556,7 +2556,7 @@ HTML_CONTENT = r"""
 
     function syncDebateModels() {
       ['groq', 'openrouter', 'bytez', 'chutes'].forEach(model => {
-        const checkbox = document.querySelector(`
+        const checkbox = document.querySelector(`input[name="debate-model"][value="${model}"]`);
         const label = document.getElementById(`debate-${model}`);
         const isSelected = appSettings.debateModels.includes(model);
         checkbox.checked = isSelected;
@@ -2565,7 +2565,7 @@ HTML_CONTENT = r"""
     }
 
     function handleDebateModelChange(model) {
-      const checkbox = document.querySelector(`
+      const checkbox = document.querySelector(`input[name="debate-model"][value="${model}"]`);
       const label = document.getElementById(`debate-${model}`);
 
       if (checkbox.checked) {
@@ -2613,7 +2613,7 @@ HTML_CONTENT = r"""
 
     function syncRegretModels() {
       ['groq', 'openrouter', 'bytez', 'chutes'].forEach(model => {
-        const checkbox = document.querySelector(`
+        const checkbox = document.querySelector(`input[name="regret-model"][value="${model}"]`);
         const label = document.getElementById(`regret-${model}`);
         const isSelected = appSettings.regretModels.includes(model);
         checkbox.checked = isSelected;
@@ -2622,7 +2622,7 @@ HTML_CONTENT = r"""
     }
 
     function handleRegretModelChange(model) {
-      const checkbox = document.querySelector(`
+      const checkbox = document.querySelector(`input[name="regret-model"][value="${model}"]`);
       const label = document.getElementById(`regret-${model}`);
 
       if (checkbox.checked) {
