@@ -192,7 +192,8 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     /* Projects List */
     .projects-list { margin-left: 2rem; margin-top: 0.25rem; }
     .project-item { display: flex; align-items: center; padding: 0.4rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; color: var(--text-muted); cursor: pointer; }
-    .project-item:hover { background: var(--bg-secondary); }
+    .project-item:hover, .project-item.active { background: var(--bg-secondary); }
+    .project-item.active { color: var(--blue); font-weight: 500; }
     .project-name { flex: 1; }
     .project-delete { opacity: 0; background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0.25rem; }
     .project-item:hover .project-delete { opacity: 1; }
@@ -387,7 +388,12 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     </aside>
     <main class="main-content">
       <div id="chatSection" style="display:flex;flex-direction:column;height:100%;">
-        <div class="section-header"><h2>Chat</h2></div>
+        <div class="section-header" style="display:flex;align-items:center;gap:0.75rem;">
+          <button id="backToMain" class="hidden" onclick="backToMainChat()" style="background:none;border:none;cursor:pointer;color:var(--text);padding:0.25rem;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.25rem;height:1.25rem;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <h2 id="chatHeaderTitle">Chat</h2>
+        </div>
         <div class="chat-messages" id="chatMessages"><div class="message ai">Hello! I'm Hike.ai. How can I help?</div></div>
         <div class="chat-input-area"><div class="chat-input-wrapper"><input type="text" id="chatInput" class="chat-input" placeholder="Type a message..."><button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.25rem;height:1.25rem;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></div>
       </div>
@@ -449,6 +455,8 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       debateModels: JSON.parse(localStorage.getItem('debateModels') || '["groq","openrouter"]'),
       regretModels: JSON.parse(localStorage.getItem('regretModels') || '["groq","openrouter"]'),
       projects: JSON.parse(localStorage.getItem('projects') || '[]'),
+      projectChats: JSON.parse(localStorage.getItem('projectChats') || '{}'),
+      currentProject: null,
       chatHistory: JSON.parse(localStorage.getItem('chatHistory') || '[]'),
       modelUsage: JSON.parse(localStorage.getItem('modelUsage') || '{"groq":0,"openrouter":0,"gemini":0,"bytez":0,"chutes":0}'),
       usageHistory: JSON.parse(localStorage.getItem('usageHistory') || '[]'),
@@ -502,11 +510,13 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       const chat=document.getElementById('chatMessages');
       chat.innerHTML += '<div class="message user">'+escapeHtml(msg)+'</div>';
       input.value = '';
+      if(state.currentProject) saveProjectChat(state.currentProject, 'user', msg);
       const aiMsg=document.createElement('div'); aiMsg.className='message ai'; aiMsg.textContent='Thinking...'; chat.appendChild(aiMsg); chat.scrollTop=chat.scrollHeight;
       try {
-        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,selected_model:state.defaultModel,empathy_model:state.empathyModel,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
+        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,project:state.currentProject,selected_model:state.defaultModel,empathy_model:state.empathyModel,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
         const d = await r.json();
-        let html = escapeHtml(d.response || 'Sorry, error occurred.');
+        let responseText = d.response || 'Sorry, error occurred.';
+        let html = escapeHtml(responseText);
         if(d.sources && d.sources.length > 0) {
           html += '<div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--border);font-size:0.8rem;"><strong>Sources:</strong><ul style="margin:0.5rem 0 0 1rem;padding:0;">';
           d.sources.forEach(s => {
@@ -515,7 +525,11 @@ HTML_CONTENT = r"""<!DOCTYPE html>
           html += '</ul></div>';
         }
         aiMsg.innerHTML = html;
-        saveToHistory(msg, d.response);
+        if(state.currentProject) {
+          saveProjectChat(state.currentProject, 'ai', responseText);
+        } else {
+          saveToHistory(msg, responseText);
+        }
         if(d.model_used) trackModelUsage(d.model_used);
       } catch(e) { aiMsg.textContent = 'Error. Try again.'; }
       chat.scrollTop = chat.scrollHeight;
@@ -563,14 +577,73 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     function renderProjects() {
       const list=document.getElementById('projectsList'), createBtn=list.querySelector('.create-project');
       list.innerHTML=''; list.appendChild(createBtn);
-      state.projects.forEach(p=>{const item=document.createElement('div');item.className='project-item';item.innerHTML='<span class="project-name">'+p+'</span><button class="project-delete" onclick="openDeleteProject(\''+p+'\',event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';list.appendChild(item);});
+      state.projects.forEach(p=>{
+        const item=document.createElement('div');
+        item.className='project-item'+(state.currentProject===p?' active':'');
+        item.onclick=()=>openProject(p);
+        item.innerHTML='<span class="project-name">'+escapeHtml(p)+'</span><button class="project-delete" onclick="openDeleteProject(\''+escapeHtml(p).replace(/'/g,"\\'")+'\',event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';
+        list.appendChild(item);
+      });
+    }
+    function openProject(name) {
+      state.currentProject = name;
+      if(!state.projectChats[name]) state.projectChats[name] = [];
+      document.getElementById('chatHeaderTitle').textContent = name;
+      document.getElementById('backToMain').classList.remove('hidden');
+      loadProjectChat(name);
+      showSection('chat');
+      document.getElementById('navProjects').classList.add('active');
+      renderProjects();
+    }
+    function backToMainChat() {
+      state.currentProject = null;
+      document.getElementById('chatHeaderTitle').textContent = 'Chat';
+      document.getElementById('backToMain').classList.add('hidden');
+      document.getElementById('chatMessages').innerHTML = '<div class="message ai">Hello! I\'m Hike.ai. How can I help?</div>';
+      renderProjects();
+    }
+    function loadProjectChat(name) {
+      const chat = document.getElementById('chatMessages');
+      const msgs = state.projectChats[name] || [];
+      if(msgs.length === 0) {
+        chat.innerHTML = '<div class="message ai">Welcome to project "'+escapeHtml(name)+'". How can I help you with this project?</div>';
+      } else {
+        chat.innerHTML = msgs.map(m => '<div class="message '+(m.role==='user'?'user':'ai')+'">'+escapeHtml(m.content)+'</div>').join('');
+      }
+      chat.scrollTop = chat.scrollHeight;
+    }
+    function saveProjectChat(name, role, content) {
+      if(!state.projectChats[name]) state.projectChats[name] = [];
+      state.projectChats[name].push({ role, content, date: new Date().toISOString() });
+      localStorage.setItem('projectChats', JSON.stringify(state.projectChats));
     }
     function openCreateProject() { document.getElementById('createProjectModal').classList.add('active'); document.getElementById('newProjectName').focus(); }
     function closeCreateProject() { document.getElementById('createProjectModal').classList.remove('active'); document.getElementById('newProjectName').value=''; }
-    function createProject() { const name=document.getElementById('newProjectName').value.trim(); if(name){state.projects.push(name);localStorage.setItem('projects',JSON.stringify(state.projects));renderProjects();closeCreateProject();} }
+    function createProject() { 
+      const name=document.getElementById('newProjectName').value.trim(); 
+      if(name && !state.projects.includes(name)){
+        state.projects.push(name);
+        state.projectChats[name] = [];
+        localStorage.setItem('projects',JSON.stringify(state.projects));
+        localStorage.setItem('projectChats',JSON.stringify(state.projectChats));
+        renderProjects();
+        closeCreateProject();
+        openProject(name);
+      }
+    }
     function openDeleteProject(name,e) { e.stopPropagation(); state.projectToDelete=name; document.getElementById('deleteProjectName').textContent=name; document.getElementById('deleteProjectModal').classList.add('active'); }
     function closeDeleteProject() { document.getElementById('deleteProjectModal').classList.remove('active'); state.projectToDelete=null; }
-    function confirmDeleteProject() { if(state.projectToDelete){state.projects=state.projects.filter(p=>p!==state.projectToDelete);localStorage.setItem('projects',JSON.stringify(state.projects));renderProjects();closeDeleteProject();} }
+    function confirmDeleteProject() { 
+      if(state.projectToDelete){
+        state.projects=state.projects.filter(p=>p!==state.projectToDelete);
+        delete state.projectChats[state.projectToDelete];
+        localStorage.setItem('projects',JSON.stringify(state.projects));
+        localStorage.setItem('projectChats',JSON.stringify(state.projectChats));
+        if(state.currentProject === state.projectToDelete) backToMainChat();
+        renderProjects();
+        closeDeleteProject();
+      } 
+    }
 
     // Settings
     function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
