@@ -121,7 +121,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger("UnifiedAI")
 
-# Placeholder for combined HTML
 HTML_CONTENT = r"""
 <!DOCTYPE html>
 <html lang="en">
@@ -140,12 +139,12 @@ HTML_CONTENT = r"""
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #fafafa;
+      background:
       transition: background 0.3s ease;
     }
 
     body.dark {
-      background: #0a0a0a;
+      background:
     }
 
     /* Login Page */
@@ -160,14 +159,14 @@ HTML_CONTENT = r"""
     .login-container {
       width: 100%;
       max-width: 400px;
-      background: #fff;
+      background:
       border-radius: 20px;
       padding: 48px 40px;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
     }
 
     body.dark .login-container {
-      background: #111;
+      background:
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
     }
 
@@ -175,24 +174,24 @@ HTML_CONTENT = r"""
       font-size: 28px;
       font-weight: 600;
       letter-spacing: -0.02em;
-      color: #0a0a0a;
+      color:
       margin-bottom: 12px;
       text-align: center;
     }
 
     body.dark .login-logo {
-      color: #fafafa;
+      color:
     }
 
     .login-subtitle {
       text-align: center;
-      color: #666;
+      color:
       font-size: 14px;
       margin-bottom: 32px;
     }
 
     body.dark .login-subtitle {
-      color: #888;
+      color:
     }
 
     .form-group {
@@ -202,39 +201,39 @@ HTML_CONTENT = r"""
     .form-label {
       display: block;
       font-size: 13px;
-      color: #666;
+      color:
       margin-bottom: 8px;
     }
 
     body.dark .form-label {
-      color: #888;
+      color:
     }
 
     .form-input {
       width: 100%;
       padding: 14px 16px;
       border-radius: 12px;
-      border: 1px solid #e8e8e8;
+      border: 1px solid
       font-size: 14px;
       font-family: inherit;
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
       transition: all 0.2s ease;
     }
 
     body.dark .form-input {
-      background: #1a1a1a;
-      border-color: #222;
-      color: #fafafa;
+      background:
+      border-color:
+      color:
     }
 
     .form-input:focus {
       outline: none;
-      border-color: #999;
+      border-color:
     }
 
     .form-input::placeholder {
-      color: #999;
+      color:
     }
 
     .login-btn {
@@ -242,8 +241,8 @@ HTML_CONTENT = r"""
       padding: 14px;
       border-radius: 12px;
       border: none;
-      background: #0a0a0a;
-      color: #fff;
+      background:
+      color:
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
@@ -252,8 +251,8 @@ HTML_CONTENT = r"""
     }
 
     body.dark .login-btn {
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     .login-btn:hover {
@@ -274,7 +273,7 @@ HTML_CONTENT = r"""
       display: flex;
       align-items: center;
       margin: 24px 0;
-      color: #999;
+      color:
       font-size: 13px;
     }
 
@@ -283,12 +282,12 @@ HTML_CONTENT = r"""
       content: '';
       flex: 1;
       height: 1px;
-      background: #e8e8e8;
+      background:
     }
 
     body.dark .divider::before,
     body.dark .divider::after {
-      background: #222;
+      background:
     }
 
     .divider span {
@@ -299,9 +298,9 @@ HTML_CONTENT = r"""
       width: 100%;
       padding: 14px;
       border-radius: 12px;
-      border: 1px solid #e8e8e8;
-      background: #fff;
-      color: #0a0a0a;
+      border: 1px solid
+      background:
+      color:
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
@@ -313,41 +312,41 @@ HTML_CONTENT = r"""
     }
 
     body.dark .google-btn {
-      background: #1a1a1a;
-      border-color: #222;
-      color: #fafafa;
+      background:
+      border-color:
+      color:
     }
 
     .google-btn:hover {
-      background: #fafafa;
-      border-color: #ccc;
+      background:
+      border-color:
     }
 
     body.dark .google-btn:hover {
-      background: #222;
-      border-color: #333;
+      background:
+      border-color:
     }
 
     .switch-mode {
       text-align: center;
       margin-top: 24px;
       font-size: 13px;
-      color: #666;
+      color:
     }
 
     body.dark .switch-mode {
-      color: #888;
+      color:
     }
 
     .switch-mode a {
-      color: #0a0a0a;
+      color:
       font-weight: 500;
       cursor: pointer;
       text-decoration: none;
     }
 
     body.dark .switch-mode a {
-      color: #fafafa;
+      color:
     }
 
     .switch-mode a:hover {
@@ -361,8 +360,8 @@ HTML_CONTENT = r"""
       width: 40px;
       height: 40px;
       border-radius: 10px;
-      background: #fff;
-      border: 1px solid #e8e8e8;
+      background:
+      border: 1px solid
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -370,26 +369,26 @@ HTML_CONTENT = r"""
       font-size: 12px;
       font-weight: 500;
       transition: all 0.2s ease;
-      color: #666;
+      color:
     }
 
     body.dark .theme-toggle-login {
-      background: #111;
-      border-color: #222;
-      color: #888;
+      background:
+      border-color:
+      color:
     }
 
     .theme-toggle-login:hover {
-      background: #f5f5f5;
+      background:
     }
 
     body.dark .theme-toggle-login:hover {
-      background: #1a1a1a;
+      background:
     }
 
     .error-msg {
       background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
+      color:
       padding: 12px 16px;
       border-radius: 12px;
       font-size: 13px;
@@ -414,8 +413,8 @@ HTML_CONTENT = r"""
     /* Sidebar */
     .sidebar {
       width: 260px;
-      background: #fff;
-      border-right: 1px solid #e8e8e8;
+      background:
+      border-right: 1px solid
       padding: 24px 16px;
       display: flex;
       flex-direction: column;
@@ -423,20 +422,20 @@ HTML_CONTENT = r"""
     }
 
     body.dark .sidebar {
-      background: #111;
-      border-color: #222;
+      background:
+      border-color:
     }
 
     .logo {
       font-size: 18px;
       font-weight: 600;
       letter-spacing: -0.02em;
-      color: #0a0a0a;
+      color:
       padding: 0 12px;
     }
 
     body.dark .logo {
-      color: #fafafa;
+      color:
     }
 
     nav {
@@ -450,33 +449,33 @@ HTML_CONTENT = r"""
       border-radius: 10px;
       cursor: pointer;
       font-size: 14px;
-      color: #666;
+      color:
       transition: all 0.2s ease;
       text-decoration: none;
     }
 
     body.dark nav a {
-      color: #888;
+      color:
     }
 
     nav a.active {
-      background: #f5f5f5;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     body.dark nav a.active {
-      background: #1a1a1a;
-      color: #fafafa;
+      background:
+      color:
     }
 
     nav a:hover {
-      background: #f5f5f5;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     body.dark nav a:hover {
-      background: #1a1a1a;
-      color: #fafafa;
+      background:
+      color:
     }
 
     /* Sidebar Bottom Settings */
@@ -488,9 +487,9 @@ HTML_CONTENT = r"""
       width: 100%;
       padding: 12px 14px;
       border-radius: 10px;
-      background: #f5f5f5;
-      border: 1px solid #e8e8e8;
-      color: #666;
+      background:
+      border: 1px solid
+      color:
       font-size: 14px;
       font-family: inherit;
       cursor: pointer;
@@ -501,19 +500,19 @@ HTML_CONTENT = r"""
     }
 
     body.dark .settings-sidebar-btn {
-      background: #1a1a1a;
-      border-color: #333;
-      color: #888;
+      background:
+      border-color:
+      color:
     }
 
     .settings-sidebar-btn:hover {
-      background: #e8e8e8;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     body.dark .settings-sidebar-btn:hover {
-      background: #222;
-      color: #fafafa;
+      background:
+      color:
     }
 
     .settings-icon {
@@ -530,38 +529,38 @@ HTML_CONTENT = r"""
       flex: 1;
       display: flex;
       flex-direction: column;
-      background: #fff;
+      background:
     }
 
     body.dark .chat {
-      background: #111;
+      background:
     }
 
     .chat-header {
       padding: 20px 32px;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
     body.dark .chat-header {
-      border-color: #222;
+      border-color:
     }
 
     .chat-header strong {
       font-size: 15px;
       font-weight: 600;
-      color: #0a0a0a;
+      color:
     }
 
     body.dark .chat-header strong {
-      color: #fafafa;
+      color:
     }
 
     .chat-header span {
       font-size: 13px;
-      color: #999;
+      color:
     }
 
     .chat-body {
@@ -583,32 +582,32 @@ HTML_CONTENT = r"""
     }
 
     .message.ai {
-      background: #f5f5f5;
-      color: #0a0a0a;
+      background:
+      color:
       align-self: flex-start;
     }
 
     body.dark .message.ai {
-      background: #1a1a1a;
-      color: #e8e8e8;
+      background:
+      color:
     }
 
     .message.user {
-      background: #0a0a0a;
-      color: #fff;
+      background:
+      color:
       align-self: flex-end;
     }
 
     body.dark .message.user {
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     /* Agent Panel */
     .agent-panel {
-      border-top: 1px solid #e8e8e8;
+      border-top: 1px solid
       padding: 20px 32px;
-      background: #fafafa;
+      background:
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 20px;
@@ -616,8 +615,8 @@ HTML_CONTENT = r"""
     }
 
     body.dark .agent-panel {
-      background: #0a0a0a;
-      border-color: #222;
+      background:
+      border-color:
     }
 
     .agent-section {
@@ -630,15 +629,15 @@ HTML_CONTENT = r"""
       display: flex;
       justify-content: space-between;
       align-items: center;
-      color: #666;
+      color:
     }
 
     body.dark .agent {
-      color: #888;
+      color:
     }
 
     .agent span {
-      color: #999;
+      color:
       font-size: 12px;
     }
 
@@ -650,33 +649,33 @@ HTML_CONTENT = r"""
     }
 
     .metric-label {
-      color: #666;
+      color:
       font-size: 12px;
     }
 
     body.dark .metric-label {
-      color: #888;
+      color:
     }
 
     .bar {
       height: 4px;
       border-radius: 4px;
-      background: #e8e8e8;
+      background:
       overflow: hidden;
     }
 
     body.dark .bar {
-      background: #222;
+      background:
     }
 
     .fill {
       height: 100%;
-      background: #0a0a0a;
+      background:
       transition: width 0.3s ease;
     }
 
     body.dark .fill {
-      background: #fafafa;
+      background:
     }
 
     /* Input */
@@ -684,13 +683,13 @@ HTML_CONTENT = r"""
       display: flex;
       gap: 12px;
       padding: 20px 32px;
-      border-top: 1px solid #e8e8e8;
-      background: #fff;
+      border-top: 1px solid
+      background:
     }
 
     body.dark .chat-input {
-      background: #111;
-      border-color: #222;
+      background:
+      border-color:
     }
 
     textarea {
@@ -698,27 +697,27 @@ HTML_CONTENT = r"""
       resize: none;
       padding: 14px 16px;
       border-radius: 12px;
-      border: 1px solid #e8e8e8;
+      border: 1px solid
       font-size: 14px;
       font-family: inherit;
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
       transition: all 0.2s ease;
     }
 
     body.dark textarea {
-      background: #1a1a1a;
-      border-color: #222;
-      color: #fafafa;
+      background:
+      border-color:
+      color:
     }
 
     textarea:focus {
       outline: none;
-      border-color: #999;
+      border-color:
     }
 
     textarea::placeholder {
-      color: #999;
+      color:
     }
 
     button {
@@ -726,8 +725,8 @@ HTML_CONTENT = r"""
       height: 48px;
       border-radius: 12px;
       border: none;
-      background: #0a0a0a;
-      color: #fff;
+      background:
+      color:
       font-size: 18px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -737,8 +736,8 @@ HTML_CONTENT = r"""
     }
 
     body.dark button {
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     button:hover {
@@ -768,20 +767,20 @@ HTML_CONTENT = r"""
       font-size: 11px;
       font-weight: 500;
       user-select: none;
-      color: #666;
+      color:
       transition: color 0.2s ease;
     }
 
     body.dark .password-toggle {
-      color: #888;
+      color:
     }
 
     .password-toggle:hover {
-      color: #0a0a0a;
+      color:
     }
 
     body.dark .password-toggle:hover {
-      color: #fafafa;
+      color:
     }
 
     /* Settings Button */
@@ -789,30 +788,30 @@ HTML_CONTENT = r"""
       width: 40px;
       height: 40px;
       border-radius: 10px;
-      background: #f5f5f5;
-      border: 1px solid #e8e8e8;
+      background:
+      border: 1px solid
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 18px;
       transition: all 0.2s ease;
-      color: #666;
+      color:
     }
 
     body.dark .settings-btn {
-      background: #1a1a1a;
-      border-color: #333;
-      color: #888;
+      background:
+      border-color:
+      color:
     }
 
     .settings-btn:hover {
-      background: #e8e8e8;
+      background:
       transform: rotate(30deg);
     }
 
     body.dark .settings-btn:hover {
-      background: #222;
+      background:
     }
 
     /* Settings Modal Overlay */
@@ -840,7 +839,7 @@ HTML_CONTENT = r"""
 
     /* Settings Panel */
     .settings-panel {
-      background: #fff;
+      background:
       border-radius: 20px;
       padding: 32px;
       width: 100%;
@@ -857,7 +856,7 @@ HTML_CONTENT = r"""
     }
 
     body.dark .settings-panel {
-      background: #111;
+      background:
       box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
     }
 
@@ -871,48 +870,48 @@ HTML_CONTENT = r"""
     .settings-title {
       font-size: 18px;
       font-weight: 600;
-      color: #0a0a0a;
+      color:
     }
 
     body.dark .settings-title {
-      color: #fafafa;
+      color:
     }
 
     .settings-close {
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: #f5f5f5;
+      background:
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
-      color: #666;
+      color:
       transition: all 0.2s ease;
     }
 
     body.dark .settings-close {
-      background: #1a1a1a;
-      color: #888;
+      background:
+      color:
     }
 
     .settings-close:hover {
-      background: #e8e8e8;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     body.dark .settings-close:hover {
-      background: #222;
-      color: #fafafa;
+      background:
+      color:
     }
 
     /* Settings Section */
     .settings-section {
       margin-bottom: 24px;
       padding-bottom: 24px;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 1px solid
     }
 
     .settings-section:last-child {
@@ -922,24 +921,24 @@ HTML_CONTENT = r"""
     }
 
     body.dark .settings-section {
-      border-color: #222;
+      border-color:
     }
 
     .settings-label {
       font-size: 13px;
       font-weight: 500;
-      color: #0a0a0a;
+      color:
       margin-bottom: 6px;
       display: block;
     }
 
     body.dark .settings-label {
-      color: #fafafa;
+      color:
     }
 
     .settings-description {
       font-size: 12px;
-      color: #888;
+      color:
       margin-bottom: 12px;
     }
 
@@ -969,13 +968,13 @@ HTML_CONTENT = r"""
       left: 0;
       right: 0;
       bottom: 0;
-      background: #e8e8e8;
+      background:
       border-radius: 26px;
       transition: all 0.3s ease;
     }
 
     body.dark .toggle-slider {
-      background: #333;
+      background:
     }
 
     .toggle-slider:before {
@@ -985,18 +984,18 @@ HTML_CONTENT = r"""
       height: 20px;
       left: 3px;
       bottom: 3px;
-      background: #fff;
+      background:
       border-radius: 50%;
       transition: all 0.3s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .toggle-switch input:checked+.toggle-slider {
-      background: #0a0a0a;
+      background:
     }
 
     body.dark .toggle-switch input:checked+.toggle-slider {
-      background: #fafafa;
+      background:
     }
 
     .toggle-switch input:checked+.toggle-slider:before {
@@ -1004,7 +1003,7 @@ HTML_CONTENT = r"""
     }
 
     body.dark .toggle-switch input:checked+.toggle-slider:before {
-      background: #111;
+      background:
     }
 
     /* Model Selector */
@@ -1012,9 +1011,9 @@ HTML_CONTENT = r"""
       width: 100%;
       padding: 12px 16px;
       border-radius: 10px;
-      border: 1px solid #e8e8e8;
-      background: #fafafa;
-      color: #0a0a0a;
+      border: 1px solid
+      background:
+      color:
       font-size: 14px;
       font-family: inherit;
       cursor: pointer;
@@ -1027,47 +1026,47 @@ HTML_CONTENT = r"""
     }
 
     body.dark .model-selector {
-      background-color: #1a1a1a;
-      border-color: #333;
-      color: #fafafa;
+      background-color:
+      border-color:
+      color:
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23fafafa' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
     }
 
     .model-selector:focus {
       outline: none;
-      border-color: #999;
+      border-color:
     }
 
     .model-selector:hover {
-      border-color: #ccc;
+      border-color:
     }
 
     body.dark .model-selector:hover {
-      border-color: #444;
+      border-color:
     }
 
     .setting-status {
       font-size: 11px;
       padding: 4px 8px;
       border-radius: 6px;
-      background: #e8f5e9;
-      color: #2e7d32;
+      background:
+      color:
       margin-left: 10px;
     }
 
     body.dark .setting-status {
-      background: #1b3320;
-      color: #66bb6a;
+      background:
+      color:
     }
 
     .setting-status.inactive {
-      background: #fafafa;
-      color: #999;
+      background:
+      color:
     }
 
     body.dark .setting-status.inactive {
-      background: #222;
-      color: #666;
+      background:
+      color:
     }
 
     /* Model Checkbox Grid */
@@ -1077,7 +1076,7 @@ HTML_CONTENT = r"""
       gap: 10px;
       margin-top: 12px;
       padding: 12px;
-      background: #f5f5f5;
+      background:
       border-radius: 10px;
       max-height: 0;
       overflow: hidden;
@@ -1092,7 +1091,7 @@ HTML_CONTENT = r"""
     }
 
     body.dark .model-checkboxes {
-      background: #1a1a1a;
+      background:
     }
 
     .model-checkbox {
@@ -1100,8 +1099,8 @@ HTML_CONTENT = r"""
       align-items: center;
       gap: 8px;
       padding: 8px 10px;
-      background: #fff;
-      border: 1px solid #e8e8e8;
+      background:
+      border: 1px solid
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -1109,60 +1108,60 @@ HTML_CONTENT = r"""
     }
 
     body.dark .model-checkbox {
-      background: #222;
-      border-color: #333;
+      background:
+      border-color:
     }
 
     .model-checkbox:hover {
-      border-color: #ccc;
+      border-color:
     }
 
     body.dark .model-checkbox:hover {
-      border-color: #444;
+      border-color:
     }
 
     .model-checkbox.selected {
-      border-color: #0a0a0a;
-      background: #f0f0f0;
+      border-color:
+      background:
     }
 
     body.dark .model-checkbox.selected {
-      border-color: #fafafa;
-      background: #333;
+      border-color:
+      background:
     }
 
     .model-checkbox input[type="checkbox"] {
       width: 16px;
       height: 16px;
-      accent-color: #0a0a0a;
+      accent-color:
     }
 
     body.dark .model-checkbox input[type="checkbox"] {
-      accent-color: #fafafa;
+      accent-color:
     }
 
     .model-checkbox-label {
       flex: 1;
-      color: #666;
+      color:
       line-height: 1.3;
     }
 
     body.dark .model-checkbox-label {
-      color: #999;
+      color:
     }
 
     .model-checkbox.selected .model-checkbox-label {
-      color: #0a0a0a;
+      color:
       font-weight: 500;
     }
 
     body.dark .model-checkbox.selected .model-checkbox-label {
-      color: #fafafa;
+      color:
     }
 
     .model-count-hint {
       font-size: 11px;
-      color: #888;
+      color:
       margin-top: 8px;
       text-align: center;
     }
@@ -1173,11 +1172,11 @@ HTML_CONTENT = r"""
       padding: 32px;
       overflow-y: auto;
       display: none;
-      background: #fff;
+      background:
     }
 
     body.dark .content-section {
-      background: #111;
+      background:
     }
 
     .content-section.active {
@@ -1194,19 +1193,19 @@ HTML_CONTENT = r"""
     .section-title {
       font-size: 20px;
       font-weight: 600;
-      color: #0a0a0a;
+      color:
     }
 
     body.dark .section-title {
-      color: #fafafa;
+      color:
     }
 
     .btn-primary {
       padding: 10px 16px;
       border-radius: 10px;
       border: none;
-      background: #0a0a0a;
-      color: #fff;
+      background:
+      color:
       font-size: 13px;
       font-weight: 500;
       cursor: pointer;
@@ -1214,8 +1213,8 @@ HTML_CONTENT = r"""
     }
 
     body.dark .btn-primary {
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     .btn-primary:hover {
@@ -1226,9 +1225,9 @@ HTML_CONTENT = r"""
     .btn-secondary {
       padding: 8px 14px;
       border-radius: 8px;
-      border: 1px solid #e8e8e8;
-      background: #fff;
-      color: #0a0a0a;
+      border: 1px solid
+      background:
+      color:
       font-size: 12px;
       font-weight: 500;
       cursor: pointer;
@@ -1236,23 +1235,23 @@ HTML_CONTENT = r"""
     }
 
     body.dark .btn-secondary {
-      background: #1a1a1a;
-      border-color: #333;
-      color: #fafafa;
+      background:
+      border-color:
+      color:
     }
 
     .btn-secondary:hover {
-      background: #f5f5f5;
+      background:
     }
 
     body.dark .btn-secondary:hover {
-      background: #222;
+      background:
     }
 
     /* Cards */
     .card {
-      background: #fafafa;
-      border: 1px solid #e8e8e8;
+      background:
+      border: 1px solid
       border-radius: 14px;
       padding: 20px;
       margin-bottom: 16px;
@@ -1260,16 +1259,16 @@ HTML_CONTENT = r"""
     }
 
     body.dark .card {
-      background: #1a1a1a;
-      border-color: #222;
+      background:
+      border-color:
     }
 
     .card:hover {
-      border-color: #ccc;
+      border-color:
     }
 
     body.dark .card:hover {
-      border-color: #333;
+      border-color:
     }
 
     /* Project Card */
@@ -1283,11 +1282,11 @@ HTML_CONTENT = r"""
     .project-title {
       font-size: 15px;
       font-weight: 600;
-      color: #0a0a0a;
+      color:
     }
 
     body.dark .project-title {
-      color: #fafafa;
+      color:
     }
 
     .project-status {
@@ -1300,56 +1299,56 @@ HTML_CONTENT = r"""
     }
 
     .status-active {
-      background: #dcfce7;
-      color: #166534;
+      background:
+      color:
     }
 
     body.dark .status-active {
-      background: #14532d;
-      color: #86efac;
+      background:
+      color:
     }
 
     .status-paused {
-      background: #fef3c7;
-      color: #92400e;
+      background:
+      color:
     }
 
     body.dark .status-paused {
-      background: #78350f;
-      color: #fde68a;
+      background:
+      color:
     }
 
     .status-completed {
-      background: #e0e7ff;
-      color: #3730a3;
+      background:
+      color:
     }
 
     body.dark .status-completed {
-      background: #312e81;
-      color: #a5b4fc;
+      background:
+      color:
     }
 
     /* Timeline */
     .project-timeline {
-      border-left: 2px solid #e8e8e8;
+      border-left: 2px solid
       padding-left: 16px;
       margin-left: 4px;
     }
 
     body.dark .project-timeline {
-      border-color: #333;
+      border-color:
     }
 
     .timeline-item {
       position: relative;
       margin-bottom: 12px;
       font-size: 13px;
-      color: #666;
+      color:
       padding-left: 8px;
     }
 
     body.dark .timeline-item {
-      color: #999;
+      color:
     }
 
     .timeline-item::before {
@@ -1360,23 +1359,23 @@ HTML_CONTENT = r"""
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #e8e8e8;
+      background:
     }
 
     body.dark .timeline-item::before {
-      background: #333;
+      background:
     }
 
     .timeline-item.high-risk::before {
-      background: #ef4444;
+      background:
     }
 
     .timeline-item.low-risk::before {
-      background: #22c55e;
+      background:
     }
 
     .timeline-item.positive::before {
-      background: #3b82f6;
+      background:
     }
 
     /* History */
@@ -1387,14 +1386,14 @@ HTML_CONTENT = r"""
     .session-date {
       font-size: 13px;
       font-weight: 600;
-      color: #666;
+      color:
       margin-bottom: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     body.dark .session-date {
-      color: #888;
+      color:
     }
 
     .history-item {
@@ -1403,61 +1402,61 @@ HTML_CONTENT = r"""
       align-items: center;
       padding: 16px;
       border-radius: 12px;
-      background: #fafafa;
-      border: 1px solid #e8e8e8;
+      background:
+      border: 1px solid
       margin-bottom: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     body.dark .history-item {
-      background: #1a1a1a;
-      border-color: #222;
+      background:
+      border-color:
     }
 
     .history-item:hover {
-      background: #f0f0f0;
-      border-color: #ccc;
+      background:
+      border-color:
     }
 
     body.dark .history-item:hover {
-      background: #222;
-      border-color: #333;
+      background:
+      border-color:
     }
 
     .history-title {
       font-size: 14px;
       font-weight: 500;
-      color: #0a0a0a;
+      color:
       margin-bottom: 4px;
     }
 
     body.dark .history-title {
-      color: #fafafa;
+      color:
     }
 
     .history-meta {
       font-size: 12px;
-      color: #888;
+      color:
     }
 
     body.dark .history-meta {
-      color: #666;
+      color:
     }
 
     .confidence-high {
-      color: #22c55e;
+      color:
     }
 
     .confidence-low {
-      color: #ef4444;
+      color:
     }
 
     /* Empty State */
     .empty-state {
       text-align: center;
       padding: 60px 20px;
-      color: #888;
+      color:
     }
 
     .empty-state-icon {
@@ -1490,7 +1489,7 @@ HTML_CONTENT = r"""
     }
 
     .project-modal {
-      background: #fff;
+      background:
       border-radius: 16px;
       width: 100%;
       max-width: 480px;
@@ -1500,7 +1499,7 @@ HTML_CONTENT = r"""
     }
 
     body.dark .project-modal {
-      background: #1a1a1a;
+      background:
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     }
 
@@ -1523,11 +1522,10 @@ HTML_CONTENT = r"""
       margin-bottom: 24px;
     }
 
-
     .project-modal-title {
       font-size: 18px;
       font-weight: 600;
-      color: #0a0a0a;
+      color:
     }
 
     /* News Section Styles */
@@ -1539,8 +1537,8 @@ HTML_CONTENT = r"""
     }
 
     .news-card {
-      background: #fff;
-      border: 1px solid #eee;
+      background:
+      border: 1px solid
       border-radius: 12px;
       overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
@@ -1551,8 +1549,8 @@ HTML_CONTENT = r"""
     }
 
     body.dark .news-card {
-      background: #1a1a1a;
-      border-color: #333;
+      background:
+      border-color:
     }
 
     .news-card:hover {
@@ -1567,14 +1565,14 @@ HTML_CONTENT = r"""
     .news-image {
       height: 160px;
       width: 100%;
-      background-color: #f5f5f5;
+      background-color:
       background-size: cover;
       background-position: center;
       position: relative;
     }
 
     body.dark .news-image {
-      background-color: #2a2a2a;
+      background-color:
     }
 
     .news-badge {
@@ -1599,7 +1597,7 @@ HTML_CONTENT = r"""
     .news-title {
       font-weight: 600;
       font-size: 15px;
-      color: #111;
+      color:
       margin-bottom: 8px;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -1610,12 +1608,12 @@ HTML_CONTENT = r"""
     }
 
     body.dark .news-title {
-      color: #eee;
+      color:
     }
 
     .news-summary {
       font-size: 13px;
-      color: #666;
+      color:
       margin-bottom: 12px;
       display: -webkit-box;
       -webkit-line-clamp: 3;
@@ -1626,7 +1624,7 @@ HTML_CONTENT = r"""
     }
 
     body.dark .news-summary {
-      color: #999;
+      color:
     }
 
     .news-meta {
@@ -1635,61 +1633,61 @@ HTML_CONTENT = r"""
       justify-content: space-between;
       align-items: center;
       font-size: 11px;
-      color: #888;
-      border-top: 1px solid #f0f0f0;
+      color:
+      border-top: 1px solid
       padding-top: 12px;
     }
 
     body.dark .news-meta {
-      border-top-color: #333;
-      color: #666;
+      border-top-color:
+      color:
     }
 
     .news-source {
       font-weight: 500;
-      color: #444;
+      color:
     }
 
     body.dark .news-source {
-      color: #aaa;
+      color:
     }
 
     .refresh-news-btn {
       margin-left: auto;
       background: none;
-      border: 1px solid #e0e0e0;
+      border: 1px solid
       padding: 6px 12px;
       border-radius: 6px;
       cursor: pointer;
       font-size: 12px;
-      color: #666;
+      color:
       transition: all 0.2s;
     }
 
     body.dark .refresh-news-btn {
-      border-color: #444;
-      color: #aaa;
+      border-color:
+      color:
     }
 
     .refresh-news-btn:hover {
-      background: #f5f5f5;
-      color: #333;
+      background:
+      color:
     }
 
     body.dark .refresh-news-btn:hover {
-      background: #333;
-      color: #fff;
+      background:
+      color:
     }
 
     body.dark .project-modal-title {
-      color: #fafafa;
+      color:
     }
 
     .project-modal-close {
       background: none;
       border: none;
       font-size: 20px;
-      color: #666;
+      color:
       cursor: pointer;
       padding: 4px 8px;
       border-radius: 6px;
@@ -1697,13 +1695,13 @@ HTML_CONTENT = r"""
     }
 
     .project-modal-close:hover {
-      background: #f5f5f5;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     body.dark .project-modal-close:hover {
-      background: #333;
-      color: #fafafa;
+      background:
+      color:
     }
 
     .project-form-group {
@@ -1714,39 +1712,39 @@ HTML_CONTENT = r"""
       display: block;
       font-size: 13px;
       font-weight: 500;
-      color: #666;
+      color:
       margin-bottom: 8px;
     }
 
     body.dark .project-form-label {
-      color: #999;
+      color:
     }
 
     .project-form-input {
       width: 100%;
       padding: 12px 14px;
       border-radius: 10px;
-      border: 1px solid #e8e8e8;
+      border: 1px solid
       font-size: 14px;
       font-family: inherit;
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
       transition: all 0.2s ease;
     }
 
     body.dark .project-form-input {
-      background: #222;
-      border-color: #333;
-      color: #fafafa;
+      background:
+      border-color:
+      color:
     }
 
     .project-form-input:focus {
       outline: none;
-      border-color: #0a0a0a;
+      border-color:
     }
 
     body.dark .project-form-input:focus {
-      border-color: #fafafa;
+      border-color:
     }
 
     .project-form-textarea {
@@ -1763,8 +1761,8 @@ HTML_CONTENT = r"""
       flex: 1;
       padding: 10px;
       border-radius: 8px;
-      border: 1px solid #e8e8e8;
-      background: #fafafa;
+      border: 1px solid
+      background:
       text-align: center;
       cursor: pointer;
       font-size: 12px;
@@ -1773,34 +1771,34 @@ HTML_CONTENT = r"""
     }
 
     body.dark .status-option {
-      background: #222;
-      border-color: #333;
+      background:
+      border-color:
     }
 
     .status-option.active-status {
-      border-color: #22c55e;
-      background: #dcfce7;
-      color: #166534;
+      border-color:
+      background:
+      color:
     }
 
     body.dark .status-option.active-status {
-      background: #14532d;
-      color: #86efac;
+      background:
+      color:
     }
 
     .status-option.paused-status {
-      border-color: #f59e0b;
-      background: #fef3c7;
-      color: #92400e;
+      border-color:
+      background:
+      color:
     }
 
     body.dark .status-option.paused-status {
-      background: #78350f;
-      color: #fde68a;
+      background:
+      color:
     }
 
     .status-option:hover {
-      border-color: #ccc;
+      border-color:
     }
 
     .project-modal-actions {
@@ -1813,9 +1811,9 @@ HTML_CONTENT = r"""
       flex: 1;
       padding: 12px;
       border-radius: 10px;
-      border: 1px solid #e8e8e8;
-      background: #fff;
-      color: #666;
+      border: 1px solid
+      background:
+      color:
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
@@ -1823,17 +1821,17 @@ HTML_CONTENT = r"""
     }
 
     body.dark .btn-cancel {
-      background: #222;
-      border-color: #333;
-      color: #999;
+      background:
+      border-color:
+      color:
     }
 
     .btn-cancel:hover {
-      background: #f5f5f5;
+      background:
     }
 
     body.dark .btn-cancel:hover {
-      background: #333;
+      background:
     }
 
     .btn-create {
@@ -1841,8 +1839,8 @@ HTML_CONTENT = r"""
       padding: 12px;
       border-radius: 10px;
       border: none;
-      background: #0a0a0a;
-      color: #fff;
+      background:
+      color:
       font-size: 14px;
       font-weight: 500;
       cursor: pointer;
@@ -1850,8 +1848,8 @@ HTML_CONTENT = r"""
     }
 
     body.dark .btn-create {
-      background: #fafafa;
-      color: #0a0a0a;
+      background:
+      color:
     }
 
     .btn-create:hover {
@@ -1860,14 +1858,13 @@ HTML_CONTENT = r"""
     }
 
     /* User Projects Container */
-    #userProjectsContainer {
       margin-top: 16px;
     }
 
     .project-delete-btn {
       background: none;
       border: none;
-      color: #ef4444;
+      color:
       cursor: pointer;
       font-size: 12px;
       padding: 4px 8px;
@@ -1877,11 +1874,11 @@ HTML_CONTENT = r"""
     }
 
     .project-delete-btn:hover {
-      background: #fef2f2;
+      background:
     }
 
     body.dark .project-delete-btn:hover {
-      background: #450a0a;
+      background:
     }
   </style>
 </head>
@@ -2452,7 +2449,6 @@ HTML_CONTENT = r"""
       localStorage.setItem('theme', isDark ? 'dark' : 'light');
     }
 
-
     if (localStorage.getItem('theme') === 'dark') {
       document.body.classList.add('dark');
       const lightIcon = document.querySelector('.theme-light');
@@ -2462,11 +2458,6 @@ HTML_CONTENT = r"""
         darkIcon.style.display = 'block';
       }
     }
-
-
-
-
-
 
     const appSettings = {
       model: localStorage.getItem('selectedModel') || 'auto',
@@ -2506,7 +2497,6 @@ HTML_CONTENT = r"""
       }
     }
 
-
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
         closeSettings();
@@ -2543,9 +2533,6 @@ HTML_CONTENT = r"""
       }
     }
 
-
-
-
     function handleDebateToggle() {
       const useDebate = document.getElementById('debateToggle').checked;
       appSettings.useDebate = useDebate;
@@ -2569,7 +2556,7 @@ HTML_CONTENT = r"""
 
     function syncDebateModels() {
       ['groq', 'openrouter', 'bytez', 'chutes'].forEach(model => {
-        const checkbox = document.querySelector(`#debate-${model} input`);
+        const checkbox = document.querySelector(`
         const label = document.getElementById(`debate-${model}`);
         const isSelected = appSettings.debateModels.includes(model);
         checkbox.checked = isSelected;
@@ -2578,7 +2565,7 @@ HTML_CONTENT = r"""
     }
 
     function handleDebateModelChange(model) {
-      const checkbox = document.querySelector(`#debate-${model} input`);
+      const checkbox = document.querySelector(`
       const label = document.getElementById(`debate-${model}`);
 
       if (checkbox.checked) {
@@ -2603,9 +2590,6 @@ HTML_CONTENT = r"""
       updateDebateStatus();
     }
 
-
-
-
     function handleRegretToggle() {
       const useRegret = document.getElementById('regretToggle').checked;
       appSettings.useRegret = useRegret;
@@ -2629,7 +2613,7 @@ HTML_CONTENT = r"""
 
     function syncRegretModels() {
       ['groq', 'openrouter', 'bytez', 'chutes'].forEach(model => {
-        const checkbox = document.querySelector(`#regret-${model} input`);
+        const checkbox = document.querySelector(`
         const label = document.getElementById(`regret-${model}`);
         const isSelected = appSettings.regretModels.includes(model);
         checkbox.checked = isSelected;
@@ -2638,7 +2622,7 @@ HTML_CONTENT = r"""
     }
 
     function handleRegretModelChange(model) {
-      const checkbox = document.querySelector(`#regret-${model} input`);
+      const checkbox = document.querySelector(`
       const label = document.getElementById(`regret-${model}`);
 
       if (checkbox.checked) {
@@ -2663,7 +2647,6 @@ HTML_CONTENT = r"""
       updateRegretStatus();
     }
 
-
     function getSelectedProviders() {
       const model = appSettings.model;
       if (model === 'auto') {
@@ -2671,9 +2654,6 @@ HTML_CONTENT = r"""
       }
       return [model];
     }
-
-
-
 
     let selectedProjectStatus = 'active';
     let userProjects = JSON.parse(localStorage.getItem('userProjects') || '[]');
@@ -2777,11 +2757,9 @@ HTML_CONTENT = r"""
       return div.innerHTML;
     }
 
-
     function loadUserProjects() {
       renderUserProjects();
     }
-
 
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
@@ -2896,7 +2874,6 @@ HTML_CONTENT = r"""
       }
     }
 
-
     function showChat() {
       showSection('chat');
     }
@@ -2909,7 +2886,6 @@ HTML_CONTENT = r"""
       const chat = document.getElementById("chat");
       const sendBtn = document.getElementById("sendBtn");
 
-
       const userMsg = document.createElement("div");
       userMsg.className = "message user";
       userMsg.textContent = message;
@@ -2920,12 +2896,10 @@ HTML_CONTENT = r"""
       sendBtn.disabled = true;
       chat.scrollTop = chat.scrollHeight;
 
-
       document.getElementById('debateStatus').textContent = 'Thinking...';
       document.getElementById('empathyStatus').textContent = 'Analyzing...';
       document.getElementById('regretStatus').textContent = 'Predicting...';
       document.getElementById('newsStatus').textContent = 'Searching...';
-
 
       const aiMsg = document.createElement("div");
       aiMsg.className = "message ai";
@@ -2934,7 +2908,6 @@ HTML_CONTENT = r"""
       chat.scrollTop = chat.scrollHeight;
 
       try {
-
 
         const response = await fetch('/api/chat', {
           method: 'POST',
@@ -2951,13 +2924,10 @@ HTML_CONTENT = r"""
         });
         const data = await response.json();
 
-
         aiMsg.textContent = data.response;
-
 
         const orchestration = data.orchestration || {};
         const details = data.details || {};
-
 
         let confidenceScore = 25;
         if (orchestration.research?.available) confidenceScore += 25;
@@ -2966,11 +2936,9 @@ HTML_CONTENT = r"""
 
         document.getElementById('confidenceFill').style.width = confidenceScore + '%';
 
-
         if (orchestration.regret?.regret) {
           document.getElementById('regretFill').style.width = (orchestration.regret.regret * 10) + '%';
         }
-
 
         document.getElementById('debateStatus').textContent =
           orchestration.debate?.available ? `${orchestration.debate.providers?.length || 0} models` : 'Ready';
@@ -2984,7 +2952,6 @@ HTML_CONTENT = r"""
         aiMsg.textContent = "Sorry, I encountered an error processing your request. Please try again.";
         console.error(e);
 
-
         document.getElementById('debateStatus').textContent = 'Error';
         document.getElementById('empathyStatus').textContent = 'Error';
         document.getElementById('regretStatus').textContent = 'Error';
@@ -2995,12 +2962,10 @@ HTML_CONTENT = r"""
       }
     }
 
-
     document.getElementById('input').addEventListener('input', function () {
       this.style.height = 'auto';
       this.style.height = Math.min(this.scrollHeight, 120) + 'px';
     });
-
 
     document.getElementById('input').addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && !e.shiftKey) {
@@ -3013,7 +2978,6 @@ HTML_CONTENT = r"""
 
 </html>
 """
-
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
@@ -3039,7 +3003,7 @@ if REDIS_AVAILABLE:
 class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True)
-    username = Column(String, unique=True, index=True) # Used for email in some contexts
+    username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True, nullable=True) 
     password_hash = Column(String)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -3063,7 +3027,7 @@ class MemorySummary(Base):
 
 class DecisionRecord(Base):
     __tablename__ = "decisions"
-    id = Column(String, primary_key=True) # UUID
+    id = Column(String, primary_key=True)
     user_id = Column(String, index=True)
     context = Column(Text)
     emotion = Column(String)
@@ -3141,7 +3105,6 @@ def validate_session(session_id: str) -> Optional[str]:
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.gzip import GZipMiddleware
 
-# Rate limiting
 from collections import defaultdict
 
 class SecurityMiddleware:
@@ -3156,7 +3119,6 @@ class SecurityMiddleware:
         async def send_wrapper(message):
             if message["type"] == "http.response.start":
                 headers = dict(message.get("headers", []))
-                # Security Headers
                 headers[b"x-content-type-options"] = b"nosniff"
                 headers[b"x-frame-options"] = b"DENY"
                 headers[b"x-xss-protection"] = b"1; mode=block"
@@ -3178,7 +3140,6 @@ class TokenOptimizer:
     """
     @staticmethod
     def count_tokens(text: str) -> int:
-        # Approximate 4 chars per token for English
         return len(text) // 4
 
     @staticmethod
@@ -3190,11 +3151,9 @@ class TokenOptimizer:
         if current_tokens <= max_tokens:
             return context
             
-        # Keep the last max_tokens worth of text (approx)
         chars_to_keep = max_tokens * 4
         truncated = context[-chars_to_keep:]
         
-        # Try to cut at a discrete line or sentence start to be cleaner
         first_newline = truncated.find('\n')
         if first_newline != -1 and first_newline < 100:
             truncated = truncated[first_newline+1:]
@@ -3207,14 +3166,14 @@ class ProviderRateLimiter:
     Allows bursts but enforces long-term rate limits.
     """
     def __init__(self):
-        # Configuration: (max_tokens, refill_rate_per_sec)
         self.configs = {
-            "gemini": (30, 0.5),      # 30 burst, 30 RPM
-            "groq": (20, 0.33),       # 20 burst, 20 RPM
-            "openrouter": (50, 1.0),  # 50 burst, 60 RPM
-            "tavily": (5, 0.1),       # 5 burst, 6 requests per minute (strict)
-            "newsapi": (5, 0.05),     # 5 burst, 3 requests per minute (very strict)
-            "default": (10, 0.2)
+            "groq": (5, 0.5),
+            "openrouter": (5, 0.5),
+            "chutes": (5, 0.5),
+            "bytez": (5, 0.5),
+            "tavily": (3, 0.5),
+            "newsapi": (3, 0.5),
+            "default": (5, 0.5)
         }
         self.buckets = defaultdict(lambda: {"tokens": 10.0, "last_update": time.time()})
         self._lock = asyncio.Lock()
@@ -3225,24 +3184,20 @@ class ProviderRateLimiter:
         
         async with self._lock:
             bucket = self.configs.get(provider)
-            # If explicit config exists, use it, else generic bucket
             key = provider if provider in self.configs else "default"
             bucket = self.buckets[key]
             
             now = time.time()
             elapsed = now - bucket["last_update"]
             
-            # Refill tokens
             new_tokens = elapsed * refill_rate
             bucket["tokens"] = min(max_tokens, bucket["tokens"] + new_tokens)
             bucket["last_update"] = now
             
-            # Consume token
             if bucket["tokens"] >= 1:
                 bucket["tokens"] -= 1
-                return # Allowed
+                return
             
-            # If not allowed, calculating wait time
             required = 1.0 - bucket["tokens"]
             wait_time = required / refill_rate
             
@@ -3250,12 +3205,10 @@ class ProviderRateLimiter:
             logger.warning(f"Rate limit hit for {provider}, waiting {wait_time:.2f}s")
             await asyncio.sleep(wait_time)
             
-            # After waiting, recurse to ensure we consume the token properly (and update timestamp)
             await self.wait_if_needed(provider)
 
 rate_limiter = ProviderRateLimiter()
 
-# Simple user IP-based rate limiting for API endpoints
 class UserRateLimiter:
     def __init__(self, requests_per_minute: int = 60):
         self.rate = requests_per_minute
@@ -3263,7 +3216,6 @@ class UserRateLimiter:
         
     def check_rate_limit(self, client_ip: str):
         now = time.time()
-        # Clean up old history
         self.history[client_ip] = [t for t in self.history[client_ip] if now - t < 60]
         
         if len(self.history[client_ip]) >= self.rate:
@@ -3271,169 +3223,623 @@ class UserRateLimiter:
             
         self.history[client_ip].append(now)
 
-user_limiter = UserRateLimiter(requests_per_minute=50)
+user_limiter = UserRateLimiter(requests_per_minute=10)
 
 def verify_rate_limit(request: Request):
     """Dependency for API routes"""
     client_ip = request.client.host
     user_limiter.check_rate_limit(client_ip)
 
-class GeminiOrchestrator:
+class BudgetManager:
     """
-    Central orchestrator using Gemini API to:
-    1. Understand user context and intent
-    2. Generate instructions for other AI systems
-    3. Coordinate responses from all modules
+    Manages budgets for API calls, tokens, and execution time.
+    Provides safe limits to prevent runaway costs or timeouts.
+    """
+    
+    def __init__(self):
+        self.hourly_limits = {
+            "research": int(os.getenv("BUDGET_RESEARCH_HOURLY", 10)),
+            "debate": int(os.getenv("BUDGET_DEBATE_HOURLY", 8)),
+            "regret": int(os.getenv("BUDGET_REGRET_HOURLY", 15)),
+            "empathy": int(os.getenv("BUDGET_EMPATHY_HOURLY", 30)),
+            "news": int(os.getenv("BUDGET_NEWS_HOURLY", 20)),
+        }
+        
+        self.token_limits = {
+            "input_max": int(os.getenv("BUDGET_INPUT_TOKENS", 20)),
+            "output_max": int(os.getenv("BUDGET_OUTPUT_TOKENS", 10)),
+            "context_max": int(os.getenv("BUDGET_CONTEXT_TOKENS", 40)), 
+        }
+        
+        self.time_limits = {
+            "single_agent": float(os.getenv("BUDGET_AGENT_TIMEOUT", 10.0)),
+            "total_request": float(os.getenv("BUDGET_REQUEST_TIMEOUT", 30.0)),
+            "debate_round": float(os.getenv("BUDGET_DEBATE_TIMEOUT", 15.0)),
+        }
+        
+        self._usage: Dict[str, Dict[str, list]] = defaultdict(lambda: defaultdict(list))
+        self._lock = threading.Lock()
+    
+    def check_budget(self, user_id: str, agent: str) -> tuple[bool, str]:
+        """
+        Check if user has budget remaining for an agent.
+        Returns (allowed: bool, reason: str)
+        """
+        limit = self.hourly_limits.get(agent, 50)
+        now = time.time()
+        hour_ago = now - 3600
+        
+        with self._lock:
+            self._usage[user_id][agent] = [
+                (ts, count) for ts, count in self._usage[user_id][agent]
+                if ts > hour_ago
+            ]
+            
+            total_usage = sum(count for _, count in self._usage[user_id][agent])
+            
+            if total_usage >= limit:
+                return False, f"Hourly limit ({limit}) reached for {agent}"
+            
+            return True, f"Budget OK: {total_usage}/{limit} used"
+    
+    def record_usage(self, user_id: str, agent: str, count: int = 1):
+        """Record API usage for budget tracking."""
+        with self._lock:
+            self._usage[user_id][agent].append((time.time(), count))
+    
+    def get_remaining(self, user_id: str, agent: str) -> int:
+        """Get remaining budget for an agent."""
+        allowed, _ = self.check_budget(user_id, agent)
+        if not allowed:
+            return 0
+        
+        limit = self.hourly_limits.get(agent, 50)
+        hour_ago = time.time() - 3600
+        
+        with self._lock:
+            total_usage = sum(
+                count for ts, count in self._usage[user_id][agent]
+                if ts > hour_ago
+            )
+        
+        return max(0, limit - total_usage)
+    
+    def get_all_budgets(self, user_id: str) -> Dict[str, Dict]:
+        """Get budget status for all agents."""
+        return {
+            agent: {
+                "limit": limit,
+                "remaining": self.get_remaining(user_id, agent),
+                "timeout": self.time_limits.get("single_agent", 10.0)
+            }
+            for agent, limit in self.hourly_limits.items()
+        }
+
+class IntentClassifier:
+    """
+    Rule-based intent classification using explicit Python patterns.
+    No LLM calls - purely deterministic.
+    """
+    
+    INTENT_PATTERNS = {
+        "emergency": {
+            "keywords": ["help", "urgent", "emergency", "asap", "immediately", "crisis"],
+            "patterns": [r"\bhelp\s+me\b", r"\burgent\b", r"\bcall\s+911\b"],
+            "priority": 100,
+        },
+        "decision": {
+            "keywords": ["should i", "decide", "choice", "option", "better", "versus", "vs", "or should"],
+            "patterns": [r"\bshould\s+i\b", r"\bwhich\s+(one|option)\b", r"\bbetter\s+to\b"],
+            "priority": 80,
+        },
+        "emotional_support": {
+            "keywords": ["feel", "sad", "depressed", "anxious", "worried", "scared", "lonely", "stressed", "overwhelmed"],
+            "patterns": [r"\bi\s+feel\b", r"\bi'm\s+(so\s+)?(sad|depressed|anxious)", r"\bcan't\s+cope\b"],
+            "priority": 75,
+        },
+        "advice": {
+            "keywords": ["advice", "recommend", "suggest", "what would you", "how should"],
+            "patterns": [r"\bwhat\s+(do\s+you|would\s+you)\s+recommend\b", r"\bany\s+advice\b"],
+            "priority": 70,
+        },
+        "information_seeking": {
+            "keywords": ["what is", "how does", "explain", "tell me about", "define", "meaning of"],
+            "patterns": [r"\bwhat\s+is\b", r"\bhow\s+does\b", r"\bexplain\b", r"\btell\s+me\s+about\b"],
+            "priority": 60,
+        },
+        "debate": {
+            "keywords": ["argue", "debate", "pros and cons", "both sides", "controversial", "opinion on"],
+            "patterns": [r"\bpros\s+and\s+cons\b", r"\bboth\s+sides\b", r"\bdebate\b"],
+            "priority": 65,
+        },
+        "news": {
+            "keywords": ["news", "latest", "today", "current events", "happening", "recent"],
+            "patterns": [r"\b(latest|recent|current)\s+news\b", r"\bwhat's\s+happening\b"],
+            "priority": 55,
+        },
+        "question": {
+            "keywords": ["what", "how", "why", "when", "where", "who", "which", "can you"],
+            "patterns": [r"\?$", r"^(what|how|why|when|where|who|which)\b"],
+            "priority": 40,
+        },
+        "casual": {
+            "keywords": ["hello", "hi", "hey", "thanks", "bye", "good morning", "how are you"],
+            "patterns": [r"^(hi|hello|hey)\b", r"\bthanks?\b", r"\bgoodbye\b"],
+            "priority": 20,
+        },
+    }
+    
+    EMOTION_PATTERNS = {
+        "sadness": ["sad", "empty", "lost", "depressed", "lonely", "crying", "tears", "hopeless", "hurt", "broken", "grief"],
+        "anger": ["angry", "mad", "furious", "annoyed", "frustrated", "hate", "pissed", "rage", "irritated"],
+        "fear": ["fear", "anxious", "scared", "worried", "nervous", "panic", "stress", "overwhelmed", "terrified"],
+        "joy": ["happy", "good", "great", "excited", "wonderful", "amazing", "love", "joy", "blessed", "thrilled"],
+        "seeking_advice": ["what should", "how do", "how can", "what can", "advice", "help me", "recommend"],
+    }
+    
+    @classmethod
+    def classify_intent(cls, message: str) -> Dict[str, any]:
+        """
+        Classify user intent using deterministic rules.
+        Returns intent with confidence score and matched patterns.
+        """
+        msg_lower = message.lower().strip()
+        
+        matches = []
+        for intent, config in cls.INTENT_PATTERNS.items():
+            score = 0
+            matched_keywords = []
+            matched_patterns = []
+            
+            for keyword in config["keywords"]:
+                if keyword in msg_lower:
+                    score += 10
+                    matched_keywords.append(keyword)
+            
+            for pattern in config["patterns"]:
+                if re.search(pattern, msg_lower, re.IGNORECASE):
+                    score += 20
+                    matched_patterns.append(pattern)
+            
+            if score > 0:
+                weighted_score = score * (config["priority"] / 100)
+                matches.append({
+                    "intent": intent,
+                    "score": weighted_score,
+                    "raw_score": score,
+                    "keywords": matched_keywords,
+                    "patterns": matched_patterns,
+                    "priority": config["priority"],
+                })
+        
+        matches.sort(key=lambda x: (x["score"], x["priority"]), reverse=True)
+        
+        if matches:
+            best = matches[0]
+            return {
+                "intent": best["intent"],
+                "confidence": min(1.0, best["score"] / 50),
+                "matched_keywords": best["keywords"],
+                "matched_patterns": best["patterns"],
+                "all_matches": matches[:3],
+            }
+        
+        return {
+            "intent": "casual",
+            "confidence": 0.3,
+            "matched_keywords": [],
+            "matched_patterns": [],
+            "all_matches": [],
+        }
+    
+    @classmethod
+    def detect_emotion(cls, message: str) -> Dict[str, any]:
+        """Detect emotion using keyword matching."""
+        msg_lower = message.lower()
+        
+        emotion_scores = {}
+        for emotion, keywords in cls.EMOTION_PATTERNS.items():
+            score = sum(1 for kw in keywords if kw in msg_lower)
+            if score > 0:
+                emotion_scores[emotion] = score
+        
+        if emotion_scores:
+            best_emotion = max(emotion_scores, key=emotion_scores.get)
+            return {
+                "primary": best_emotion,
+                "confidence": min(1.0, emotion_scores[best_emotion] / 3),
+                "all_emotions": emotion_scores,
+            }
+        
+        return {
+            "primary": "neutral",
+            "confidence": 0.5,
+            "all_emotions": {},
+        }
+
+class AgentPriority:
+    """Defines execution priority for agents."""
+    EMERGENCY = 100
+    RESEARCH = 80
+    EMPATHY = 70
+    DEBATE = 60
+    REGRET = 50
+    NEWS = 40
+
+class DeterministicOrchestrator:
+    """
+    Central orchestrator using deterministic Python rules to:
+    1. Understand user context and intent (rule-based, no LLM)
+    2. Control agent execution with budgets and priorities
+    3. Coordinate responses from all modules safely
+    4. Provide full transparency into decision-making
     
     Architecture:
     - Research/Real-time Data: Tavily API
     - News: NewsAPI
-    - Debate: All models EXCEPT Gemini (Groq, OpenRouter, Bytez, Chutes)
+    - Debate: All models (Groq, OpenRouter, Bytez, Chutes)
     - Empathy: User-selected model
-    - Regret AI: All available models
-    - Orchestration: Gemini API (this class)
+    - Regret AI: Decision analysis models
+    - Orchestration: THIS CLASS (deterministic Python rules)
+    
+    Key Principles:
+    - No LLM calls for orchestration decisions
+    - Explicit, auditable rules
+    - Budget enforcement
+    - Safe fallbacks and circuit breakers
     """
     
     def __init__(self):
-        self.gemini_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
-        if self.gemini_key and GENAI_AVAILABLE:
-            genai.configure(api_key=self.gemini_key)
-            self.model = genai.GenerativeModel("gemini-pro")
-            logger.info("Gemini Orchestrator initialized")
-        else:
-            self.model = None
-            logger.warning("Gemini not available - orchestrator will use fallback mode")
+        self.budget_manager = BudgetManager()
+        self.intent_classifier = IntentClassifier()
+        
+        self._circuit_breakers: Dict[str, Dict] = defaultdict(
+            lambda: {"failures": 0, "last_failure": 0, "open": False}
+        )
+        self._circuit_threshold = 3
+        self._circuit_reset_time = 60
+        
+        logger.info("Deterministic Orchestrator initialized (no LLM dependencies)")
     
-    def analyze_context(self, user_message: str, conversation_history: List[Dict] = None) -> Dict:
+    def _check_circuit(self, agent: str) -> bool:
+        """Check if circuit breaker allows agent execution."""
+        cb = self._circuit_breakers[agent]
+        
+        if cb["open"]:
+            if time.time() - cb["last_failure"] > self._circuit_reset_time:
+                cb["open"] = False
+                cb["failures"] = 0
+                logger.info(f"Circuit breaker reset for {agent}")
+                return True
+            return False
+        
+        return True
+    
+    def _record_failure(self, agent: str):
+        """Record agent failure for circuit breaker."""
+        cb = self._circuit_breakers[agent]
+        cb["failures"] += 1
+        cb["last_failure"] = time.time()
+        
+        if cb["failures"] >= self._circuit_threshold:
+            cb["open"] = True
+            logger.warning(f"Circuit breaker OPEN for {agent} after {cb['failures']} failures")
+    
+    def _record_success(self, agent: str):
+        """Record agent success, reset failure count."""
+        cb = self._circuit_breakers[agent]
+        cb["failures"] = 0
+    
+    def analyze_context(self, user_message: str, conversation_history: List[Dict] = None, user_id: str = "anonymous") -> Dict:
         """
-        Analyze user message and determine what each AI system should do.
+        Analyze user message using deterministic rules.
         Returns structured instructions for all systems.
+        
+        This method uses NO LLM calls - purely Python logic.
         """
-        if not self.model:
-            return self._fallback_analysis(user_message)
+        intent_result = self.intent_classifier.classify_intent(user_message)
+        intent = intent_result["intent"]
+        intent_confidence = intent_result["confidence"]
         
-        history_context = ""
-        if conversation_history:
-            history_context = "\n".join([
-                f"User: {h.get('user', '')}\nAI: {h.get('ai', '')}" 
-                for h in conversation_history[-3:]  # Last 3 exchanges
-            ])
+        emotion_result = self.intent_classifier.detect_emotion(user_message)
+        emotion = emotion_result["primary"]
         
-        analysis_prompt = f"""You are an AI orchestrator. Analyze this user message and determine what each AI module should do.
-
-User Message: "{user_message}"
-
-{f"Recent conversation context:{chr(10)}{history_context}" if history_context else ""}
-
-Respond in this exact JSON format (no markdown, just JSON):
-{{
-    "intent": "one of: question, decision, emotional_support, information_seeking, advice, debate, casual",
-    "needs_research": true/false,
-    "research_query": "optimized search query if needs_research is true, else empty string",
-    "needs_news": true/false,
-    "news_keywords": "relevant news keywords if needs_news is true, else empty string",
-    "debate_question": "question for debate models if this is a debatable topic, else empty string",
-    "debate_providers": ["list of providers to use: groq, openrouter, bytez, chutes - never include gemini"],
-    "emotion_detected": "sadness/anger/fear/joy/neutral/seeking_advice",
-    "empathy_instruction": "specific instruction for empathy AI on how to respond",
-    "needs_regret_analysis": true/false,
-    "regret_context": "context for regret AI if this involves a decision, else empty string",
-    "final_response_instruction": "how to combine all responses into a cohesive answer"
-}}"""
+        msg_lower = user_message.lower()
+        msg_length = len(user_message)
+        has_question_mark = "?" in user_message
         
-        try:
-            response = self.model.generate_content(analysis_prompt)
-            text = response.text.strip()
-            if text.startswith("```"):
-                text = text.split("```")[1]
-                if text.startswith("json"):
-                    text = text[4:]
-            text = text.strip()
-            
-            return json.loads(text)
-        except Exception as e:
-            logger.error(f"Gemini orchestration error: {e}")
-            return self._fallback_analysis(user_message)
-    
-    def _fallback_analysis(self, message: str) -> Dict:
-        msg_lower = message.lower()
+        needs_research = self._should_research(intent, msg_lower, msg_length, user_id)
+        needs_news = self._should_fetch_news(intent, msg_lower, user_id)
+        needs_debate = self._should_debate(intent, msg_lower, intent_confidence, user_id)
+        needs_regret = self._should_analyze_regret(intent, msg_lower, user_id)
         
-        is_question = "?" in message or any(w in msg_lower for w in ["what", "how", "why", "when", "where", "who"])
-        is_decision = any(w in msg_lower for w in ["should i", "decide", "choice", "option", "better"])
-        is_emotional = any(w in msg_lower for w in ["feel", "sad", "happy", "angry", "worried", "stress"])
+        research_query = self._extract_research_query(user_message, intent) if needs_research else ""
+        
+        debate_providers = self._select_debate_providers(user_id) if needs_debate else []
+        
+        news_keywords = self._extract_news_keywords(user_message) if needs_news else ""
+        
+        empathy_instruction = self._get_empathy_instruction(emotion, intent)
+        
+        synthesis_instruction = self._get_synthesis_instruction(intent, needs_research, needs_debate, needs_regret)
         
         return {
-            "intent": "decision" if is_decision else ("emotional_support" if is_emotional else ("question" if is_question else "casual")),
-            "needs_research": is_question and len(message) > 20,
-            "research_query": message[:200] if is_question else "",
-            "needs_news": any(w in msg_lower for w in ["news", "latest", "today", "current", "recent"]),
-            "news_keywords": message[:50] if "news" in msg_lower else "",
-            "debate_question": message if is_question or is_decision else "",
-            "debate_providers": ["groq", "openrouter"],  # Default providers (no Gemini)
-            "emotion_detected": "seeking_advice" if is_decision else ("neutral" if not is_emotional else "neutral"),
-            "empathy_instruction": "Respond with understanding and support",
-            "needs_regret_analysis": is_decision,
-            "regret_context": message if is_decision else "",
-            "final_response_instruction": "Combine insights from all AI systems into a helpful response"
+            "intent": intent,
+            "intent_confidence": intent_confidence,
+            "intent_details": intent_result,
+            
+            "needs_research": needs_research,
+            "research_query": research_query,
+            "research_priority": AgentPriority.RESEARCH if needs_research else 0,
+            
+            "needs_news": needs_news,
+            "news_keywords": news_keywords,
+            "news_priority": AgentPriority.NEWS if needs_news else 0,
+            
+            "debate_question": user_message if needs_debate else "",
+            "debate_providers": debate_providers,
+            "debate_priority": AgentPriority.DEBATE if needs_debate else 0,
+            
+            "emotion_detected": emotion,
+            "emotion_confidence": emotion_result["confidence"],
+            "emotion_details": emotion_result,
+            "empathy_instruction": empathy_instruction,
+            "empathy_priority": AgentPriority.EMPATHY,
+            
+            "needs_regret_analysis": needs_regret,
+            "regret_context": user_message if needs_regret else "",
+            "regret_priority": AgentPriority.REGRET if needs_regret else 0,
+            
+            "final_response_instruction": synthesis_instruction,
+            
+            "budget_status": self.budget_manager.get_all_budgets(user_id),
+            
+            "orchestration_method": "deterministic_rules",
+            "timestamp": datetime.utcnow().isoformat(),
         }
     
-    def synthesize_response(self, 
+    def _should_research(self, intent: str, msg_lower: str, msg_length: int, user_id: str) -> bool:
+        """Determine if research is needed using explicit rules."""
+        allowed, _ = self.budget_manager.check_budget(user_id, "research")
+        if not allowed:
+            return False
+        
+        if not self._check_circuit("research"):
+            return False
+        
+        research_intents = {"information_seeking", "question", "advice", "debate"}
+        research_keywords = ["research", "find out", "look up", "search for", "what is the latest"]
+        
+        if intent in research_intents and msg_length > 15:
+            return True
+        
+        if any(kw in msg_lower for kw in research_keywords):
+            return True
+        
+        return False
+    
+    def _should_fetch_news(self, intent: str, msg_lower: str, user_id: str) -> bool:
+        """Determine if news fetch is needed."""
+        allowed, _ = self.budget_manager.check_budget(user_id, "news")
+        if not allowed:
+            return False
+        
+        if not self._check_circuit("news"):
+            return False
+        
+        news_keywords = ["news", "latest", "today", "current events", "happening now", "recent", "headlines"]
+        return intent == "news" or any(kw in msg_lower for kw in news_keywords)
+    
+    def _should_debate(self, intent: str, msg_lower: str, confidence: float, user_id: str) -> bool:
+        """Determine if multi-model debate is needed."""
+        allowed, _ = self.budget_manager.check_budget(user_id, "debate")
+        if not allowed:
+            return False
+        
+        if not self._check_circuit("debate"):
+            return False
+        
+        debate_intents = {"debate", "decision", "advice"}
+        debate_keywords = ["pros and cons", "both sides", "different perspective", "compare", "versus", " vs "]
+        
+        if intent in debate_intents and confidence > 0.5:
+            return True
+        
+        if any(kw in msg_lower for kw in debate_keywords):
+            return True
+        
+        return False
+    
+    def _should_analyze_regret(self, intent: str, msg_lower: str, user_id: str) -> bool:
+        """Determine if regret analysis is needed."""
+        allowed, _ = self.budget_manager.check_budget(user_id, "regret")
+        if not allowed:
+            return False
+        
+        if not self._check_circuit("regret"):
+            return False
+        
+        decision_keywords = [
+            "should i", "decision", "choice", "option", "considering", 
+            "thinking about", "planning to", "going to", "want to"
+        ]
+        
+        return intent == "decision" or any(kw in msg_lower for kw in decision_keywords)
+    
+    def _extract_research_query(self, message: str, intent: str) -> str:
+        """Extract an optimized research query from the message."""
+        fillers = ["please", "can you", "could you", "i want to know", "tell me", "help me"]
+        query = message.lower()
+        for filler in fillers:
+            query = query.replace(filler, "")
+        
+        query = " ".join(query.split())
+        query = query.strip("?.,! ")
+        
+        return query[:200] if query else message[:200]
+    
+    def _extract_news_keywords(self, message: str) -> str:
+        """Extract news-relevant keywords from message."""
+        stopwords = {"the", "a", "an", "is", "are", "was", "were", "what", "about", "news", "latest", "tell", "me"}
+        words = message.lower().split()
+        keywords = [w.strip("?.,!") for w in words if w.lower() not in stopwords and len(w) > 2]
+        
+        return " ".join(keywords[:5])
+    
+    def _select_debate_providers(self, user_id: str) -> List[str]:
+        """Select available debate providers based on configuration and budget."""
+        available_providers = []
+        
+        provider_configs = [
+            ("groq", GROQ_API_KEY),
+            ("openrouter", OPENROUTER_API_KEY),
+            ("chutes", CHUTES_API_KEY),
+            ("bytez", BYTEZ_API_KEY),
+        ]
+        
+        for provider, key in provider_configs:
+            if key and self._check_circuit(provider):
+                available_providers.append(provider)
+        
+        if len(available_providers) >= 2:
+            return available_providers[:4]
+        elif available_providers:
+            return available_providers
+        else:
+            return ["groq", "openrouter"]
+    
+    def _get_empathy_instruction(self, emotion: str, intent: str) -> str:
+        """Get empathy instruction based on emotion and intent."""
+        instructions = {
+            "sadness": "Respond with warmth and validation. Acknowledge their pain without minimizing it.",
+            "anger": "Validate their frustration. Help them feel heard before offering any perspective.",
+            "fear": "Provide reassurance and calm presence. Focus on what they can control.",
+            "joy": "Celebrate with them! Match their positive energy.",
+            "seeking_advice": "Listen carefully, then offer thoughtful guidance. Ask clarifying questions if needed.",
+            "neutral": "Be warm and attentive. Follow their lead on the conversation.",
+        }
+        
+        base = instructions.get(emotion, instructions["neutral"])
+        
+        if intent == "decision":
+            base += " Help them think through the decision without pushing an agenda."
+        elif intent == "emotional_support":
+            base += " Prioritize emotional connection over problem-solving."
+        
+        return base
+    
+    def _get_synthesis_instruction(self, intent: str, has_research: bool, has_debate: bool, has_regret: bool) -> str:
+        """Generate instruction for synthesizing the final response."""
+        parts = ["Create a helpful, conversational response that:"]
+        
+        parts.append("1. Directly addresses the user's message")
+        
+        if has_research:
+            parts.append("2. Incorporates relevant research findings naturally")
+        
+        if has_debate:
+            parts.append("3. Presents multiple perspectives fairly")
+        
+        if has_regret:
+            parts.append("4. Includes decision analysis insights")
+        
+        parts.append(f"Focus on {intent.replace('_', ' ')} as the primary intent.")
+        
+        return " ".join(parts)
+    
+    def synthesize_response(self,
                            user_message: str,
                            orchestration: Dict,
                            research_data: Dict = None,
                            news_data: List = None,
                            debate_data: Dict = None,
                            empathy_response: str = None,
-                           regret_data: Dict = None) -> str:
+                           regret_data: Dict = None,
+                           user_id: str = "anonymous") -> str:
         """
-        Use Gemini to synthesize all AI responses into a coherent final response.
+        Synthesize all AI responses into a coherent final response.
+        Uses deterministic rules to combine responses - NO LLM for synthesis.
         """
-        if not self.model:
-            return self._fallback_synthesis(empathy_response, debate_data, regret_data, research_data)
-        
-        synthesis_prompt = f"""You are synthesizing responses from multiple AI systems into one cohesive answer.
-
-User's original message: "{user_message}"
-User's intent: {orchestration.get('intent', 'unknown')}
-
-Available data from AI systems:
-{f"Research findings: {json.dumps(research_data)}" if research_data else "No research data"}
-{f"Relevant news: {json.dumps(news_data[:3]) if news_data else 'No news data'}" if news_data else ""}
-{f"Debate perspectives: {debate_data.get('final_answer', 'No debate data')}" if debate_data else "No debate data"}
-{f"Empathetic response: {empathy_response}" if empathy_response else "No empathy response"}
-{f"Regret analysis: Action suggested: {regret_data.get('action')}, Regret score: {regret_data.get('regret')}" if regret_data else "No regret analysis"}
-
-Instruction: {orchestration.get('final_response_instruction', 'Create a helpful, comprehensive response')}
-
-Create a well-structured, helpful response that:
-1. Directly addresses the user's message
-2. Incorporates relevant insights from the AI systems
-3. Is warm and conversational
-4. Provides actionable advice if applicable
-
-Response:"""
-
-        try:
-            response = self.model.generate_content(synthesis_prompt)
-            return response.text.strip()
-        except Exception as e:
-            logger.error(f"Gemini synthesis error: {e}")
-            return self._fallback_synthesis(empathy_response, debate_data, regret_data, research_data)
-    
-    def _fallback_synthesis(self, empathy: str, debate: Dict, regret: Dict, research: Dict) -> str:
+        intent = orchestration.get("intent", "casual")
         parts = []
-        if empathy:
-            parts.append(empathy)
-        if debate and debate.get("final_answer"):
-            parts.append(f"\n\n**Additional Perspectives:**\n{debate['final_answer'][:500]}")
-        if regret and regret.get("action"):
-            parts.append(f"\n\n**Suggested Action:** {regret['action']} (Regret risk: {regret.get('regret', 0):.1%})")
-        if research and research.get("answer"):
-            parts.append(f"\n\n**Research Context:** {research['answer'][:300]}")
         
-        return "\n".join(parts) if parts else "I'm here to help. Could you tell me more?"
+        if empathy_response:
+            parts.append(empathy_response)
+        
+        if research_data and research_data.get("answer"):
+            answer = research_data["answer"]
+            if len(answer) > 50 and (not empathy_response or answer[:100] not in empathy_response):
+                parts.append(f"\n\n**Research Insights:**\n{answer[:500]}")
+                
+                sources = research_data.get("sources", [])
+                if sources:
+                    source_links = [f"- [{s.get('title', 'Source')[:50]}]({s.get('url', '')})" 
+                                   for s in sources[:3] if s.get('url')]
+                    if source_links:
+                        parts.append("\n**Sources:**\n" + "\n".join(source_links))
+        
+        if news_data and orchestration.get("needs_news"):
+            news_items = news_data[:3] if isinstance(news_data, list) else []
+            if news_items:
+                news_text = "\n\n**Latest News:**\n"
+                for item in news_items:
+                    title = item.get("title", "")[:80]
+                    if title:
+                        news_text += f"• {title}\n"
+                parts.append(news_text)
+        
+        if debate_data:
+            final_answer = debate_data.get("final_answer", "")
+            if final_answer:
+                parts.append(f"\n\n**Multiple Perspectives:**\n{final_answer[:600]}")
+            else:
+                responses = debate_data.get("responses", {})
+                if responses:
+                    perspectives = []
+                    for provider, resp in list(responses.items())[:3]:
+                        if resp.get("success") and resp.get("response"):
+                            perspectives.append(f"**{provider.title()}:** {resp['response'][:200]}...")
+                    if perspectives:
+                        parts.append("\n\n**Different Viewpoints:**\n" + "\n\n".join(perspectives))
+        
+        if regret_data and orchestration.get("needs_regret_analysis"):
+            action = regret_data.get("action", "")
+            regret_score = regret_data.get("regret", 0)
+            domain = regret_data.get("domain", "")
+            
+            if action:
+                risk_level = "Low" if regret_score < 3 else ("Medium" if regret_score < 6 else "High")
+                parts.append(f"\n\n**Decision Analysis:**\n"
+                           f"• Suggested action: {action}\n"
+                           f"• Domain: {domain}\n"
+                           f"• Risk level: {risk_level} (score: {regret_score:.1f}/10)")
+        
+        if parts:
+            result = "\n".join(parts)
+        else:
+            result = "I'm here to help. Could you tell me more about what you're looking for?"
+        
+        self.budget_manager.record_usage(user_id, "empathy")
+        
+        return result
+    
+    def get_orchestration_summary(self, orchestration: Dict) -> Dict:
+        """Get a human-readable summary of orchestration decisions."""
+        return {
+            "intent": orchestration.get("intent"),
+            "confidence": orchestration.get("intent_confidence"),
+            "agents_activated": {
+                "research": orchestration.get("needs_research", False),
+                "news": orchestration.get("needs_news", False),
+                "debate": bool(orchestration.get("debate_providers")),
+                "regret": orchestration.get("needs_regret_analysis", False),
+                "empathy": True,
+            },
+            "emotion": orchestration.get("emotion_detected"),
+            "method": "deterministic_rules",
+        }
 
-orchestrator = GeminiOrchestrator()
+orchestrator = DeterministicOrchestrator()
 
 class NewsSystem:
     def __init__(self):
@@ -3678,7 +4084,7 @@ class RegretSystem:
         chosen_action = random.choice(possible_actions)
         
         score = self.predict_outcome(context, chosen_action)
-        regret = max(0, 10 - score) # Simple regret metric
+        regret = max(0, 10 - score)
 
         decision_id = str(uuid.uuid4())
         record = DecisionRecord(
@@ -3853,7 +4259,7 @@ app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET)
 LANDING_HTML = """
 <!DOCTYPE html>
 <html>
-<head><title>Unified AI</title><style>body{font-family:sans-serif;background:#111;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}a{color:#fff;text-decoration:none;border:1px solid #333;padding:20px;border-radius:10px;margin:10px;display:block;width:200px;text-align:center;transition:0.3s}a:hover{background:#222;border-color:#555}</style></head>
+<head><title>Unified AI</title><style>body{font-family:sans-serif;background:
 <body>
 <div>
     <h1>Unified AI System</h1>
@@ -4008,12 +4414,12 @@ def get_news_summary():
 class ChatMessage(BaseModel):
     message: str
     token: Optional[str] = None
-    selected_model: str = "auto"  # User's selected model for empathy
-    use_research: bool = True     # Whether to use Tavily for research
-    use_debate: bool = True       # Whether to use debate AI
-    debate_models: List[str] = ["groq", "openrouter"]  # Models for debate (2-4)
-    use_regret: bool = True       # Whether to use regret AI
-    regret_models: List[str] = ["groq", "openrouter"]  # Models for regret (2-4)
+    selected_model: str = "auto"
+    use_research: bool = True
+    use_debate: bool = True
+    debate_models: List[str] = ["groq", "openrouter"]
+    use_regret: bool = True
+    regret_models: List[str] = ["groq", "openrouter"]
 
 @app.post("/api/chat")
 async def chat_endpoint(data: ChatMessage, db: Session = Depends(get_db), _ = Depends(verify_rate_limit)):
@@ -4061,7 +4467,7 @@ async def chat_endpoint(data: ChatMessage, db: Session = Depends(get_db), _ = De
                 debate_data = await debate_system.conduct_debate(
                     orchestration.get("debate_question", message),
                     providers,
-                    use_research=False  # Research already done above
+                    use_research=False
                 )
                 logger.info(f"Debate completed with providers: {providers}")
         except Exception as e:
@@ -4133,7 +4539,7 @@ def decide_endpoint(data: dict):
 
 class DebateRequest(BaseModel):
     question: str
-    providers: List[str] = ["groq", "openrouter", "bytez", "chutes"]  # No Gemini in debate
+    providers: List[str] = ["groq", "openrouter", "bytez", "chutes"]
     use_research: bool = True
 
 @app.post("/api/debate")
