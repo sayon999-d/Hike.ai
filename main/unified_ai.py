@@ -911,6 +911,37 @@ HTML_CONTENT = r"""
   </div>
 
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const loginBtn = document.getElementById('loginBtn');
+        if (loginBtn) {
+            loginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleLogin();
+            });
+        }
+        
+        const signupBtn = document.getElementById('signupBtn');
+        if (signupBtn) {
+            signupBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleSignup();
+            });
+        }
+
+        // Allow Enter key to submit
+        const inputs = document.querySelectorAll('.login-container input');
+        inputs.forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    if (document.getElementById('loginForm').classList.contains('hidden')) {
+                        handleSignup();
+                    } else {
+                        handleLogin();
+                    }
+                }
+            });
+        });
+    });
 
     function safeJsonParse(str, fallback) {
         try {
