@@ -910,20 +910,26 @@ HTML_CONTENT = r"""
     </div>
   </div>
 
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
+    function initApp() {
+        console.log("Initializing App Bindings...");
+        
         const loginBtn = document.getElementById('loginBtn');
         if (loginBtn) {
+            // Add listener without clearing onclick to ensure redundancy
             loginBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log("Login Button Clicked");
                 handleLogin();
             });
+        } else {
+            console.error("Login Button Not Found in DOM");
         }
         
         const signupBtn = document.getElementById('signupBtn');
         if (signupBtn) {
             signupBtn.addEventListener('click', (e) => {
                 e.preventDefault();
+                console.log("Signup Button Clicked");
                 handleSignup();
             });
         }
@@ -933,7 +939,8 @@ HTML_CONTENT = r"""
         inputs.forEach(input => {
             input.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    if (document.getElementById('loginForm').classList.contains('hidden')) {
+                    e.preventDefault();
+                    if (document.getElementById('loginForm') && document.getElementById('loginForm').classList.contains('hidden')) {
                         handleSignup();
                     } else {
                         handleLogin();
@@ -941,7 +948,17 @@ HTML_CONTENT = r"""
                 }
             });
         });
-    });
+        
+        console.log("Checking session...");
+        checkSession();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initApp);
+    } else {
+        // DOM already ready, run immediately
+        initApp();
+    }
 
     function safeJsonParse(str, fallback) {
         try {
