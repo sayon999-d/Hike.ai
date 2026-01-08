@@ -1,10 +1,14 @@
-import multiprocessing
+"""
+Unified AI System - Hike.ai
+A comprehensive AI platform with chat, news, debate, and analysis features.
+"""
+
 # Fix for semaphore leak warning on macOS
-if __name__ != "__main__":
-    try:
-        multiprocessing.set_start_method('spawn', force=True)
-    except RuntimeError:
-        pass
+import multiprocessing
+try:
+    multiprocessing.set_start_method('spawn', force=True)
+except RuntimeError:
+    pass
 
 import os
 import time
