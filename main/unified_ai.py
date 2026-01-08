@@ -127,637 +127,114 @@ HTML_CONTENT = r"""<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hike.ai</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    :root {
-      --bg: #ffffff;
-      --bg-secondary: #f3f4f6;
-      --text: #000000;
-      --text-muted: #6b7280;
-      --border: #e5e7eb;
-      --blue: #2563eb;
-    }
-    
-    .dark {
-      --bg: #000000;
-      --bg-secondary: #111111;
-      --text: #ffffff;
-      --text-muted: #9ca3af;
-      --border: #1f2937;
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      height: 100vh;
-      overflow: hidden;
-    }
-    
+    :root { --bg: #fff; --bg-secondary: #f3f4f6; --text: #000; --text-muted: #6b7280; --border: #e5e7eb; --blue: #2563eb; }
+    .dark { --bg: #000; --bg-secondary: #111; --text: #fff; --text-muted: #9ca3af; --border: #1f2937; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
     .hidden { display: none !important; }
     
-    /* ==================== LOGIN PAGE ==================== */
-    .login-page {
-      min-height: 100vh;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    
-    .login-wrapper {
-      width: 100%;
-      max-width: 28rem;
-    }
-    
-    .login-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    
-    .login-logo {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
-    }
-    
-    .login-logo-icon {
-      width: 3rem;
-      height: 3rem;
-      background: #fff;
-      border-radius: 0.75rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .login-logo h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    
-    .login-subtitle {
-      color: #9ca3af;
-    }
-    
-    .login-card {
-      background: #fff;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    
-    .form-label {
-      display: block;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #374151;
-      margin-bottom: 0.5rem;
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 0.75rem 1rem;
-      border-radius: 9999px;
-      border: 2px solid #d1d5db;
-      font-size: 1rem;
-      transition: border-color 0.2s;
-      background: #fff;
-      color: #000;
-    }
-    
-    .form-input:focus {
-      outline: none;
-      border-color: #000;
-    }
-    
-    .form-input::placeholder {
-      color: #9ca3af;
-    }
-    
-    .password-wrapper {
-      position: relative;
-    }
-    
-    .password-toggle {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #6b7280;
-      cursor: pointer;
-      font-size: 0.875rem;
-    }
-    
-    .password-toggle:hover {
-      color: #000;
-    }
-    
-    .btn {
-      width: 100%;
-      padding: 0.75rem 1.5rem;
-      border-radius: 9999px;
-      font-weight: 600;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      border: none;
-    }
-    
-    .btn-primary {
-      background: #000;
-      color: #fff;
-    }
-    
-    .btn-primary:hover {
-      background: #1f2937;
-    }
-    
-    .btn-google {
-      background: #fff;
-      color: #374151;
-      border: 2px solid #d1d5db;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-    
-    .btn-google:hover {
-      background: #f9fafb;
-    }
-    
-    .divider {
-      position: relative;
-      margin: 1.5rem 0;
-    }
-    
-    .divider-line {
-      border-top: 1px solid #d1d5db;
-    }
-    
-    .divider-text {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff;
-      padding: 0 0.5rem;
-      color: #6b7280;
-      font-size: 0.875rem;
-    }
-    
-    .login-footer {
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #4b5563;
-    }
-    
-    .login-footer a {
-      color: #000;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    
-    .login-footer a:hover {
-      text-decoration: underline;
-    }
-    
-    .error-message {
-      background: #fef2f2;
-      color: #b91c1c;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
-      margin-bottom: 1rem;
-      font-size: 0.875rem;
-      display: none;
-    }
-    
-    .error-message.show {
-      display: block;
-    }
-    
-    /* ==================== MAIN APP ==================== */
-    .app {
-      display: none;
-      height: 100vh;
-      width: 100%;
-    }
-    
-    .app.active {
-      display: flex;
-    }
-    
-    /* Sidebar */
-    .sidebar {
-      width: 16rem;
-      background: var(--bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-    }
-    
-    .sidebar-header {
-      padding: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .sidebar-logo-icon {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
-    }
-    
-    .dark .sidebar-logo-icon {
-      background: #fff;
-    }
-    
-    .sidebar-logo-icon svg {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-    
-    .dark .sidebar-logo-icon svg {
-      color: #000;
-    }
-    
-    .sidebar-logo h1 {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-    
-    .sidebar-nav {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.75rem;
-    }
-    
-    .nav-item {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: 9999px;
-      background: none;
-      border: none;
-      color: var(--text);
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: background 0.2s;
-      text-align: left;
-    }
-    
-    .nav-item:hover {
-      background: var(--bg-secondary);
-    }
-    
-    .nav-item.active {
-      background: var(--bg-secondary);
-    }
-    
-    .nav-item svg {
-      width: 1.25rem;
-      height: 1.25rem;
-      flex-shrink: 0;
-    }
-    
-    .nav-item-text {
-      flex: 1;
-    }
-    
-    .projects-list {
-      margin-left: 2.25rem;
-      margin-top: 0.25rem;
-    }
-    
-    .project-item {
-      display: flex;
-      align-items: center;
-      padding: 0.5rem 0.75rem;
-      border-radius: 9999px;
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      cursor: pointer;
-    }
-    
-    .project-item:hover {
-      background: var(--bg-secondary);
-    }
-    
-    .project-item-name {
-      flex: 1;
-    }
-    
-    .project-delete {
-      opacity: 0;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      padding: 0.25rem;
-      border-radius: 0.25rem;
-    }
-    
-    .project-item:hover .project-delete {
-      opacity: 1;
-    }
-    
-    .project-delete:hover {
-      color: #ef4444;
-    }
-    
-    .sidebar-footer {
-      padding: 0.75rem;
-      border-top: 1px solid var(--border);
-    }
-    
-    .settings-panel {
-      margin-top: 0.5rem;
-      padding: 0.75rem;
-      background: var(--bg-secondary);
-      border-radius: 0.5rem;
-    }
-    
-    .settings-label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-    }
-    
-    .theme-btn {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.375rem 0.5rem;
-      background: none;
-      border: none;
-      border-radius: 0.25rem;
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      cursor: pointer;
-      text-align: left;
-    }
-    
-    .theme-btn:hover, .theme-btn.active {
-      background: var(--border);
-      color: var(--text);
-    }
-    
-    .theme-btn svg {
-      width: 1rem;
-      height: 1rem;
-    }
-    
-    /* Main Chat Area */
-    .main-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg);
-      min-width: 0;
-    }
-    
-    .chat-header {
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .chat-header h2 {
-      font-size: 1.125rem;
-      font-weight: 600;
-    }
-    
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
-    .message {
-      max-width: 42rem;
-      padding: 0.75rem 1rem;
-      border-radius: 1rem;
-      line-height: 1.5;
-    }
-    
-    .message.user {
-      align-self: flex-end;
-      background: #2563eb;
-      color: #fff;
-      border-bottom-right-radius: 0.25rem;
-    }
-    
-    .message.ai {
-      align-self: flex-start;
-      background: var(--bg-secondary);
-      color: var(--text);
-      border-bottom-left-radius: 0.25rem;
-    }
-    
-    .chat-input-area {
-      padding: 1rem;
-      border-top: 1px solid var(--border);
-    }
-    
-    .chat-input-wrapper {
-      max-width: 56rem;
-      margin: 0 auto;
-      display: flex;
-      gap: 0.75rem;
-    }
-    
-    .chat-input {
-      flex: 1;
-      padding: 0.75rem 1rem;
-      border-radius: 9999px;
-      border: 1px solid var(--border);
-      background: var(--bg-secondary);
-      color: var(--text);
-      font-size: 1rem;
-      font-family: inherit;
-    }
-    
-    .chat-input:focus {
-      outline: none;
-      border-color: #2563eb;
-    }
-    
-    .chat-input::placeholder {
-      color: var(--text-muted);
-    }
-    
-    .send-btn {
-      padding: 0.75rem 1.5rem;
-      background: #000;
-      color: #fff;
-      border: none;
-      border-radius: 9999px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 500;
-    }
-    
-    .dark .send-btn {
-      background: #fff;
-      color: #000;
-    }
-    
-    .send-btn:hover {
-      opacity: 0.9;
-    }
-    
-    .send-btn svg {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-    
-    /* News Section */
-    .news-section {
-      display: none;
-      padding: 1.5rem;
-      overflow-y: auto;
-      height: 100%;
-    }
-    
-    .news-section.active {
-      display: block;
-    }
-    
-    .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 1.5rem;
-    }
-    
-    .news-card {
-      background: var(--bg-secondary);
-      border: 1px solid var(--border);
-      border-radius: 1rem;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    
-    .news-card:hover {
-      transform: translateY(-2px);
-    }
-    
-    .news-image {
-      height: 180px;
-      background-size: cover;
-      background-position: center;
-      background-color: var(--border);
-    }
-    
-    .news-content {
-      padding: 1rem;
-    }
-    
-    .news-title {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      line-height: 1.4;
-    }
-    
-    .news-summary {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      z-index: 50;
-    }
-    
-    .modal-overlay.active {
-      display: flex;
-    }
-    
-    .modal {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      width: 100%;
-      max-width: 28rem;
-    }
-    
-    .modal h3 {
-      font-size: 1.25rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-    
-    .modal p {
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-    
-    .modal-actions {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: flex-end;
-    }
-    
-    .btn-cancel {
-      padding: 0.5rem 1rem;
-      background: var(--bg-secondary);
-      color: var(--text);
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
-    
-    .btn-danger {
-      padding: 0.5rem 1rem;
-      background: #dc2626;
-      color: #fff;
-      border: none;
-      border-radius: 0.5rem;
-      cursor: pointer;
-    }
-    
-    .btn-danger:hover {
-      background: #b91c1c;
-    }
+    /* Login */
+    .login-page { min-height: 100vh; background: #000; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .login-wrapper { width: 100%; max-width: 28rem; }
+    .login-header { text-align: center; margin-bottom: 2rem; }
+    .login-logo { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .login-logo-icon { width: 3rem; height: 3rem; background: #fff; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; }
+    .login-logo h1 { font-size: 3rem; font-weight: 700; color: #fff; }
+    .login-subtitle { color: #9ca3af; }
+    .login-card { background: #fff; border-radius: 1.5rem; padding: 2rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; }
+    .form-input { width: 100%; padding: 0.75rem 1rem; border-radius: 9999px; border: 2px solid #d1d5db; font-size: 1rem; background: #fff; color: #000; }
+    .form-input:focus { outline: none; border-color: #000; }
+    .password-wrapper { position: relative; }
+    .password-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #6b7280; cursor: pointer; font-size: 0.875rem; }
+    .btn { width: 100%; padding: 0.75rem 1.5rem; border-radius: 9999px; font-weight: 600; font-size: 1rem; cursor: pointer; border: none; }
+    .btn-primary { background: #000; color: #fff; }
+    .btn-primary:hover { background: #1f2937; }
+    .btn-google { background: #fff; color: #374151; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
+    .divider { position: relative; margin: 1.5rem 0; }
+    .divider-line { border-top: 1px solid #d1d5db; }
+    .divider-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 0 0.5rem; color: #6b7280; font-size: 0.875rem; }
+    .login-footer { text-align: center; margin-top: 1.5rem; color: #4b5563; }
+    .login-footer a { color: #000; font-weight: 600; cursor: pointer; }
+    .error-message { background: #fef2f2; color: #b91c1c; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; display: none; }
+    .error-message.show { display: block; }
+    
+    /* App */
+    .app { display: none; height: 100vh; width: 100%; }
+    .app.active { display: flex; }
+    .sidebar { width: 16rem; background: var(--bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+    .sidebar-header { padding: 1rem; border-bottom: 1px solid var(--border); }
+    .sidebar-logo { display: flex; align-items: center; gap: 0.5rem; }
+    .sidebar-logo-icon { padding: 0.5rem; border-radius: 0.5rem; }
+    .dark .sidebar-logo-icon { background: #fff; }
+    .sidebar-logo h1 { font-size: 1.25rem; font-weight: 700; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 0.75rem; }
+    .nav-item { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 9999px; background: none; border: none; color: var(--text); font-size: 0.875rem; cursor: pointer; text-align: left; }
+    .nav-item:hover, .nav-item.active { background: var(--bg-secondary); }
+    .nav-item svg { width: 1.25rem; height: 1.25rem; }
+    .sidebar-footer { padding: 0.75rem; border-top: 1px solid var(--border); }
+    
+    /* Settings Panel */
+    .settings-panel { margin-top: 0.5rem; padding: 0.75rem; background: var(--bg-secondary); border-radius: 0.5rem; max-height: 400px; overflow-y: auto; }
+    .settings-section { margin-bottom: 1rem; }
+    .settings-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; }
+    .theme-btns { display: flex; gap: 0.25rem; }
+    .theme-btn { flex: 1; padding: 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 0.5rem; color: var(--text); font-size: 0.75rem; cursor: pointer; text-align: center; }
+    .theme-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; }
+    .toggle-label { font-size: 0.875rem; }
+    .toggle { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; cursor: pointer; }
+    .toggle.active { background: var(--blue); }
+    .toggle::after { content: ''; position: absolute; width: 20px; height: 20px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.2s; }
+    .toggle.active::after { transform: translateX(20px); }
+    .model-select { margin-top: 0.5rem; }
+    .model-grid { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.25rem; }
+    .model-chip { padding: 0.25rem 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 0.25rem; font-size: 0.7rem; cursor: pointer; }
+    .model-chip.selected { background: var(--blue); color: #fff; border-color: var(--blue); }
+    
+    /* Main Content */
+    .main-content { flex: 1; display: flex; flex-direction: column; background: var(--bg); min-width: 0; }
+    .section-header { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .section-header h2 { font-size: 1.125rem; font-weight: 600; }
+    
+    /* Chat */
+    .chat-messages { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .message { max-width: 42rem; padding: 0.75rem 1rem; border-radius: 1rem; line-height: 1.5; }
+    .message.user { align-self: flex-end; background: #2563eb; color: #fff; }
+    .message.ai { align-self: flex-start; background: var(--bg-secondary); }
+    .chat-input-area { padding: 1rem; border-top: 1px solid var(--border); }
+    .chat-input-wrapper { max-width: 56rem; margin: 0 auto; display: flex; gap: 0.75rem; }
+    .chat-input { flex: 1; padding: 0.75rem 1rem; border-radius: 9999px; border: 1px solid var(--border); background: var(--bg-secondary); color: var(--text); font-size: 1rem; }
+    .chat-input:focus { outline: none; border-color: var(--blue); }
+    .send-btn { padding: 0.75rem 1.5rem; background: #000; color: #fff; border: none; border-radius: 9999px; cursor: pointer; }
+    .dark .send-btn { background: #fff; color: #000; }
+    
+    /* History */
+    .history-list { padding: 1.5rem; overflow-y: auto; flex: 1; }
+    .history-item { padding: 1rem; background: var(--bg-secondary); border-radius: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; }
+    .history-item:hover { opacity: 0.8; }
+    .history-date { font-size: 0.75rem; color: var(--text-muted); }
+    .history-preview { margin-top: 0.25rem; font-size: 0.875rem; }
+    
+    /* Analysis */
+    .analysis-section { padding: 1.5rem; overflow-y: auto; flex: 1; }
+    .chart-container { background: var(--bg-secondary); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .stat-card { background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: 700; }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+    
+    /* News */
+    .news-section { padding: 1.5rem; overflow-y: auto; flex: 1; }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+    .news-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; cursor: pointer; }
+    .news-image { height: 160px; background-size: cover; background-position: center; background-color: var(--border); }
+    .news-content { padding: 1rem; }
+    .news-title { font-weight: 600; margin-bottom: 0.5rem; }
+    .news-summary { font-size: 0.875rem; color: var(--text-muted); }
   </style>
 </head>
 <body>
@@ -767,560 +244,313 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       <div class="login-header">
         <div class="login-logo">
           <div class="login-logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:2rem;height:2rem;">
-              <path d="M3 12l7-9 4 9 7-6v13H3z" fill="black" stroke="black"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:2rem;height:2rem;"><path d="M3 12l7-9 4 9 7-6v13H3z" fill="black" stroke="black"/></svg>
           </div>
           <h1>Hike.ai</h1>
         </div>
         <p class="login-subtitle">Sign in to continue</p>
       </div>
-      
       <div class="login-card">
         <div id="errorMessage" class="error-message"></div>
-        
-        <!-- Login Form -->
         <div id="loginForm">
           <div class="form-group">
             <label class="form-label">Email Address</label>
             <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email">
           </div>
-          
           <div class="form-group">
             <label class="form-label">Password</label>
             <div class="password-wrapper">
-              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" style="padding-right: 4rem;">
-              <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">Show</button>
+              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" style="padding-right:4rem;">
+              <button type="button" class="password-toggle" onclick="togglePassword('loginPassword',this)">Show</button>
             </div>
           </div>
-          
           <button class="btn btn-primary" id="loginBtn">Sign In</button>
-          
-          <div class="divider">
-            <div class="divider-line"></div>
-            <span class="divider-text">Or continue with</span>
-          </div>
-          
+          <div class="divider"><div class="divider-line"></div><span class="divider-text">Or continue with</span></div>
           <button class="btn btn-google" id="googleBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
+            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
             Sign in with Google
           </button>
-          
-          <div class="login-footer">
-            Don't have an account? <a onclick="showSignup()">Sign up</a>
-          </div>
+          <div class="login-footer">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
         </div>
-        
-        <!-- Signup Form -->
         <div id="signupForm" class="hidden">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" id="signupName" class="form-input" placeholder="Enter your name">
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email">
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <div class="password-wrapper">
-              <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" style="padding-right: 4rem;">
-              <button type="button" class="password-toggle" onclick="togglePassword('signupPassword', this)">Show</button>
-            </div>
-          </div>
-          
+          <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signupName" class="form-input" placeholder="Enter your name"></div>
+          <div class="form-group"><label class="form-label">Email Address</label><input type="email" id="signupEmail" class="form-input" placeholder="Enter your email"></div>
+          <div class="form-group"><label class="form-label">Password</label><div class="password-wrapper"><input type="password" id="signupPassword" class="form-input" placeholder="Create a password" style="padding-right:4rem;"><button type="button" class="password-toggle" onclick="togglePassword('signupPassword',this)">Show</button></div></div>
           <button class="btn btn-primary" id="signupBtn">Create Account</button>
-          
-          <div class="login-footer">
-            Already have an account? <a onclick="showLogin()">Sign in</a>
-          </div>
+          <div class="login-footer">Already have an account? <a onclick="showLogin()">Sign in</a></div>
         </div>
       </div>
     </div>
   </div>
-  
+
   <!-- Main App -->
   <div class="app" id="mainApp">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
-          <div class="sidebar-logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <path d="M3 12l7-9 4 9 7-6v13H3z" fill="currentColor" stroke="currentColor"/>
-            </svg>
-          </div>
+          <div class="sidebar-logo-icon"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1.5rem;height:1.5rem;"><path d="M3 12l7-9 4 9 7-6v13H3z"/></svg></div>
           <h1>Hike.ai</h1>
         </div>
       </div>
-      
       <nav class="sidebar-nav">
-        <button class="nav-item active" id="navChat" onclick="showSection('chat')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-          <span class="nav-item-text">Chat</span>
-        </button>
-        
-        <button class="nav-item" id="navNews" onclick="showSection('news')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
-          </svg>
-          <span class="nav-item-text">News</span>
-        </button>
-        
-        <button class="nav-item" id="navProjects" onclick="toggleProjects()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
-          </svg>
-          <span class="nav-item-text">Projects</span>
-          <svg id="projectsChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;">
-            <path d="M9 18l6-6-6-6"/>
-          </svg>
-        </button>
-        
-        <div id="projectsList" class="projects-list hidden">
-          <div class="project-item" onclick="openCreateProject()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;margin-right:0.5rem;">
-              <path d="M12 5v14M5 12h14"/>
-            </svg>
-            <span>Create Project</span>
+        <button class="nav-item active" id="navChat" onclick="showSection('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></button>
+        <button class="nav-item" id="navHistory" onclick="showSection('history')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>History</span></button>
+        <button class="nav-item" id="navNews" onclick="showSection('news')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/></svg><span>News</span></button>
+        <button class="nav-item" id="navAnalysis" onclick="showSection('analysis')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><span>Analysis</span></button>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="nav-item" onclick="toggleSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span>Settings</span></button>
+        <div id="settingsPanel" class="settings-panel hidden">
+          <div class="settings-section">
+            <div class="settings-label">Theme</div>
+            <div class="theme-btns">
+              <button class="theme-btn" onclick="setTheme('light')">Light</button>
+              <button class="theme-btn active" onclick="setTheme('dark')">Dark</button>
+              <button class="theme-btn" onclick="setTheme('system')">System</button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="toggle-row"><span class="toggle-label">Web Search</span><div class="toggle" id="webSearchToggle" onclick="toggleSetting('webSearch')"></div></div>
+          </div>
+          <div class="settings-section">
+            <div class="toggle-row"><span class="toggle-label">Debate AI</span><div class="toggle" id="debateToggle" onclick="toggleSetting('debate')"></div></div>
+            <div class="model-select hidden" id="debateModels">
+              <div class="settings-label">Select 2-4 models</div>
+              <div class="model-grid">
+                <span class="model-chip selected" onclick="toggleModel('debate','groq')">Groq</span>
+                <span class="model-chip selected" onclick="toggleModel('debate','openrouter')">OpenRouter</span>
+                <span class="model-chip" onclick="toggleModel('debate','gemini')">Gemini</span>
+                <span class="model-chip" onclick="toggleModel('debate','bytez')">Bytez</span>
+              </div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="toggle-row"><span class="toggle-label">Regret AI</span><div class="toggle" id="regretToggle" onclick="toggleSetting('regret')"></div></div>
+            <div class="model-select hidden" id="regretModels">
+              <div class="settings-label">Select 2-4 models</div>
+              <div class="model-grid">
+                <span class="model-chip selected" onclick="toggleModel('regret','groq')">Groq</span>
+                <span class="model-chip selected" onclick="toggleModel('regret','openrouter')">OpenRouter</span>
+                <span class="model-chip" onclick="toggleModel('regret','gemini')">Gemini</span>
+                <span class="model-chip" onclick="toggleModel('regret','chutes')">Chutes</span>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <button class="nav-item" onclick="showSection('analysis')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 20V10M12 20V4M6 20v-6"/>
-          </svg>
-          <span class="nav-item-text">Analysis</span>
-        </button>
-      </nav>
-      
-      <div class="sidebar-footer">
-        <button class="nav-item" id="settingsBtn" onclick="toggleSettings()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-          </svg>
-          <span class="nav-item-text">Settings</span>
-        </button>
-        
-        <div id="settingsPanel" class="settings-panel hidden">
-          <div class="settings-label">THEME</div>
-          <button class="theme-btn" onclick="setTheme('light')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-            Light
-          </button>
-          <button class="theme-btn" onclick="setTheme('dark')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            Dark
-          </button>
-          <button class="theme-btn" onclick="setTheme('system')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
-            System
-          </button>
-        </div>
-        
-        <button class="nav-item" style="margin-top:0.5rem;color:#ef4444;" onclick="handleLogout()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
-          </svg>
-          <span class="nav-item-text">Logout</span>
-        </button>
+        <button class="nav-item" style="margin-top:0.5rem;color:#ef4444;" onclick="handleLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Logout</span></button>
       </div>
     </aside>
-    
-    <!-- Main Content -->
     <main class="main-content">
-      <!-- Chat Section -->
-      <div id="chatSection">
-        <div class="chat-header">
-          <h2>Chat</h2>
-        </div>
-        
-        <div class="chat-messages" id="chatMessages">
-          <div class="message ai">Hello! I'm Hike.ai. How can I assist you today?</div>
-        </div>
-        
-        <div class="chat-input-area">
-          <div class="chat-input-wrapper">
-            <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-              </svg>
-            </button>
-          </div>
-        </div>
+      <!-- Chat -->
+      <div id="chatSection" style="display:flex;flex-direction:column;height:100%;">
+        <div class="section-header"><h2>Chat</h2></div>
+        <div class="chat-messages" id="chatMessages"><div class="message ai">Hello! I'm Hike.ai. How can I assist you today?</div></div>
+        <div class="chat-input-area"><div class="chat-input-wrapper"><input type="text" id="chatInput" class="chat-input" placeholder="Type your message..."><button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.25rem;height:1.25rem;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></div>
       </div>
-      
-      <!-- News Section -->
-      <div id="newsSection" class="news-section">
-        <h2 style="margin-bottom:1.5rem;font-size:1.5rem;">Latest News</h2>
-        <div class="news-grid" id="newsGrid">
-          <p style="color:var(--text-muted);">Loading news...</p>
+      <!-- History -->
+      <div id="historySection" class="hidden" style="display:flex;flex-direction:column;height:100%;">
+        <div class="section-header"><h2>Chat History</h2></div>
+        <div class="history-list" id="historyList"><p style="color:var(--text-muted);text-align:center;margin-top:2rem;">No chat history yet.</p></div>
+      </div>
+      <!-- News -->
+      <div id="newsSection" class="hidden" style="display:flex;flex-direction:column;height:100%;">
+        <div class="section-header"><h2>Latest News</h2></div>
+        <div class="news-section" id="newsGrid"><p style="color:var(--text-muted);">Loading news...</p></div>
+      </div>
+      <!-- Analysis -->
+      <div id="analysisSection" class="hidden" style="display:flex;flex-direction:column;height:100%;">
+        <div class="section-header"><h2>Model Usage Analysis</h2></div>
+        <div class="analysis-section">
+          <div class="chart-container"><canvas id="usageChart" height="200"></canvas></div>
+          <div class="stats-grid">
+            <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Requests</div></div>
+            <div class="stat-card"><div class="stat-value" id="statGroq">0</div><div class="stat-label">Groq</div></div>
+            <div class="stat-card"><div class="stat-value" id="statOpenRouter">0</div><div class="stat-label">OpenRouter</div></div>
+            <div class="stat-card"><div class="stat-value" id="statGemini">0</div><div class="stat-label">Gemini</div></div>
+          </div>
         </div>
       </div>
     </main>
   </div>
-  
-  <!-- Create Project Modal -->
-  <div class="modal-overlay" id="createProjectModal">
-    <div class="modal">
-      <h3>Create New Project</h3>
-      <input type="text" id="newProjectName" class="form-input" placeholder="Project name..." style="margin-bottom:1rem;border-radius:0.5rem;">
-      <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeCreateProject()">Cancel</button>
-        <button class="btn btn-primary" style="width:auto;padding:0.5rem 1rem;" onclick="createProject()">Create</button>
-      </div>
-    </div>
-  </div>
 
   <script>
-    // ==================== STATE ====================
     const state = {
-      theme: localStorage.getItem('theme') || 'system',
-      projects: JSON.parse(localStorage.getItem('projects') || '[]'),
-      currentSection: 'chat'
+      theme: localStorage.getItem('theme') || 'dark',
+      webSearch: localStorage.getItem('webSearch') === 'true',
+      debate: localStorage.getItem('debate') === 'true',
+      regret: localStorage.getItem('regret') === 'true',
+      debateModels: JSON.parse(localStorage.getItem('debateModels') || '["groq","openrouter"]'),
+      regretModels: JSON.parse(localStorage.getItem('regretModels') || '["groq","openrouter"]'),
+      chatHistory: JSON.parse(localStorage.getItem('chatHistory') || '[]'),
+      modelUsage: JSON.parse(localStorage.getItem('modelUsage') || '{"groq":0,"openrouter":0,"gemini":0,"bytez":0,"chutes":0}'),
+      usageHistory: JSON.parse(localStorage.getItem('usageHistory') || '[]')
     };
+    let usageChart = null;
 
-    // ==================== INITIALIZATION ====================
     document.addEventListener('DOMContentLoaded', () => {
-      console.log('Hike.ai initialized');
       applyTheme();
+      applySettings();
       checkSession();
       bindEvents();
     });
 
     function bindEvents() {
-      // Login button
       document.getElementById('loginBtn').addEventListener('click', handleLogin);
-      
-      // Signup button
       document.getElementById('signupBtn').addEventListener('click', handleSignup);
-      
-      // Google button
-      document.getElementById('googleBtn').addEventListener('click', handleGoogleLogin);
-      
-      // Send button
-      document.getElementById('sendBtn').addEventListener('click', sendMessage);
-      
-      // Chat input enter key
-      document.getElementById('chatInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') sendMessage();
-      });
-      
-      // Login form enter key
-      document.getElementById('loginPassword').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleLogin();
-      });
-      
-      // Signup form enter key
-      document.getElementById('signupPassword').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleSignup();
-      });
+      document.getElementById('googleBtn').addEventListener('click', () => window.location.href='/auth/google/login');
+      document.getElementById('chatInput').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
+      document.getElementById('loginPassword').addEventListener('keypress', e => { if(e.key==='Enter') handleLogin(); });
     }
 
-    // ==================== AUTHENTICATION ====================
-    async function checkSession() {
-      try {
-        const res = await fetch('/api/profile');
-        if (res.ok) {
-          showApp();
-        }
-      } catch (e) {
-        console.log('Not logged in');
-      }
-    }
-
+    async function checkSession() { try { const r = await fetch('/api/profile'); if(r.ok) showApp(); } catch(e){} }
     async function handleLogin() {
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
-      
-      if (!email || !password) {
-        showError('Please enter email and password');
-        return;
-      }
-      
+      if(!email || !password) { showError('Please enter email and password'); return; }
       try {
-        const res = await fetch('/api/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-          showApp();
-        } else {
-          showError(data.detail || 'Login failed');
-        }
-      } catch (e) {
-        showError('Connection error. Please try again.');
-      }
+        const r = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password}) });
+        if(r.ok) showApp(); else { const d=await r.json(); showError(d.detail||'Login failed'); }
+      } catch(e) { showError('Connection error'); }
     }
-
     async function handleSignup() {
-      const name = document.getElementById('signupName').value;
-      const email = document.getElementById('signupEmail').value;
-      const password = document.getElementById('signupPassword').value;
-      
-      if (!name || !email || !password) {
-        showError('Please fill in all fields');
-        return;
-      }
-      
+      const name = document.getElementById('signupName').value, email = document.getElementById('signupEmail').value, password = document.getElementById('signupPassword').value;
+      if(!name||!email||!password) { showError('Please fill in all fields'); return; }
       try {
-        const res = await fetch('/api/signup', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password })
-        });
-        
-        const data = await res.json();
-        
-        if (res.ok) {
-          showApp();
-        } else {
-          showError(data.detail || 'Signup failed');
-        }
-      } catch (e) {
-        showError('Connection error. Please try again.');
-      }
+        const r = await fetch('/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,password}) });
+        if(r.ok) showApp(); else { const d=await r.json(); showError(d.detail||'Signup failed'); }
+      } catch(e) { showError('Connection error'); }
     }
+    async function handleLogout() { try { await fetch('/api/logout',{method:'POST'}); } catch(e){} document.getElementById('mainApp').classList.remove('active'); document.getElementById('loginPage').style.display='flex'; }
 
-    function handleGoogleLogin() {
-      window.location.href = '/auth/google/login';
-    }
+    function showApp() { document.getElementById('loginPage').style.display='none'; document.getElementById('mainApp').classList.add('active'); loadNews(); renderHistory(); initChart(); }
+    function showError(msg) { const el=document.getElementById('errorMessage'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),5000); }
+    function showLogin() { document.getElementById('signupForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); }
+    function showSignup() { document.getElementById('loginForm').classList.add('hidden'); document.getElementById('signupForm').classList.remove('hidden'); }
+    function togglePassword(id,btn) { const i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'Show':'Hide'; }
 
-    async function handleLogout() {
-      try {
-        await fetch('/api/logout', { method: 'POST' });
-      } catch (e) {}
-      document.getElementById('mainApp').classList.remove('active');
-      document.getElementById('loginPage').style.display = 'flex';
-    }
-
-    // ==================== UI HELPERS ====================
-    function showApp() {
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('mainApp').classList.add('active');
-      loadNews();
-      renderProjects();
-    }
-
-    function showError(msg) {
-      const el = document.getElementById('errorMessage');
-      el.textContent = msg;
-      el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 5000);
-    }
-
-    function showLogin() {
-      document.getElementById('signupForm').classList.add('hidden');
-      document.getElementById('loginForm').classList.remove('hidden');
-      document.getElementById('errorMessage').classList.remove('show');
-    }
-
-    function showSignup() {
-      document.getElementById('loginForm').classList.add('hidden');
-      document.getElementById('signupForm').classList.remove('hidden');
-      document.getElementById('errorMessage').classList.remove('show');
-    }
-
-    function togglePassword(inputId, btn) {
-      const input = document.getElementById(inputId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        btn.textContent = 'Hide';
-      } else {
-        input.type = 'password';
-        btn.textContent = 'Show';
-      }
-    }
-
-    // ==================== SECTIONS ====================
     function showSection(section) {
-      state.currentSection = section;
-      
-      // Update nav
-      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-      
-      // Hide all sections
-      document.getElementById('chatSection').style.display = 'none';
-      document.getElementById('newsSection').classList.remove('active');
-      
-      if (section === 'chat') {
-        document.getElementById('navChat').classList.add('active');
-        document.getElementById('chatSection').style.display = 'flex';
-        document.getElementById('chatSection').style.flexDirection = 'column';
-        document.getElementById('chatSection').style.height = '100%';
-      } else if (section === 'news') {
-        document.getElementById('navNews').classList.add('active');
-        document.getElementById('newsSection').classList.add('active');
-        loadNews();
-      }
+      ['chat','history','news','analysis'].forEach(s => {
+        document.getElementById(s+'Section').classList.add('hidden');
+        document.getElementById('nav'+s.charAt(0).toUpperCase()+s.slice(1)).classList.remove('active');
+      });
+      document.getElementById(section+'Section').classList.remove('hidden');
+      document.getElementById(section+'Section').style.display='flex';
+      document.getElementById('nav'+section.charAt(0).toUpperCase()+section.slice(1)).classList.add('active');
+      if(section==='news') loadNews();
+      if(section==='history') renderHistory();
+      if(section==='analysis') updateChart();
     }
 
-    // ==================== CHAT ====================
     async function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
-      if (!message) return;
-      
+      const input = document.getElementById('chatInput'), msg = input.value.trim();
+      if(!msg) return;
       const chat = document.getElementById('chatMessages');
-      
-      // Add user message
-      const userMsg = document.createElement('div');
-      userMsg.className = 'message user';
-      userMsg.textContent = message;
-      chat.appendChild(userMsg);
-      
+      chat.innerHTML += '<div class="message user">'+msg+'</div>';
       input.value = '';
-      chat.scrollTop = chat.scrollHeight;
-      
-      // Add thinking message
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'message ai';
-      aiMsg.textContent = 'Thinking...';
-      chat.appendChild(aiMsg);
-      
+      const aiMsg = document.createElement('div'); aiMsg.className='message ai'; aiMsg.textContent='Thinking...'; chat.appendChild(aiMsg); chat.scrollTop=chat.scrollHeight;
       try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
-        
-        const data = await res.json();
-        aiMsg.textContent = data.response || 'Sorry, I could not process that.';
-      } catch (e) {
-        aiMsg.textContent = 'Sorry, there was an error. Please try again.';
-      }
-      
+        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
+        const d = await r.json();
+        aiMsg.textContent = d.response || 'Sorry, I could not process that.';
+        saveToHistory(msg, d.response);
+        if(d.model_used) trackModelUsage(d.model_used);
+      } catch(e) { aiMsg.textContent = 'Error. Please try again.'; }
       chat.scrollTop = chat.scrollHeight;
     }
 
-    // ==================== NEWS ====================
+    function saveToHistory(user, ai) {
+      state.chatHistory.unshift({ date: new Date().toISOString(), user, ai });
+      if(state.chatHistory.length > 50) state.chatHistory.pop();
+      localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('historyList');
+      if(state.chatHistory.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;margin-top:2rem;">No chat history yet.</p>'; return; }
+      list.innerHTML = state.chatHistory.map(h => '<div class="history-item"><div class="history-date">'+new Date(h.date).toLocaleString()+'</div><div class="history-preview"><strong>You:</strong> '+h.user.substring(0,50)+'...</div></div>').join('');
+    }
+
+    function trackModelUsage(model) {
+      const m = model.toLowerCase();
+      if(state.modelUsage[m] !== undefined) state.modelUsage[m]++;
+      state.usageHistory.push({ date: new Date().toISOString(), model: m });
+      if(state.usageHistory.length > 100) state.usageHistory.shift();
+      localStorage.setItem('modelUsage', JSON.stringify(state.modelUsage));
+      localStorage.setItem('usageHistory', JSON.stringify(state.usageHistory));
+    }
+
+    function initChart() {
+      const ctx = document.getElementById('usageChart').getContext('2d');
+      usageChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: [], datasets: [
+          { label: 'Groq', data: [], borderColor: '#10b981', fill: false },
+          { label: 'OpenRouter', data: [], borderColor: '#3b82f6', fill: false },
+          { label: 'Gemini', data: [], borderColor: '#f59e0b', fill: false }
+        ]},
+        options: { responsive: true, scales: { y: { beginAtZero: true } } }
+      });
+      updateChart();
+    }
+
+    function updateChart() {
+      if(!usageChart) return;
+      const last7 = [...Array(7)].map((_,i) => { const d = new Date(); d.setDate(d.getDate()-6+i); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); });
+      const counts = { groq: Array(7).fill(0), openrouter: Array(7).fill(0), gemini: Array(7).fill(0) };
+      state.usageHistory.forEach(u => {
+        const d = new Date(u.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+        const idx = last7.indexOf(d);
+        if(idx >= 0 && counts[u.model]) counts[u.model][idx]++;
+      });
+      usageChart.data.labels = last7;
+      usageChart.data.datasets[0].data = counts.groq;
+      usageChart.data.datasets[1].data = counts.openrouter;
+      usageChart.data.datasets[2].data = counts.gemini;
+      usageChart.update();
+      document.getElementById('statTotal').textContent = Object.values(state.modelUsage).reduce((a,b)=>a+b,0);
+      document.getElementById('statGroq').textContent = state.modelUsage.groq || 0;
+      document.getElementById('statOpenRouter').textContent = state.modelUsage.openrouter || 0;
+      document.getElementById('statGemini').textContent = state.modelUsage.gemini || 0;
+    }
+
     async function loadNews() {
       const grid = document.getElementById('newsGrid');
-      
       try {
-        const res = await fetch('/api/news/latest');
-        const articles = await res.json();
-        
-        if (!articles || articles.length === 0) {
-          grid.innerHTML = '<p style="color:var(--text-muted);">No news available.</p>';
-          return;
-        }
-        
-        grid.innerHTML = articles.map(article => {
-          const image = (article.urlToImage || '').replace(/'/g, '%27');
-          const url = (article.url || '#').replace(/'/g, '%27');
-          return `
-            <div class="news-card" onclick="window.open('${url}', '_blank')">
-              <div class="news-image" style="background-image: url('${image}')"></div>
-              <div class="news-content">
-                <div class="news-title">${article.title || 'Untitled'}</div>
-                <div class="news-summary">${article.description || ''}</div>
-              </div>
-            </div>
-          `;
-        }).join('');
-      } catch (e) {
-        grid.innerHTML = '<p style="color:#ef4444;">Failed to load news.</p>';
-      }
+        const r = await fetch('/api/news/latest'), articles = await r.json();
+        if(!articles||articles.length===0) { grid.innerHTML='<p>No news available.</p>'; return; }
+        grid.innerHTML = '<div class="news-grid">'+articles.map(a => '<div class="news-card" onclick="window.open(\''+a.url+'\',\'_blank\')"><div class="news-image" style="background-image:url(\''+a.urlToImage+'\')"></div><div class="news-content"><div class="news-title">'+a.title+'</div><div class="news-summary">'+(a.description||'')+'</div></div></div>').join('')+'</div>';
+      } catch(e) { grid.innerHTML='<p style="color:#ef4444;">Failed to load news.</p>'; }
     }
 
-    // ==================== PROJECTS ====================
-    function toggleProjects() {
-      const list = document.getElementById('projectsList');
-      const chevron = document.getElementById('projectsChevron');
-      list.classList.toggle('hidden');
-      chevron.style.transform = list.classList.contains('hidden') ? '' : 'rotate(90deg)';
+    function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
+    function setTheme(t) {
+      state.theme = t; localStorage.setItem('theme', t); applyTheme();
+      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
     }
-
-    function renderProjects() {
-      const list = document.getElementById('projectsList');
-      const createBtn = list.querySelector('.project-item');
-      list.innerHTML = '';
-      list.appendChild(createBtn);
-      
-      state.projects.forEach(project => {
-        const item = document.createElement('div');
-        item.className = 'project-item';
-        item.innerHTML = `
-          <span class="project-item-name">${project}</span>
-          <button class="project-delete" onclick="deleteProject('${project}', event)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;">
-              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-            </svg>
-          </button>
-        `;
-        list.appendChild(item);
-      });
+    function applyTheme() { document.body.classList.toggle('dark', state.theme==='dark'||(state.theme==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches)); }
+    function applySettings() {
+      if(state.webSearch) document.getElementById('webSearchToggle').classList.add('active');
+      if(state.debate) { document.getElementById('debateToggle').classList.add('active'); document.getElementById('debateModels').classList.remove('hidden'); }
+      if(state.regret) { document.getElementById('regretToggle').classList.add('active'); document.getElementById('regretModels').classList.remove('hidden'); }
+      updateModelChips();
     }
-
-    function openCreateProject() {
-      document.getElementById('createProjectModal').classList.add('active');
-      document.getElementById('newProjectName').focus();
+    function toggleSetting(s) {
+      state[s] = !state[s]; localStorage.setItem(s, state[s]);
+      document.getElementById(s+'Toggle').classList.toggle('active', state[s]);
+      if(s==='debate'||s==='regret') document.getElementById(s+'Models').classList.toggle('hidden', !state[s]);
     }
-
-    function closeCreateProject() {
-      document.getElementById('createProjectModal').classList.remove('active');
-      document.getElementById('newProjectName').value = '';
+    function toggleModel(type, model) {
+      const arr = state[type+'Models'], idx = arr.indexOf(model);
+      if(idx >= 0) { if(arr.length > 2) arr.splice(idx,1); }
+      else { if(arr.length < 4) arr.push(model); }
+      localStorage.setItem(type+'Models', JSON.stringify(arr));
+      updateModelChips();
     }
-
-    function createProject() {
-      const name = document.getElementById('newProjectName').value.trim();
-      if (name) {
-        state.projects.push(name);
-        localStorage.setItem('projects', JSON.stringify(state.projects));
-        renderProjects();
-        closeCreateProject();
-      }
+    function updateModelChips() {
+      document.querySelectorAll('#debateModels .model-chip').forEach(c => c.classList.toggle('selected', state.debateModels.includes(c.textContent.toLowerCase())));
+      document.querySelectorAll('#regretModels .model-chip').forEach(c => c.classList.toggle('selected', state.regretModels.includes(c.textContent.toLowerCase())));
     }
-
-    function deleteProject(name, event) {
-      event.stopPropagation();
-      state.projects = state.projects.filter(p => p !== name);
-      localStorage.setItem('projects', JSON.stringify(state.projects));
-      renderProjects();
-    }
-
-    // ==================== SETTINGS ====================
-    function toggleSettings() {
-      document.getElementById('settingsPanel').classList.toggle('hidden');
-    }
-
-    function setTheme(theme) {
-      state.theme = theme;
-      localStorage.setItem('theme', theme);
-      applyTheme();
-      
-      // Update active states
-      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.closest('.theme-btn').classList.add('active');
-    }
-
-    function applyTheme() {
-      const isDark = state.theme === 'dark' || 
-        (state.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-      
-      document.body.classList.toggle('dark', isDark);
-    }
-
-    // Listen for system theme changes
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-      if (state.theme === 'system') applyTheme();
-    });
   </script>
 </body>
 </html>
