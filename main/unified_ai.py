@@ -910,6 +910,7 @@ HTML_CONTENT = r"""
     </div>
   </div>
 
+  <script>
     function initApp() {
         console.log("Initializing App Bindings...");
         
