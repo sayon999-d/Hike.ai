@@ -912,13 +912,22 @@ HTML_CONTENT = r"""
 
   <script>
 
+    function safeJsonParse(str, fallback) {
+        try {
+            return str ? JSON.parse(str) : fallback;
+        } catch (e) {
+            console.error("JSON Parse Error:", e);
+            return fallback;
+        }
+    }
+
     const appSettings = {
         model: localStorage.getItem('selectedModel') || 'auto',
         useResearch: localStorage.getItem('useResearch') === 'true',
         useDebate: localStorage.getItem('useDebate') === 'true',
-        debateModels: JSON.parse(localStorage.getItem('debateModels') || '["groq", "openrouter"]'),
+        debateModels: safeJsonParse(localStorage.getItem('debateModels'), ["groq", "openrouter"]),
         useRegret: localStorage.getItem('useRegret') === 'true',
-        regretModels: JSON.parse(localStorage.getItem('regretModels') || '["groq"]')
+        regretModels: safeJsonParse(localStorage.getItem('regretModels'), ["groq"])
     };
 
     function escapeHtml(text) {
