@@ -149,17 +149,16 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     .form-input { width: 100%; padding: 0.75rem 1rem; border-radius: 9999px; border: 2px solid #d1d5db; font-size: 1rem; background: #fff; color: #000; }
     .form-input:focus { outline: none; border-color: #000; }
     .password-wrapper { position: relative; }
-    .password-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #6b7280; cursor: pointer; font-size: 0.875rem; }
-    .btn { width: 100%; padding: 0.75rem 1.5rem; border-radius: 9999px; font-weight: 600; font-size: 1rem; cursor: pointer; border: none; }
+    .password-toggle { position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #6b7280; cursor: pointer; }
+    .btn { width: 100%; padding: 0.75rem; border-radius: 9999px; font-weight: 600; cursor: pointer; border: none; }
     .btn-primary { background: #000; color: #fff; }
-    .btn-primary:hover { background: #1f2937; }
     .btn-google { background: #fff; color: #374151; border: 2px solid #d1d5db; display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
     .divider { position: relative; margin: 1.5rem 0; }
     .divider-line { border-top: 1px solid #d1d5db; }
     .divider-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 0 0.5rem; color: #6b7280; font-size: 0.875rem; }
     .login-footer { text-align: center; margin-top: 1.5rem; color: #4b5563; }
     .login-footer a { color: #000; font-weight: 600; cursor: pointer; }
-    .error-message { background: #fef2f2; color: #b91c1c; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 1rem; font-size: 0.875rem; display: none; }
+    .error-message { background: #fef2f2; color: #b91c1c; padding: 0.75rem; border-radius: 0.5rem; margin-bottom: 1rem; display: none; }
     .error-message.show { display: block; }
     
     /* App */
@@ -174,26 +173,37 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     .sidebar-nav { flex: 1; overflow-y: auto; padding: 0.75rem; }
     .nav-item { width: 100%; display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 0.75rem; border-radius: 9999px; background: none; border: none; color: var(--text); font-size: 0.875rem; cursor: pointer; text-align: left; }
     .nav-item:hover, .nav-item.active { background: var(--bg-secondary); }
-    .nav-item svg { width: 1.25rem; height: 1.25rem; }
+    .nav-item svg { width: 1.25rem; height: 1.25rem; flex-shrink: 0; }
     .sidebar-footer { padding: 0.75rem; border-top: 1px solid var(--border); }
     
-    /* Settings Panel */
+    /* Projects List */
+    .projects-list { margin-left: 2rem; margin-top: 0.25rem; }
+    .project-item { display: flex; align-items: center; padding: 0.4rem 0.75rem; border-radius: 0.5rem; font-size: 0.8rem; color: var(--text-muted); cursor: pointer; }
+    .project-item:hover { background: var(--bg-secondary); }
+    .project-name { flex: 1; }
+    .project-delete { opacity: 0; background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0.25rem; }
+    .project-item:hover .project-delete { opacity: 1; }
+    .project-delete:hover { color: #ef4444; }
+    .create-project { color: var(--blue); }
+    
+    /* Settings */
     .settings-panel { margin-top: 0.5rem; padding: 0.75rem; background: var(--bg-secondary); border-radius: 0.5rem; max-height: 400px; overflow-y: auto; }
     .settings-section { margin-bottom: 1rem; }
     .settings-label { font-size: 0.7rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase; }
     .theme-btns { display: flex; gap: 0.25rem; }
-    .theme-btn { flex: 1; padding: 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 0.5rem; color: var(--text); font-size: 0.75rem; cursor: pointer; text-align: center; }
+    .theme-btn { flex: 1; padding: 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 0.5rem; color: var(--text); font-size: 0.75rem; cursor: pointer; }
     .theme-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0; }
-    .toggle-label { font-size: 0.875rem; }
-    .toggle { width: 44px; height: 24px; background: var(--border); border-radius: 12px; position: relative; cursor: pointer; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0; }
+    .toggle-label { font-size: 0.8rem; }
+    .toggle { width: 40px; height: 22px; background: var(--border); border-radius: 11px; position: relative; cursor: pointer; }
     .toggle.active { background: var(--blue); }
-    .toggle::after { content: ''; position: absolute; width: 20px; height: 20px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.2s; }
-    .toggle.active::after { transform: translateX(20px); }
+    .toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.2s; }
+    .toggle.active::after { transform: translateX(18px); }
     .model-select { margin-top: 0.5rem; }
     .model-grid { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.25rem; }
     .model-chip { padding: 0.25rem 0.5rem; background: var(--bg); border: 1px solid var(--border); border-radius: 0.25rem; font-size: 0.7rem; cursor: pointer; }
     .model-chip.selected { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .model-dropdown { width: 100%; padding: 0.5rem; border-radius: 0.5rem; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 0.8rem; margin-top: 0.5rem; }
     
     /* Main Content */
     .main-content { flex: 1; display: flex; flex-direction: column; background: var(--bg); min-width: 0; }
@@ -212,40 +222,43 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     .send-btn { padding: 0.75rem 1.5rem; background: #000; color: #fff; border: none; border-radius: 9999px; cursor: pointer; }
     .dark .send-btn { background: #fff; color: #000; }
     
-    /* History */
-    .history-list { padding: 1.5rem; overflow-y: auto; flex: 1; }
+    /* Sections */
+    .section-content { padding: 1.5rem; overflow-y: auto; flex: 1; }
     .history-item { padding: 1rem; background: var(--bg-secondary); border-radius: 0.5rem; margin-bottom: 0.75rem; cursor: pointer; }
-    .history-item:hover { opacity: 0.8; }
     .history-date { font-size: 0.75rem; color: var(--text-muted); }
     .history-preview { margin-top: 0.25rem; font-size: 0.875rem; }
-    
-    /* Analysis */
-    .analysis-section { padding: 1.5rem; overflow-y: auto; flex: 1; }
     .chart-container { background: var(--bg-secondary); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1rem; }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem; }
     .stat-card { background: var(--bg-secondary); padding: 1rem; border-radius: 0.5rem; text-align: center; }
     .stat-value { font-size: 1.5rem; font-weight: 700; }
-    .stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
-    
-    /* News */
-    .news-section { padding: 1.5rem; overflow-y: auto; flex: 1; }
-    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+    .stat-label { font-size: 0.7rem; color: var(--text-muted); }
+    .news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
     .news-card { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 1rem; overflow: hidden; cursor: pointer; }
-    .news-image { height: 160px; background-size: cover; background-position: center; background-color: var(--border); }
+    .news-image { height: 140px; background-size: cover; background-position: center; background-color: var(--border); }
     .news-content { padding: 1rem; }
-    .news-title { font-weight: 600; margin-bottom: 0.5rem; }
-    .news-summary { font-size: 0.875rem; color: var(--text-muted); }
+    .news-title { font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; }
+    .news-summary { font-size: 0.8rem; color: var(--text-muted); }
+    
+    /* Modal */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: var(--bg); border: 1px solid var(--border); border-radius: 0.75rem; padding: 1.5rem; width: 90%; max-width: 400px; }
+    .modal h3 { margin-bottom: 1rem; }
+    .modal-input { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background: var(--bg-secondary); color: var(--text); margin-bottom: 1rem; }
+    .modal-btns { display: flex; gap: 0.5rem; justify-content: flex-end; }
+    .modal-btn { padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; border: none; }
+    .modal-btn-cancel { background: var(--bg-secondary); color: var(--text); }
+    .modal-btn-primary { background: var(--blue); color: #fff; }
+    .modal-btn-danger { background: #ef4444; color: #fff; }
   </style>
 </head>
 <body>
-  <!-- Login Page -->
+  <!-- Login -->
   <div class="login-page" id="loginPage">
     <div class="login-wrapper">
       <div class="login-header">
         <div class="login-logo">
-          <div class="login-logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:2rem;height:2rem;"><path d="M3 12l7-9 4 9 7-6v13H3z" fill="black" stroke="black"/></svg>
-          </div>
+          <div class="login-logo-icon"><svg viewBox="0 0 24 24" style="width:2rem;height:2rem;"><path d="M3 12l7-9 4 9 7-6v13H3z" fill="black"/></svg></div>
           <h1>Hike.ai</h1>
         </div>
         <p class="login-subtitle">Sign in to continue</p>
@@ -253,37 +266,25 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       <div class="login-card">
         <div id="errorMessage" class="error-message"></div>
         <div id="loginForm">
-          <div class="form-group">
-            <label class="form-label">Email Address</label>
-            <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Password</label>
-            <div class="password-wrapper">
-              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" style="padding-right:4rem;">
-              <button type="button" class="password-toggle" onclick="togglePassword('loginPassword',this)">Show</button>
-            </div>
-          </div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" id="loginEmail" class="form-input" placeholder="Enter your email"></div>
+          <div class="form-group"><label class="form-label">Password</label><div class="password-wrapper"><input type="password" id="loginPassword" class="form-input" placeholder="Password" style="padding-right:4rem;"><button type="button" class="password-toggle" onclick="togglePassword('loginPassword',this)">Show</button></div></div>
           <button class="btn btn-primary" id="loginBtn">Sign In</button>
-          <div class="divider"><div class="divider-line"></div><span class="divider-text">Or continue with</span></div>
-          <button class="btn btn-google" id="googleBtn">
-            <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Sign in with Google
-          </button>
-          <div class="login-footer">Don't have an account? <a onclick="showSignup()">Sign up</a></div>
+          <div class="divider"><div class="divider-line"></div><span class="divider-text">or</span></div>
+          <button class="btn btn-google" id="googleBtn"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>Google</button>
+          <div class="login-footer">No account? <a onclick="showSignup()">Sign up</a></div>
         </div>
         <div id="signupForm" class="hidden">
-          <div class="form-group"><label class="form-label">Full Name</label><input type="text" id="signupName" class="form-input" placeholder="Enter your name"></div>
-          <div class="form-group"><label class="form-label">Email Address</label><input type="email" id="signupEmail" class="form-input" placeholder="Enter your email"></div>
-          <div class="form-group"><label class="form-label">Password</label><div class="password-wrapper"><input type="password" id="signupPassword" class="form-input" placeholder="Create a password" style="padding-right:4rem;"><button type="button" class="password-toggle" onclick="togglePassword('signupPassword',this)">Show</button></div></div>
+          <div class="form-group"><label class="form-label">Name</label><input type="text" id="signupName" class="form-input" placeholder="Your name"></div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" id="signupEmail" class="form-input" placeholder="Email"></div>
+          <div class="form-group"><label class="form-label">Password</label><div class="password-wrapper"><input type="password" id="signupPassword" class="form-input" placeholder="Password" style="padding-right:4rem;"><button type="button" class="password-toggle" onclick="togglePassword('signupPassword',this)">Show</button></div></div>
           <button class="btn btn-primary" id="signupBtn">Create Account</button>
-          <div class="login-footer">Already have an account? <a onclick="showLogin()">Sign in</a></div>
+          <div class="login-footer">Have account? <a onclick="showLogin()">Sign in</a></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Main App -->
+  <!-- App -->
   <div class="app" id="mainApp">
     <aside class="sidebar">
       <div class="sidebar-header">
@@ -293,13 +294,17 @@ HTML_CONTENT = r"""<!DOCTYPE html>
         </div>
       </div>
       <nav class="sidebar-nav">
-        <button class="nav-item active" id="navChat" onclick="showSection('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chat</span></button>
-        <button class="nav-item" id="navHistory" onclick="showSection('history')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><span>History</span></button>
-        <button class="nav-item" id="navNews" onclick="showSection('news')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/></svg><span>News</span></button>
-        <button class="nav-item" id="navAnalysis" onclick="showSection('analysis')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg><span>Analysis</span></button>
+        <button class="nav-item active" id="navChat" onclick="showSection('chat')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Chat</button>
+        <button class="nav-item" id="navHistory" onclick="showSection('history')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>History</button>
+        <button class="nav-item" id="navProjects" onclick="toggleProjects()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>Projects<svg id="projectsChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;margin-left:auto;"><path d="M9 18l6-6-6-6"/></svg></button>
+        <div id="projectsList" class="projects-list hidden">
+          <div class="project-item create-project" onclick="openCreateProject()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;margin-right:0.5rem;"><path d="M12 5v14M5 12h14"/></svg>Create Project</div>
+        </div>
+        <button class="nav-item" id="navNews" onclick="showSection('news')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/></svg>News</button>
+        <button class="nav-item" id="navAnalysis" onclick="showSection('analysis')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>Analysis</button>
       </nav>
       <div class="sidebar-footer">
-        <button class="nav-item" onclick="toggleSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg><span>Settings</span></button>
+        <button class="nav-item" onclick="toggleSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Settings</button>
         <div id="settingsPanel" class="settings-panel hidden">
           <div class="settings-section">
             <div class="settings-label">Theme</div>
@@ -310,6 +315,17 @@ HTML_CONTENT = r"""<!DOCTYPE html>
             </div>
           </div>
           <div class="settings-section">
+            <div class="settings-label">Default Model</div>
+            <select class="model-dropdown" id="defaultModel" onchange="setDefaultModel(this.value)">
+              <option value="auto">Auto</option>
+              <option value="groq">Groq</option>
+              <option value="openrouter">OpenRouter</option>
+              <option value="gemini">Gemini</option>
+              <option value="bytez">Bytez</option>
+              <option value="chutes">Chutes</option>
+            </select>
+          </div>
+          <div class="settings-section">
             <div class="toggle-row"><span class="toggle-label">Web Search</span><div class="toggle" id="webSearchToggle" onclick="toggleSetting('webSearch')"></div></div>
           </div>
           <div class="settings-section">
@@ -317,10 +333,10 @@ HTML_CONTENT = r"""<!DOCTYPE html>
             <div class="model-select hidden" id="debateModels">
               <div class="settings-label">Select 2-4 models</div>
               <div class="model-grid">
-                <span class="model-chip selected" onclick="toggleModel('debate','groq')">Groq</span>
-                <span class="model-chip selected" onclick="toggleModel('debate','openrouter')">OpenRouter</span>
-                <span class="model-chip" onclick="toggleModel('debate','gemini')">Gemini</span>
-                <span class="model-chip" onclick="toggleModel('debate','bytez')">Bytez</span>
+                <span class="model-chip selected" data-model="groq" onclick="toggleModel('debate','groq')">Groq</span>
+                <span class="model-chip selected" data-model="openrouter" onclick="toggleModel('debate','openrouter')">OpenRouter</span>
+                <span class="model-chip" data-model="gemini" onclick="toggleModel('debate','gemini')">Gemini</span>
+                <span class="model-chip" data-model="bytez" onclick="toggleModel('debate','bytez')">Bytez</span>
               </div>
             </div>
           </div>
@@ -329,41 +345,37 @@ HTML_CONTENT = r"""<!DOCTYPE html>
             <div class="model-select hidden" id="regretModels">
               <div class="settings-label">Select 2-4 models</div>
               <div class="model-grid">
-                <span class="model-chip selected" onclick="toggleModel('regret','groq')">Groq</span>
-                <span class="model-chip selected" onclick="toggleModel('regret','openrouter')">OpenRouter</span>
-                <span class="model-chip" onclick="toggleModel('regret','gemini')">Gemini</span>
-                <span class="model-chip" onclick="toggleModel('regret','chutes')">Chutes</span>
+                <span class="model-chip selected" data-model="groq" onclick="toggleModel('regret','groq')">Groq</span>
+                <span class="model-chip selected" data-model="openrouter" onclick="toggleModel('regret','openrouter')">OpenRouter</span>
+                <span class="model-chip" data-model="gemini" onclick="toggleModel('regret','gemini')">Gemini</span>
+                <span class="model-chip" data-model="chutes" onclick="toggleModel('regret','chutes')">Chutes</span>
               </div>
             </div>
           </div>
         </div>
-        <button class="nav-item" style="margin-top:0.5rem;color:#ef4444;" onclick="handleLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg><span>Logout</span></button>
+        <button class="nav-item" style="margin-top:0.5rem;color:#ef4444;" onclick="handleLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Logout</button>
       </div>
     </aside>
     <main class="main-content">
-      <!-- Chat -->
       <div id="chatSection" style="display:flex;flex-direction:column;height:100%;">
         <div class="section-header"><h2>Chat</h2></div>
-        <div class="chat-messages" id="chatMessages"><div class="message ai">Hello! I'm Hike.ai. How can I assist you today?</div></div>
-        <div class="chat-input-area"><div class="chat-input-wrapper"><input type="text" id="chatInput" class="chat-input" placeholder="Type your message..."><button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.25rem;height:1.25rem;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></div>
+        <div class="chat-messages" id="chatMessages"><div class="message ai">Hello! I'm Hike.ai. How can I help?</div></div>
+        <div class="chat-input-area"><div class="chat-input-wrapper"><input type="text" id="chatInput" class="chat-input" placeholder="Type a message..."><button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1.25rem;height:1.25rem;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button></div></div>
       </div>
-      <!-- History -->
       <div id="historySection" class="hidden" style="display:flex;flex-direction:column;height:100%;">
-        <div class="section-header"><h2>Chat History</h2></div>
-        <div class="history-list" id="historyList"><p style="color:var(--text-muted);text-align:center;margin-top:2rem;">No chat history yet.</p></div>
+        <div class="section-header"><h2>History</h2></div>
+        <div class="section-content" id="historyList"><p style="color:var(--text-muted);text-align:center;margin-top:2rem;">No history yet.</p></div>
       </div>
-      <!-- News -->
       <div id="newsSection" class="hidden" style="display:flex;flex-direction:column;height:100%;">
-        <div class="section-header"><h2>Latest News</h2></div>
-        <div class="news-section" id="newsGrid"><p style="color:var(--text-muted);">Loading news...</p></div>
+        <div class="section-header"><h2>News</h2></div>
+        <div class="section-content" id="newsGrid"><p style="color:var(--text-muted);">Loading...</p></div>
       </div>
-      <!-- Analysis -->
       <div id="analysisSection" class="hidden" style="display:flex;flex-direction:column;height:100%;">
-        <div class="section-header"><h2>Model Usage Analysis</h2></div>
-        <div class="analysis-section">
+        <div class="section-header"><h2>Analysis</h2></div>
+        <div class="section-content">
           <div class="chart-container"><canvas id="usageChart" height="200"></canvas></div>
           <div class="stats-grid">
-            <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total Requests</div></div>
+            <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Total</div></div>
             <div class="stat-card"><div class="stat-value" id="statGroq">0</div><div class="stat-label">Groq</div></div>
             <div class="stat-card"><div class="stat-value" id="statOpenRouter">0</div><div class="stat-label">OpenRouter</div></div>
             <div class="stat-card"><div class="stat-value" id="statGemini">0</div><div class="stat-label">Gemini</div></div>
@@ -373,26 +385,48 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     </main>
   </div>
 
+  <!-- Create Project Modal -->
+  <div class="modal-overlay" id="createProjectModal">
+    <div class="modal">
+      <h3>Create Project</h3>
+      <input type="text" class="modal-input" id="newProjectName" placeholder="Project name...">
+      <div class="modal-btns">
+        <button class="modal-btn modal-btn-cancel" onclick="closeCreateProject()">Cancel</button>
+        <button class="modal-btn modal-btn-primary" onclick="createProject()">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Project Modal -->
+  <div class="modal-overlay" id="deleteProjectModal">
+    <div class="modal">
+      <h3>Delete Project</h3>
+      <p style="margin-bottom:1rem;color:var(--text-muted);">Delete "<span id="deleteProjectName"></span>"?</p>
+      <div class="modal-btns">
+        <button class="modal-btn modal-btn-cancel" onclick="closeDeleteProject()">Cancel</button>
+        <button class="modal-btn modal-btn-danger" onclick="confirmDeleteProject()">Delete</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const state = {
       theme: localStorage.getItem('theme') || 'dark',
+      defaultModel: localStorage.getItem('defaultModel') || 'auto',
       webSearch: localStorage.getItem('webSearch') === 'true',
       debate: localStorage.getItem('debate') === 'true',
       regret: localStorage.getItem('regret') === 'true',
       debateModels: JSON.parse(localStorage.getItem('debateModels') || '["groq","openrouter"]'),
       regretModels: JSON.parse(localStorage.getItem('regretModels') || '["groq","openrouter"]'),
+      projects: JSON.parse(localStorage.getItem('projects') || '[]'),
       chatHistory: JSON.parse(localStorage.getItem('chatHistory') || '[]'),
       modelUsage: JSON.parse(localStorage.getItem('modelUsage') || '{"groq":0,"openrouter":0,"gemini":0,"bytez":0,"chutes":0}'),
-      usageHistory: JSON.parse(localStorage.getItem('usageHistory') || '[]')
+      usageHistory: JSON.parse(localStorage.getItem('usageHistory') || '[]'),
+      projectToDelete: null
     };
     let usageChart = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      applyTheme();
-      applySettings();
-      checkSession();
-      bindEvents();
-    });
+    document.addEventListener('DOMContentLoaded', () => { applyTheme(); applySettings(); checkSession(); bindEvents(); });
 
     function bindEvents() {
       document.getElementById('loginBtn').addEventListener('click', handleLogin);
@@ -400,157 +434,115 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       document.getElementById('googleBtn').addEventListener('click', () => window.location.href='/auth/google/login');
       document.getElementById('chatInput').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
       document.getElementById('loginPassword').addEventListener('keypress', e => { if(e.key==='Enter') handleLogin(); });
+      document.getElementById('newProjectName').addEventListener('keypress', e => { if(e.key==='Enter') createProject(); });
     }
 
     async function checkSession() { try { const r = await fetch('/api/profile'); if(r.ok) showApp(); } catch(e){} }
     async function handleLogin() {
-      const email = document.getElementById('loginEmail').value;
-      const password = document.getElementById('loginPassword').value;
-      if(!email || !password) { showError('Please enter email and password'); return; }
-      try {
-        const r = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password}) });
-        if(r.ok) showApp(); else { const d=await r.json(); showError(d.detail||'Login failed'); }
-      } catch(e) { showError('Connection error'); }
+      const email = document.getElementById('loginEmail').value, password = document.getElementById('loginPassword').value;
+      if(!email||!password) { showError('Enter email and password'); return; }
+      try { const r = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({email,password}) }); if(r.ok) showApp(); else { const d=await r.json(); showError(d.detail||'Failed'); } } catch(e) { showError('Error'); }
     }
     async function handleSignup() {
-      const name = document.getElementById('signupName').value, email = document.getElementById('signupEmail').value, password = document.getElementById('signupPassword').value;
-      if(!name||!email||!password) { showError('Please fill in all fields'); return; }
-      try {
-        const r = await fetch('/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,password}) });
-        if(r.ok) showApp(); else { const d=await r.json(); showError(d.detail||'Signup failed'); }
-      } catch(e) { showError('Connection error'); }
+      const name=document.getElementById('signupName').value, email=document.getElementById('signupEmail').value, password=document.getElementById('signupPassword').value;
+      if(!name||!email||!password) { showError('Fill all fields'); return; }
+      try { const r = await fetch('/api/signup', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({name,email,password}) }); if(r.ok) showApp(); else { const d=await r.json(); showError(d.detail||'Failed'); } } catch(e) { showError('Error'); }
     }
     async function handleLogout() { try { await fetch('/api/logout',{method:'POST'}); } catch(e){} document.getElementById('mainApp').classList.remove('active'); document.getElementById('loginPage').style.display='flex'; }
 
-    function showApp() { document.getElementById('loginPage').style.display='none'; document.getElementById('mainApp').classList.add('active'); loadNews(); renderHistory(); initChart(); }
+    function showApp() { document.getElementById('loginPage').style.display='none'; document.getElementById('mainApp').classList.add('active'); loadNews(); renderHistory(); renderProjects(); initChart(); }
     function showError(msg) { const el=document.getElementById('errorMessage'); el.textContent=msg; el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),5000); }
     function showLogin() { document.getElementById('signupForm').classList.add('hidden'); document.getElementById('loginForm').classList.remove('hidden'); }
     function showSignup() { document.getElementById('loginForm').classList.add('hidden'); document.getElementById('signupForm').classList.remove('hidden'); }
     function togglePassword(id,btn) { const i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'Show':'Hide'; }
 
     function showSection(section) {
-      ['chat','history','news','analysis'].forEach(s => {
-        document.getElementById(s+'Section').classList.add('hidden');
-        document.getElementById('nav'+s.charAt(0).toUpperCase()+s.slice(1)).classList.remove('active');
-      });
+      ['chat','history','news','analysis'].forEach(s => { document.getElementById(s+'Section').classList.add('hidden'); document.getElementById('nav'+s.charAt(0).toUpperCase()+s.slice(1))?.classList.remove('active'); });
       document.getElementById(section+'Section').classList.remove('hidden');
       document.getElementById(section+'Section').style.display='flex';
-      document.getElementById('nav'+section.charAt(0).toUpperCase()+section.slice(1)).classList.add('active');
+      document.getElementById('nav'+section.charAt(0).toUpperCase()+section.slice(1))?.classList.add('active');
       if(section==='news') loadNews();
       if(section==='history') renderHistory();
       if(section==='analysis') updateChart();
     }
 
     async function sendMessage() {
-      const input = document.getElementById('chatInput'), msg = input.value.trim();
+      const input=document.getElementById('chatInput'), msg=input.value.trim();
       if(!msg) return;
-      const chat = document.getElementById('chatMessages');
+      const chat=document.getElementById('chatMessages');
       chat.innerHTML += '<div class="message user">'+msg+'</div>';
       input.value = '';
-      const aiMsg = document.createElement('div'); aiMsg.className='message ai'; aiMsg.textContent='Thinking...'; chat.appendChild(aiMsg); chat.scrollTop=chat.scrollHeight;
+      const aiMsg=document.createElement('div'); aiMsg.className='message ai'; aiMsg.textContent='Thinking...'; chat.appendChild(aiMsg); chat.scrollTop=chat.scrollHeight;
       try {
-        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
+        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,selected_model:state.defaultModel,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
         const d = await r.json();
-        aiMsg.textContent = d.response || 'Sorry, I could not process that.';
+        aiMsg.textContent = d.response || 'Sorry, error occurred.';
         saveToHistory(msg, d.response);
         if(d.model_used) trackModelUsage(d.model_used);
-      } catch(e) { aiMsg.textContent = 'Error. Please try again.'; }
+      } catch(e) { aiMsg.textContent = 'Error. Try again.'; }
       chat.scrollTop = chat.scrollHeight;
     }
 
-    function saveToHistory(user, ai) {
-      state.chatHistory.unshift({ date: new Date().toISOString(), user, ai });
-      if(state.chatHistory.length > 50) state.chatHistory.pop();
-      localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory));
-    }
-
+    function saveToHistory(user, ai) { state.chatHistory.unshift({ date: new Date().toISOString(), user, ai }); if(state.chatHistory.length > 50) state.chatHistory.pop(); localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory)); }
     function renderHistory() {
       const list = document.getElementById('historyList');
-      if(state.chatHistory.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;margin-top:2rem;">No chat history yet.</p>'; return; }
+      if(state.chatHistory.length === 0) { list.innerHTML = '<p style="color:var(--text-muted);text-align:center;margin-top:2rem;">No history yet.</p>'; return; }
       list.innerHTML = state.chatHistory.map(h => '<div class="history-item"><div class="history-date">'+new Date(h.date).toLocaleString()+'</div><div class="history-preview"><strong>You:</strong> '+h.user.substring(0,50)+'...</div></div>').join('');
     }
 
-    function trackModelUsage(model) {
-      const m = model.toLowerCase();
-      if(state.modelUsage[m] !== undefined) state.modelUsage[m]++;
-      state.usageHistory.push({ date: new Date().toISOString(), model: m });
-      if(state.usageHistory.length > 100) state.usageHistory.shift();
-      localStorage.setItem('modelUsage', JSON.stringify(state.modelUsage));
-      localStorage.setItem('usageHistory', JSON.stringify(state.usageHistory));
-    }
+    function trackModelUsage(model) { const m=model.toLowerCase(); if(state.modelUsage[m]!==undefined) state.modelUsage[m]++; state.usageHistory.push({date:new Date().toISOString(),model:m}); if(state.usageHistory.length>100) state.usageHistory.shift(); localStorage.setItem('modelUsage',JSON.stringify(state.modelUsage)); localStorage.setItem('usageHistory',JSON.stringify(state.usageHistory)); }
 
     function initChart() {
       const ctx = document.getElementById('usageChart').getContext('2d');
-      usageChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels: [], datasets: [
-          { label: 'Groq', data: [], borderColor: '#10b981', fill: false },
-          { label: 'OpenRouter', data: [], borderColor: '#3b82f6', fill: false },
-          { label: 'Gemini', data: [], borderColor: '#f59e0b', fill: false }
-        ]},
-        options: { responsive: true, scales: { y: { beginAtZero: true } } }
-      });
+      usageChart = new Chart(ctx, { type:'line', data:{labels:[],datasets:[{label:'Groq',data:[],borderColor:'#10b981',fill:false},{label:'OpenRouter',data:[],borderColor:'#3b82f6',fill:false},{label:'Gemini',data:[],borderColor:'#f59e0b',fill:false}]}, options:{responsive:true,scales:{y:{beginAtZero:true}}} });
       updateChart();
     }
-
     function updateChart() {
       if(!usageChart) return;
-      const last7 = [...Array(7)].map((_,i) => { const d = new Date(); d.setDate(d.getDate()-6+i); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); });
-      const counts = { groq: Array(7).fill(0), openrouter: Array(7).fill(0), gemini: Array(7).fill(0) };
-      state.usageHistory.forEach(u => {
-        const d = new Date(u.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-        const idx = last7.indexOf(d);
-        if(idx >= 0 && counts[u.model]) counts[u.model][idx]++;
-      });
-      usageChart.data.labels = last7;
-      usageChart.data.datasets[0].data = counts.groq;
-      usageChart.data.datasets[1].data = counts.openrouter;
-      usageChart.data.datasets[2].data = counts.gemini;
-      usageChart.update();
-      document.getElementById('statTotal').textContent = Object.values(state.modelUsage).reduce((a,b)=>a+b,0);
-      document.getElementById('statGroq').textContent = state.modelUsage.groq || 0;
-      document.getElementById('statOpenRouter').textContent = state.modelUsage.openrouter || 0;
-      document.getElementById('statGemini').textContent = state.modelUsage.gemini || 0;
+      const last7=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-6+i);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});});
+      const counts={groq:Array(7).fill(0),openrouter:Array(7).fill(0),gemini:Array(7).fill(0)};
+      state.usageHistory.forEach(u=>{const d=new Date(u.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});const idx=last7.indexOf(d);if(idx>=0&&counts[u.model])counts[u.model][idx]++;});
+      usageChart.data.labels=last7; usageChart.data.datasets[0].data=counts.groq; usageChart.data.datasets[1].data=counts.openrouter; usageChart.data.datasets[2].data=counts.gemini; usageChart.update();
+      document.getElementById('statTotal').textContent=Object.values(state.modelUsage).reduce((a,b)=>a+b,0);
+      document.getElementById('statGroq').textContent=state.modelUsage.groq||0;
+      document.getElementById('statOpenRouter').textContent=state.modelUsage.openrouter||0;
+      document.getElementById('statGemini').textContent=state.modelUsage.gemini||0;
     }
 
     async function loadNews() {
-      const grid = document.getElementById('newsGrid');
-      try {
-        const r = await fetch('/api/news/latest'), articles = await r.json();
-        if(!articles||articles.length===0) { grid.innerHTML='<p>No news available.</p>'; return; }
-        grid.innerHTML = '<div class="news-grid">'+articles.map(a => '<div class="news-card" onclick="window.open(\''+a.url+'\',\'_blank\')"><div class="news-image" style="background-image:url(\''+a.urlToImage+'\')"></div><div class="news-content"><div class="news-title">'+a.title+'</div><div class="news-summary">'+(a.description||'')+'</div></div></div>').join('')+'</div>';
-      } catch(e) { grid.innerHTML='<p style="color:#ef4444;">Failed to load news.</p>'; }
+      const grid=document.getElementById('newsGrid');
+      try { const r=await fetch('/api/news/latest'), articles=await r.json(); if(!articles||articles.length===0){grid.innerHTML='<p>No news.</p>';return;} grid.innerHTML='<div class="news-grid">'+articles.map(a=>'<div class="news-card" onclick="window.open(\''+a.url+'\',\'_blank\')"><div class="news-image" style="background-image:url(\''+a.urlToImage+'\')"></div><div class="news-content"><div class="news-title">'+a.title+'</div><div class="news-summary">'+(a.description||'')+'</div></div></div>').join('')+'</div>'; } catch(e){grid.innerHTML='<p style="color:#ef4444;">Failed.</p>';}
     }
 
-    function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
-    function setTheme(t) {
-      state.theme = t; localStorage.setItem('theme', t); applyTheme();
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-      event.target.classList.add('active');
+    // Projects
+    function toggleProjects() { const list=document.getElementById('projectsList'),chev=document.getElementById('projectsChevron'); list.classList.toggle('hidden'); chev.style.transform=list.classList.contains('hidden')?'':'rotate(90deg)'; }
+    function renderProjects() {
+      const list=document.getElementById('projectsList'), createBtn=list.querySelector('.create-project');
+      list.innerHTML=''; list.appendChild(createBtn);
+      state.projects.forEach(p=>{const item=document.createElement('div');item.className='project-item';item.innerHTML='<span class="project-name">'+p+'</span><button class="project-delete" onclick="openDeleteProject(\''+p+'\',event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>';list.appendChild(item);});
     }
+    function openCreateProject() { document.getElementById('createProjectModal').classList.add('active'); document.getElementById('newProjectName').focus(); }
+    function closeCreateProject() { document.getElementById('createProjectModal').classList.remove('active'); document.getElementById('newProjectName').value=''; }
+    function createProject() { const name=document.getElementById('newProjectName').value.trim(); if(name){state.projects.push(name);localStorage.setItem('projects',JSON.stringify(state.projects));renderProjects();closeCreateProject();} }
+    function openDeleteProject(name,e) { e.stopPropagation(); state.projectToDelete=name; document.getElementById('deleteProjectName').textContent=name; document.getElementById('deleteProjectModal').classList.add('active'); }
+    function closeDeleteProject() { document.getElementById('deleteProjectModal').classList.remove('active'); state.projectToDelete=null; }
+    function confirmDeleteProject() { if(state.projectToDelete){state.projects=state.projects.filter(p=>p!==state.projectToDelete);localStorage.setItem('projects',JSON.stringify(state.projects));renderProjects();closeDeleteProject();} }
+
+    // Settings
+    function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
+    function setTheme(t) { state.theme=t; localStorage.setItem('theme',t); applyTheme(); document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); event.target.classList.add('active'); }
     function applyTheme() { document.body.classList.toggle('dark', state.theme==='dark'||(state.theme==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches)); }
+    function setDefaultModel(m) { state.defaultModel=m; localStorage.setItem('defaultModel',m); }
     function applySettings() {
+      document.getElementById('defaultModel').value=state.defaultModel;
       if(state.webSearch) document.getElementById('webSearchToggle').classList.add('active');
       if(state.debate) { document.getElementById('debateToggle').classList.add('active'); document.getElementById('debateModels').classList.remove('hidden'); }
       if(state.regret) { document.getElementById('regretToggle').classList.add('active'); document.getElementById('regretModels').classList.remove('hidden'); }
       updateModelChips();
     }
-    function toggleSetting(s) {
-      state[s] = !state[s]; localStorage.setItem(s, state[s]);
-      document.getElementById(s+'Toggle').classList.toggle('active', state[s]);
-      if(s==='debate'||s==='regret') document.getElementById(s+'Models').classList.toggle('hidden', !state[s]);
-    }
-    function toggleModel(type, model) {
-      const arr = state[type+'Models'], idx = arr.indexOf(model);
-      if(idx >= 0) { if(arr.length > 2) arr.splice(idx,1); }
-      else { if(arr.length < 4) arr.push(model); }
-      localStorage.setItem(type+'Models', JSON.stringify(arr));
-      updateModelChips();
-    }
-    function updateModelChips() {
-      document.querySelectorAll('#debateModels .model-chip').forEach(c => c.classList.toggle('selected', state.debateModels.includes(c.textContent.toLowerCase())));
-      document.querySelectorAll('#regretModels .model-chip').forEach(c => c.classList.toggle('selected', state.regretModels.includes(c.textContent.toLowerCase())));
-    }
+    function toggleSetting(s) { state[s]=!state[s]; localStorage.setItem(s,state[s]); document.getElementById(s+'Toggle').classList.toggle('active',state[s]); if(s==='debate'||s==='regret') document.getElementById(s+'Models').classList.toggle('hidden',!state[s]); }
+    function toggleModel(type,model) { const arr=state[type+'Models'],idx=arr.indexOf(model); if(idx>=0){if(arr.length>2)arr.splice(idx,1);} else{if(arr.length<4)arr.push(model);} localStorage.setItem(type+'Models',JSON.stringify(arr)); updateModelChips(); }
+    function updateModelChips() { document.querySelectorAll('#debateModels .model-chip').forEach(c=>c.classList.toggle('selected',state.debateModels.includes(c.dataset.model))); document.querySelectorAll('#regretModels .model-chip').forEach(c=>c.classList.toggle('selected',state.regretModels.includes(c.dataset.model))); }
   </script>
 </body>
 </html>
