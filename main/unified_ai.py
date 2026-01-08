@@ -1912,7 +1912,7 @@ HTML_CONTENT = r"""
           </div>
         </div>
 
-        <button class="login-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+        <button class="login-btn" id="loginBtn" onclick="console.log('Login clicked'); handleLogin();">Sign In</button>
 
         <div class="divider">
           <span>or</span>
