@@ -489,18 +489,32 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       const input=document.getElementById('chatInput'), msg=input.value.trim();
       if(!msg) return;
       const chat=document.getElementById('chatMessages');
-      chat.innerHTML += '<div class="message user">'+msg+'</div>';
+      chat.innerHTML += '<div class="message user">'+escapeHtml(msg)+'</div>';
       input.value = '';
       const aiMsg=document.createElement('div'); aiMsg.className='message ai'; aiMsg.textContent='Thinking...'; chat.appendChild(aiMsg); chat.scrollTop=chat.scrollHeight;
       try {
         const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,selected_model:state.defaultModel,empathy_model:state.empathyModel,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
         const d = await r.json();
-        aiMsg.textContent = d.response || 'Sorry, error occurred.';
+        let html = escapeHtml(d.response || 'Sorry, error occurred.');
+        if(d.sources && d.sources.length > 0) {
+          html += '<div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--border);font-size:0.8rem;"><strong>Sources:</strong><ul style="margin:0.5rem 0 0 1rem;padding:0;">';
+          d.sources.forEach(s => {
+            html += '<li style="margin:0.25rem 0;"><a href="'+escapeHtml(s.url)+'" target="_blank" style="color:var(--blue);text-decoration:none;">'+escapeHtml(s.title || s.url)+'</a></li>';
+          });
+          html += '</ul></div>';
+        }
+        aiMsg.innerHTML = html;
         saveToHistory(msg, d.response);
         if(d.model_used) trackModelUsage(d.model_used);
       } catch(e) { aiMsg.textContent = 'Error. Try again.'; }
       chat.scrollTop = chat.scrollHeight;
     }
+
+    function escapeHtml(text) {
+      if(!text) return '';
+      return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
 
     function saveToHistory(user, ai) { state.chatHistory.unshift({ date: new Date().toISOString(), user, ai }); if(state.chatHistory.length > 50) state.chatHistory.pop(); localStorage.setItem('chatHistory', JSON.stringify(state.chatHistory)); }
     function renderHistory() {
@@ -2096,6 +2110,8 @@ async def chat_endpoint(data: ChatMessage, db: Session = Depends(get_db), _ = De
     
     return {
         "response": final_response, 
+        "sources": research_data.get("sources", []) if research_data else [],
+        "model_used": data.selected_model or "auto",
         "details": {
             "emotion": emotion, 
             "strategy": strategy,
