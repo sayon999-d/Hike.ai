@@ -360,6 +360,16 @@ HTML_CONTENT = r"""<!DOCTYPE html>
               </div>
             </div>
           </div>
+          <div class="settings-section">
+            <div class="settings-label">Empathy AI Model</div>
+            <select class="model-dropdown" id="empathyModel" onchange="setEmpathyModel(this.value)">
+              <option value="groq">Groq</option>
+              <option value="openrouter">OpenRouter</option>
+              <option value="gemini">Gemini</option>
+              <option value="bytez">Bytez</option>
+              <option value="chutes">Chutes</option>
+            </select>
+          </div>
         </div>
         <button class="nav-item" style="margin-top:0.5rem;color:#ef4444;" onclick="handleLogout()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Logout</button>
       </div>
@@ -421,6 +431,7 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     const state = {
       theme: localStorage.getItem('theme') || 'dark',
       defaultModel: localStorage.getItem('defaultModel') || 'auto',
+      empathyModel: localStorage.getItem('empathyModel') || 'groq',
       webSearch: localStorage.getItem('webSearch') === 'true',
       debate: localStorage.getItem('debate') === 'true',
       regret: localStorage.getItem('regret') === 'true',
@@ -482,7 +493,7 @@ HTML_CONTENT = r"""<!DOCTYPE html>
       input.value = '';
       const aiMsg=document.createElement('div'); aiMsg.className='message ai'; aiMsg.textContent='Thinking...'; chat.appendChild(aiMsg); chat.scrollTop=chat.scrollHeight;
       try {
-        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,selected_model:state.defaultModel,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
+        const r = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({message:msg,selected_model:state.defaultModel,empathy_model:state.empathyModel,use_research:state.webSearch,use_debate:state.debate,debate_models:state.debateModels,use_regret:state.regret,regret_models:state.regretModels}) });
         const d = await r.json();
         aiMsg.textContent = d.response || 'Sorry, error occurred.';
         saveToHistory(msg, d.response);
@@ -541,8 +552,10 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     function setTheme(t) { state.theme=t; localStorage.setItem('theme',t); applyTheme(); document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); event.target.classList.add('active'); }
     function applyTheme() { document.body.classList.toggle('dark', state.theme==='dark'||(state.theme==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches)); }
     function setDefaultModel(m) { state.defaultModel=m; localStorage.setItem('defaultModel',m); }
+    function setEmpathyModel(m) { state.empathyModel=m; localStorage.setItem('empathyModel',m); }
     function applySettings() {
       document.getElementById('defaultModel').value=state.defaultModel;
+      document.getElementById('empathyModel').value=state.empathyModel;
       if(state.webSearch) document.getElementById('webSearchToggle').classList.add('active');
       if(state.debate) { document.getElementById('debateToggle').classList.add('active'); document.getElementById('debateModels').classList.remove('hidden'); }
       if(state.regret) { document.getElementById('regretToggle').classList.add('active'); document.getElementById('regretModels').classList.remove('hidden'); }
