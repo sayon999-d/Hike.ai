@@ -121,876 +121,913 @@ logging.basicConfig(
 )
 logger = logging.getLogger("UnifiedAI")
 
-HTML_CONTENT = r"""
-<!DOCTYPE html>
+HTML_CONTENT = r"""<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hike.ai</title>
-
   <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
     :root {
-      --bg-body: #ffffff;
-      --bg-panel: #f9fafb;
-      --bg-card: #ffffff;
-      --text-main: #111827;
+      --bg: #ffffff;
+      --bg-secondary: #f3f4f6;
+      --text: #000000;
       --text-muted: #6b7280;
       --border: #e5e7eb;
-      --primary: #2563eb;
-      --primary-fg: #ffffff;
-      --msg-user-bg: #000000;
-      --msg-user-text: #ffffff;
-    }
-    body.dark {
-      --bg-body: #0a0a0a;
-      --bg-panel: #171717;
-      --bg-card: #171717;
-      --text-main: #ededed;
-      --text-muted: #a3a3a3;
-      --border: #262626;
-      --primary: #3b82f6;
-      --primary-fg: #ffffff;
-      --msg-user-bg: #3b82f6;
-      --msg-user-text: #ffffff;
+      --blue: #2563eb;
     }
     
-    * { box-sizing: border-box; }
-    body { 
-      margin: 0; 
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-      background: var(--bg-body); 
-      color: var(--text-main);
-      height: 100vh; 
-      overflow: hidden; 
-      transition: background 0.3s, color 0.3s;
+    .dark {
+      --bg: #000000;
+      --bg-secondary: #111111;
+      --text: #ffffff;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
     }
     
-    /* Layout */
-    .app { display: none; height: 100%; width: 100%; }
-    .app.active { display: flex; }
-    
-    .sidebar {
-      width: 260px;
-      background: var(--bg-panel);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      padding: 16px;
-      gap: 8px;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      overflow: hidden;
     }
     
-    .chat {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: var(--bg-body);
-      position: relative;
-      height: 100%;
-    }
+    .hidden { display: none !important; }
     
-    /* Navigation */
-    .logo { font-size: 18px; font-weight: 700; margin-bottom: 24px; padding: 0 12px; color: var(--text-main); }
-    nav a {
-      display: block;
-      padding: 10px 12px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-    nav a:hover, nav a.active {
-      background: var(--bg-card);
-      color: var(--text-main);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-    }
-    body.dark nav a:hover, body.dark nav a.active {
-      background: #262626;
-      box-shadow: none;
-    }
-    
-    .sidebar-bottom { margin-top: auto; }
-    .settings-sidebar-btn {
-        width: 100%;
-        padding: 12px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        color: var(--text-main);
-        border-radius: 8px;
-        cursor: pointer;
-        text-align: left;
-    }
-    
-    /* Login */
+    /* ==================== LOGIN PAGE ==================== */
     .login-page {
+      min-height: 100vh;
+      background: #000;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      background: var(--bg-body);
+      padding: 1rem;
     }
-    .login-container {
+    
+    .login-wrapper {
       width: 100%;
-      max-width: 400px;
-      padding: 40px;
-      background: var(--bg-panel);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      max-width: 28rem;
     }
-    .login-logo { font-size: 24px; font-weight: 700; margin-bottom: 8px; text-align: center; }
-    .login-subtitle { text-align: center; color: var(--text-muted); margin-bottom: 32px; font-size: 14px; }
-    .form-group { margin-bottom: 16px; }
-    .form-label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; }
+    
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .login-logo-icon {
+      width: 3rem;
+      height: 3rem;
+      background: #fff;
+      border-radius: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-logo h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .login-subtitle {
+      color: #9ca3af;
+    }
+    
+    .login-card {
+      background: #fff;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 0.5rem;
+    }
+    
     .form-input {
       width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-body);
-      color: var(--text-main);
-      font-size: 14px;
+      padding: 0.75rem 1rem;
+      border-radius: 9999px;
+      border: 2px solid #d1d5db;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      background: #fff;
+      color: #000;
     }
-    .form-input:focus { outline: 2px solid var(--text-main); border-color: transparent; }
-    .login-btn, .google-btn {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      margin-top: 16px;
-      font-size: 14px;
-    }
-    .login-btn { background: var(--text-main); color: var(--bg-body); }
-    .google-btn { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
     
-    /* Chat Area */
-    .chat-header {
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-body);
+    .form-input:focus {
+      outline: none;
+      border-color: #000;
     }
-    .chat-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 24px 20%;
+    
+    .form-input::placeholder {
+      color: #9ca3af;
+    }
+    
+    .password-wrapper {
+      position: relative;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #6b7280;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    
+    .password-toggle:hover {
+      color: #000;
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+    
+    .btn-primary {
+      background: #000;
+      color: #fff;
+    }
+    
+    .btn-primary:hover {
+      background: #1f2937;
+    }
+    
+    .btn-google {
+      background: #fff;
+      color: #374151;
+      border: 2px solid #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    
+    .btn-google:hover {
+      background: #f9fafb;
+    }
+    
+    .divider {
+      position: relative;
+      margin: 1.5rem 0;
+    }
+    
+    .divider-line {
+      border-top: 1px solid #d1d5db;
+    }
+    
+    .divider-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      padding: 0 0.5rem;
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+    
+    .login-footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #4b5563;
+    }
+    
+    .login-footer a {
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    
+    .login-footer a:hover {
+      text-decoration: underline;
+    }
+    
+    .error-message {
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.875rem;
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+    }
+    
+    /* ==================== MAIN APP ==================== */
+    .app {
+      display: none;
+      height: 100vh;
+      width: 100%;
+    }
+    
+    .app.active {
+      display: flex;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 16rem;
+      background: var(--bg);
+      border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      flex-shrink: 0;
     }
-    @media (max-width: 1024px) {
-        .chat-body { padding: 24px 5%; }
+    
+    .sidebar-header {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
     }
-    .message {
-      max-width: 80%;
-      padding: 14px 18px;
-      border-radius: 16px;
-      line-height: 1.6;
-      font-size: 15px;
-    }
-    .message.user {
-      align-self: flex-end;
-      background: var(--msg-user-bg);
-      color: var(--msg-user-text);
-      border-bottom-right-radius: 4px;
-    }
-    .message.ai {
-      align-self: flex-start;
-      background: var(--bg-panel);
-      color: var(--text-main);
-      border: 1px solid var(--border);
-      border-bottom-left-radius: 4px;
-    }
-    .chat-input {
-      padding: 24px 20%;
-      border-top: 1px solid var(--border);
+    
+    .sidebar-logo {
       display: flex;
-      gap: 12px;
-      background: var(--bg-body);
-      align-items: flex-end;
+      align-items: center;
+      gap: 0.5rem;
     }
-    @media (max-width: 1024px) {
-        .chat-input { padding: 20px 5%; }
+    
+    .sidebar-logo-icon {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
     }
-    textarea {
+    
+    .dark .sidebar-logo-icon {
+      background: #fff;
+    }
+    
+    .sidebar-logo-icon svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    
+    .dark .sidebar-logo-icon svg {
+      color: #000;
+    }
+    
+    .sidebar-logo h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    
+    .sidebar-nav {
       flex: 1;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--bg-panel);
-      color: var(--text-main);
-      resize: none;
-      font-family: inherit;
-      min-height: 52px;
-      max-height: 200px;
+      overflow-y: auto;
+      padding: 0.75rem;
     }
-    #sendBtn {
-      padding: 0 20px;
-      height: 52px;
-      background: var(--text-main);
-      color: var(--bg-body);
+    
+    .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 9999px;
+      background: none;
       border: none;
-      border-radius: 12px;
+      color: var(--text);
+      font-size: 0.875rem;
       cursor: pointer;
+      transition: background 0.2s;
+      text-align: left;
+    }
+    
+    .nav-item:hover {
+      background: var(--bg-secondary);
+    }
+    
+    .nav-item.active {
+      background: var(--bg-secondary);
+    }
+    
+    .nav-item svg {
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+    }
+    
+    .nav-item-text {
+      flex: 1;
+    }
+    
+    .projects-list {
+      margin-left: 2.25rem;
+      margin-top: 0.25rem;
+    }
+    
+    .project-item {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    
+    .project-item:hover {
+      background: var(--bg-secondary);
+    }
+    
+    .project-item-name {
+      flex: 1;
+    }
+    
+    .project-delete {
+      opacity: 0;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 0.25rem;
+    }
+    
+    .project-item:hover .project-delete {
+      opacity: 1;
+    }
+    
+    .project-delete:hover {
+      color: #ef4444;
+    }
+    
+    .sidebar-footer {
+      padding: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .settings-panel {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: var(--bg-secondary);
+      border-radius: 0.5rem;
+    }
+    
+    .settings-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    
+    .theme-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.5rem;
+      background: none;
+      border: none;
+      border-radius: 0.25rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      cursor: pointer;
+      text-align: left;
+    }
+    
+    .theme-btn:hover, .theme-btn.active {
+      background: var(--border);
+      color: var(--text);
+    }
+    
+    .theme-btn svg {
+      width: 1rem;
+      height: 1rem;
+    }
+    
+    /* Main Chat Area */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      min-width: 0;
+    }
+    
+    .chat-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .chat-header h2 {
+      font-size: 1.125rem;
       font-weight: 600;
     }
     
-    /* Modules */
-    .project-grid, .news-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-      padding: 32px;
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .message {
+      max-width: 42rem;
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      line-height: 1.5;
+    }
+    
+    .message.user {
+      align-self: flex-end;
+      background: #2563eb;
+      color: #fff;
+      border-bottom-right-radius: 0.25rem;
+    }
+    
+    .message.ai {
+      align-self: flex-start;
+      background: var(--bg-secondary);
+      color: var(--text);
+      border-bottom-left-radius: 0.25rem;
+    }
+    
+    .chat-input-area {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .chat-input-wrapper {
+      max-width: 56rem;
+      margin: 0 auto;
+      display: flex;
+      gap: 0.75rem;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    
+    .chat-input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+    
+    .chat-input::placeholder {
+      color: var(--text-muted);
+    }
+    
+    .send-btn {
+      padding: 0.75rem 1.5rem;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .dark .send-btn {
+      background: #fff;
+      color: #000;
+    }
+    
+    .send-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .send-btn svg {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+    
+    /* News Section */
+    .news-section {
+      display: none;
+      padding: 1.5rem;
       overflow-y: auto;
       height: 100%;
     }
-    .project-card, .news-card {
-      background: var(--bg-panel);
+    
+    .news-section.active {
+      display: block;
+    }
+    
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .news-card {
+      background: var(--bg-secondary);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
+      border-radius: 1rem;
       overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.2s;
     }
-    .project-card:hover, .news-card:hover {
-        transform: translateY(-2px);
-        border-color: var(--text-muted);
+    
+    .news-card:hover {
+      transform: translateY(-2px);
     }
+    
     .news-image {
       height: 180px;
       background-size: cover;
       background-position: center;
-      border-radius: 12px;
-      margin-bottom: 16px;
       background-color: var(--border);
     }
-    .news-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; color: var(--text-main); }
-    .news-summary { font-size: 14px; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 12px; }
     
-    /* Agent & Metrics */
-    .agent-panel {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 16px;
-        padding: 12px 20%;
-        background: var(--bg-panel);
-        border-bottom: 1px solid var(--border);
-        font-size: 12px;
-    }
-    @media (max-width: 1024px) {
-        .agent-panel { padding: 12px 5%; }
-    }
-    .agent { display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--text-main); }
-    .bar { height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
-    .fill { height: 100%; background: var(--text-main); transition: width 0.5s; }
-
-    /* Utilities */
-    .hidden { display: none !important; }
-    .divider { display: flex; align-items: center; margin: 24px 0; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
-    .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-    .divider span { padding: 0 12px; }
-    .switch-mode { text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted); }
-    .switch-mode a { color: var(--text-main); cursor: pointer; font-weight: 600; text-decoration: underline; text-underline-offset: 4px; }
-    .error-msg { background: #fee2e2; color: #b91c1c; padding: 12px; border-radius: 8px; display: none; margin-bottom: 16px; font-size: 14px; }
-    .error-msg.show { display: block; }
-    .password-toggle { position: absolute; right: 12px; top: 12px; cursor: pointer; font-size: 12px; color: var(--text-muted); }
-    
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-    
-    .theme-toggle-login {
-        position: absolute; top: 20px; right: 20px;
-        width: 36px; height: 36px;
-        border-radius: 8px;
-        background: var(--bg-panel);
-        border: 1px solid var(--border);
-        display: flex; justify-content: center; align-items: center;
-        cursor: pointer;
-        color: var(--text-main);
+    .news-content {
+      padding: 1rem;
     }
     
-    /* Settings Modal */
-    .settings-overlay {
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        background: rgba(0,0,0,0.5);
-        display: none; justify-content: center; align-items: center; z-index: 1000;
-        backdrop-filter: blur(4px);
+    .news-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.4;
     }
-    .settings-overlay.active { display: flex; }
-    .settings-panel {
-        width: 100%; max-width: 500px;
-        background: var(--bg-body);
-        padding: 24px;
-        border-radius: 16px;
-        max-height: 85vh;
-        overflow-y: auto;
-        position: relative;
-    }
-    .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .settings-title { font-size: 18px; font-weight: 700; }
-    .settings-close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-main); }
     
-    .setting-card {
-        padding: 16px;
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        margin-bottom: 12px;
-        cursor: pointer;
-        display: flex; align-items: center; justify-content: space-between;
+    .news-summary {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
-    .setting-card.selected { border-color: var(--text-main); background: var(--bg-panel); }
     
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 50;
+    }
+    
+    .modal-overlay.active {
+      display: flex;
+    }
+    
+    .modal {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem;
+      width: 100%;
+      max-width: 28rem;
+    }
+    
+    .modal h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    
+    .modal p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+    
+    .btn-cancel {
+      padding: 0.5rem 1rem;
+      background: var(--bg-secondary);
+      color: var(--text);
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .btn-danger {
+      padding: 0.5rem 1rem;
+      background: #dc2626;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    
+    .btn-danger:hover {
+      background: #b91c1c;
+    }
   </style>
 </head>
-
 <body>
-
+  <!-- Login Page -->
   <div class="login-page" id="loginPage">
-    <div class="theme-toggle-login" onclick="toggleDark()">
-      <span class="theme-light">☀</span>
-      <span class="theme-dark" style="display:none;">☾</span>
-    </div>
-
-    <div class="login-container">
-      <div class="login-logo">Hike.ai</div>
-      <div class="login-subtitle">Thinking-first AI for better decisions</div>
-
-      <div id="errorMessage" class="error-msg"></div>
-
-      <div id="loginForm">
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <div style="position: relative;">
-            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••"
-              style="padding-right: 55px;">
-            <span class="password-toggle" onclick="togglePassword('loginPassword', this)">Show</span>
+    <div class="login-wrapper">
+      <div class="login-header">
+        <div class="login-logo">
+          <div class="login-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:2rem;height:2rem;">
+              <path d="M3 12l7-9 4 9 7-6v13H3z" fill="black" stroke="black"/>
+            </svg>
           </div>
+          <h1>Hike.ai</h1>
         </div>
-
-        <button class="login-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
-
-        <div class="divider">
-          <span>or</span>
-        </div>
-
-        <button class="google-btn" onclick="window.location.href='/auth/google'">
-          <svg width="18" height="18" viewBox="0 0 18 18">
-            <path fill="#4285F4"
-              d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" />
-            <path fill="#34A853"
-              d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
-            <path fill="#FBBC05"
-              d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.96H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.04l3.007-2.333z" />
-            <path fill="#EA4335"
-              d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
-          </svg>
-          Continue with Google
-        </button>
-
-        <div class="switch-mode">
-          Don't have an account? <a onclick="switchToSignup()">Sign up</a>
-        </div>
+        <p class="login-subtitle">Sign in to continue</p>
       </div>
-
-      <div id="signupForm" class="hidden">
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <input type="text" id="signupName" class="form-input" placeholder="John Doe">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Email</label>
-          <input type="email" id="signupEmail" class="form-input" placeholder="you@example.com">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <div style="position: relative;">
-            <input type="password" id="signupPassword" class="form-input" placeholder="••••••••"
-              style="padding-right: 55px;">
-            <span class="password-toggle" onclick="togglePassword('signupPassword', this)">Show</span>
+      
+      <div class="login-card">
+        <div id="errorMessage" class="error-message"></div>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="Enter your email">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="loginPassword" class="form-input" placeholder="Enter your password" style="padding-right: 4rem;">
+              <button type="button" class="password-toggle" onclick="togglePassword('loginPassword', this)">Show</button>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary" id="loginBtn">Sign In</button>
+          
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">Or continue with</span>
+          </div>
+          
+          <button class="btn btn-google" id="googleBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Sign in with Google
+          </button>
+          
+          <div class="login-footer">
+            Don't have an account? <a onclick="showSignup()">Sign up</a>
           </div>
         </div>
-
-        <button class="login-btn" id="signupBtn" onclick="handleSignup()">Create Account</button>
-
-        <div class="divider">
-          <span>or</span>
-        </div>
-
-        <button class="google-btn" onclick="window.location.href='/auth/google'">
-          <svg width="18" height="18" viewBox="0 0 18 18">
-            <path fill="#4285F4"
-              d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" />
-            <path fill="#34A853"
-              d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" />
-            <path fill="#FBBC05"
-              d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.96H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.04l3.007-2.333z" />
-            <path fill="#EA4335"
-              d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" />
-          </svg>
-          Sign up with Google
-        </button>
-
-        <div class="switch-mode">
-          Already have an account? <a onclick="switchToLogin()">Sign in</a>
+        
+        <!-- Signup Form -->
+        <div id="signupForm" class="hidden">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input type="text" id="signupName" class="form-input" placeholder="Enter your name">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="signupEmail" class="form-input" placeholder="Enter your email">
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="password-wrapper">
+              <input type="password" id="signupPassword" class="form-input" placeholder="Create a password" style="padding-right: 4rem;">
+              <button type="button" class="password-toggle" onclick="togglePassword('signupPassword', this)">Show</button>
+            </div>
+          </div>
+          
+          <button class="btn btn-primary" id="signupBtn">Create Account</button>
+          
+          <div class="login-footer">
+            Already have an account? <a onclick="showLogin()">Sign in</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-
+  
+  <!-- Main App -->
   <div class="app" id="mainApp">
+    <!-- Sidebar -->
     <aside class="sidebar">
-      <div class="logo">Hike.ai</div>
-      <nav>
-        <a class="active" id="nav-chat" onclick="showSection('chat')">AI Chat</a>
-        <a id="nav-projects" onclick="showSection('projects')">Projects</a>
-        <a id="nav-news" onclick="showSection('news')">News</a>
-        <a id="nav-history" onclick="showSection('history')">History</a>
-        <a onclick="window.location.href='/api/logout'">Log Out</a>
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M3 12l7-9 4 9 7-6v13H3z" fill="currentColor" stroke="currentColor"/>
+            </svg>
+          </div>
+          <h1>Hike.ai</h1>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <button class="nav-item active" id="navChat" onclick="showSection('chat')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="nav-item-text">Chat</span>
+        </button>
+        
+        <button class="nav-item" id="navNews" onclick="showSection('news')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 20H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v1m2 13a2 2 0 0 1-2-2V7m2 13a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-2"/>
+          </svg>
+          <span class="nav-item-text">News</span>
+        </button>
+        
+        <button class="nav-item" id="navProjects" onclick="toggleProjects()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span class="nav-item-text">Projects</span>
+          <svg id="projectsChevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </button>
+        
+        <div id="projectsList" class="projects-list hidden">
+          <div class="project-item" onclick="openCreateProject()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;margin-right:0.5rem;">
+              <path d="M12 5v14M5 12h14"/>
+            </svg>
+            <span>Create Project</span>
+          </div>
+        </div>
+        
+        <button class="nav-item" onclick="showSection('analysis')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 20V10M12 20V4M6 20v-6"/>
+          </svg>
+          <span class="nav-item-text">Analysis</span>
+        </button>
       </nav>
-      <div class="sidebar-bottom">
-        <button class="settings-sidebar-btn" onclick="openSettings()">
-          <span class="settings-icon">⚙</span>
-          <span>Settings</span>
+      
+      <div class="sidebar-footer">
+        <button class="nav-item" id="settingsBtn" onclick="toggleSettings()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <span class="nav-item-text">Settings</span>
+        </button>
+        
+        <div id="settingsPanel" class="settings-panel hidden">
+          <div class="settings-label">THEME</div>
+          <button class="theme-btn" onclick="setTheme('light')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+            Light
+          </button>
+          <button class="theme-btn" onclick="setTheme('dark')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            Dark
+          </button>
+          <button class="theme-btn" onclick="setTheme('system')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+            System
+          </button>
+        </div>
+        
+        <button class="nav-item" style="margin-top:0.5rem;color:#ef4444;" onclick="handleLogout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+          <span class="nav-item-text">Logout</span>
         </button>
       </div>
     </aside>
-
-    <main class="chat" id="section-chat">
-      <div class="chat-header">
-        <strong>AI Chat</strong>
-        <span>Thinking-first AI</span>
-      </div>
-
-      <div class="chat-body" id="chat">
-        <div class="message ai">
-          Welcome to <strong>Hike.ai</strong><br><br>
-          I analyze decisions using debate, regret prediction, emotional alignment,
-          and real-world context.<br><br>
-          Ask me anything or describe a decision you're facing.
+    
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Chat Section -->
+      <div id="chatSection">
+        <div class="chat-header">
+          <h2>Chat</h2>
         </div>
-      </div>
-
-      <div class="agent-panel">
-        <div class="agent-section">
-          <div class="agent">
-            <span>Debate AI</span>
-            <span id="debateStatus">Ready</span>
-          </div>
-          <div class="agent">
-            <span>Regret AI</span>
-            <span id="regretStatus">Low Risk</span>
-          </div>
-          <div class="agent">
-            <span>Empathy AI</span>
-            <span id="empathyStatus">Normal</span>
-          </div>
-          <div class="agent">
-            <span>News Flow AI</span>
-            <span id="newsStatus">Monitoring</span>
-          </div>
+        
+        <div class="chat-messages" id="chatMessages">
+          <div class="message ai">Hello! I'm Hike.ai. How can I assist you today?</div>
         </div>
-
-        <div class="agent-section">
-          <div class="metric">
-            <div class="metric-label">Confidence</div>
-            <div class="bar">
-              <div class="fill" id="confidenceFill" style="width:0%"></div>
-            </div>
-          </div>
-          <div class="metric">
-            <div class="metric-label">Regret Risk</div>
-            <div class="bar">
-              <div class="fill" id="regretFill" style="width:0%"></div>
-            </div>
+        
+        <div class="chat-input-area">
+          <div class="chat-input-wrapper">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Type your message...">
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
-
-      <div class="chat-input">
-        <textarea id="input" placeholder="Describe your situation or decision…" rows="1"></textarea>
-        <button id="sendBtn" onclick="send()">➤</button>
+      
+      <!-- News Section -->
+      <div id="newsSection" class="news-section">
+        <h2 style="margin-bottom:1.5rem;font-size:1.5rem;">Latest News</h2>
+        <div class="news-grid" id="newsGrid">
+          <p style="color:var(--text-muted);">Loading news...</p>
+        </div>
       </div>
     </main>
-
-    <section class="content-section" id="section-projects">
-      <div class="section-header">
-        <h2 class="section-title">Projects</h2>
-        <button class="btn-primary" onclick="openNewProjectModal()">+ New Project</button>
-      </div>
-
-      <div id="userProjectsContainer"></div>
-
-      <div class="card">
-        <div class="project-header">
-          <span class="project-title">Career Transition 2026</span>
-          <span class="project-status status-active">Active</span>
-        </div>
-        <div class="project-timeline">
-          <div class="timeline-item high-risk">
-            Jan 10 → Switch immediately ⚠️ High regret risk
-          </div>
-          <div class="timeline-item low-risk">
-            Jan 18 → Delay & upskill ✓ Low regret
-          </div>
-          <div class="timeline-item positive">
-            Feb 02 → Portfolio building 👍 Positive outcome
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="project-header">
-          <span class="project-title">Startup Idea Validation</span>
-          <span class="project-status status-paused">Paused</span>
-        </div>
-        <div class="project-timeline">
-          <div class="timeline-item positive">
-            Dec 28 → Market research completed
-          </div>
-          <div class="timeline-item">
-            Jan 05 → Waiting for funding decision
-          </div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div class="project-header">
-          <span class="project-title">Investment Portfolio Review</span>
-          <span class="project-status status-completed">Completed</span>
-        </div>
-        <div class="project-timeline">
-          <div class="timeline-item low-risk">
-            Dec 15 → Diversification strategy approved ✓
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- News Section -->
-    <section class="content-section" id="section-news">
-      <div class="section-header">
-        <h2 class="section-title">Latest Global News</h2>
-        <button class="refresh-news-btn" onclick="loadNews(true)">Refresh News</button>
-      </div>
-      <div id="news-loading" style="text-align: center; padding: 40px; color: #666; display: none;">
-        Updating news feed...
-      </div>
-      <div id="news-container" class="news-grid">
-        <!-- News items will be inserted here -->
-      </div>
-    </section>
-
-    <section class="content-section" id="section-history">
-      <div class="section-header">
-        <h2 class="section-title">History</h2>
-      </div>
-
-      <div class="session-group">
-        <div class="session-date">Today</div>
-        <div class="history-item" onclick="showSection('chat')">
-          <div>
-            <div class="history-title">Career advice discussion</div>
-            <span class="history-meta">Confidence: <span class="confidence-high">0.81</span> · Regret: Low</span>
-          </div>
-          <button class="btn-secondary">Continue as Project</button>
-        </div>
-        <div class="history-item" onclick="showSection('chat')">
-          <div>
-            <div class="history-title">Investment decision analysis</div>
-            <span class="history-meta">Confidence: <span class="confidence-high">0.73</span> · Regret: Low</span>
-          </div>
-          <button class="btn-secondary">Continue as Project</button>
-        </div>
-      </div>
-
-      <div class="session-group">
-        <div class="session-date">Yesterday</div>
-        <div class="history-item" onclick="showSection('chat')">
-          <div>
-            <div class="history-title">Market analysis for startup</div>
-            <span class="history-meta">Confidence: <span class="confidence-low">0.47</span> · Regret: High</span>
-          </div>
-          <button class="btn-secondary">Continue as Project</button>
-        </div>
-      </div>
-
-      <div class="session-group">
-        <div class="session-date">Last Week</div>
-        <div class="history-item" onclick="showSection('chat')">
-          <div>
-            <div class="history-title">Relationship advice</div>
-            <span class="history-meta">Confidence: <span class="confidence-high">0.89</span> · Regret: Low</span>
-          </div>
-          <button class="btn-secondary">Continue as Project</button>
-        </div>
-        <div class="history-item" onclick="showSection('chat')">
-          <div>
-            <div class="history-title">Health decision support</div>
-            <span class="history-meta">Confidence: <span class="confidence-high">0.76</span> · Regret: Low</span>
-          </div>
-          <button class="btn-secondary">Continue as Project</button>
-        </div>
-      </div>
-    </section>
   </div>
-
-  <div class="project-modal-overlay" id="projectModalOverlay" onclick="closeProjectModalOnOverlay(event)">
-    <div class="project-modal" onclick="event.stopPropagation()">
-      <div class="project-modal-header">
-        <span class="project-modal-title">Create New Project</span>
-        <button class="project-modal-close" onclick="closeProjectModal()">✕</button>
-      </div>
-
-      <div class="project-form-group">
-        <label class="project-form-label">Project Title</label>
-        <input type="text" class="project-form-input" id="projectTitle" placeholder="e.g., Career Decision 2026">
-      </div>
-
-      <div class="project-form-group">
-        <label class="project-form-label">Description</label>
-        <textarea class="project-form-input project-form-textarea" id="projectDescription"
-          placeholder="What decision or goal are you exploring?"></textarea>
-      </div>
-
-      <div class="project-form-group">
-        <label class="project-form-label">Status</label>
-        <div class="project-status-selector">
-          <div class="status-option active-status" id="status-active" onclick="selectProjectStatus('active')">
-            Active
-          </div>
-          <div class="status-option" id="status-paused" onclick="selectProjectStatus('paused')">
-            Paused
-          </div>
-        </div>
-      </div>
-
-      <div class="project-modal-actions">
-        <button class="btn-cancel" onclick="closeProjectModal()">Cancel</button>
-        <button class="btn-create" onclick="createProject()">Create Project</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="settings-overlay" id="settingsOverlay" onclick="closeSettingsOnOverlay(event)">
-    <div class="settings-panel" onclick="event.stopPropagation()">
-      <div class="settings-header">
-        <span class="settings-title">Settings</span>
-        <button class="settings-close" onclick="closeSettings()">✕</button>
-      </div>
-
-      <div class="settings-section">
-        <div class="toggle-row">
-          <div>
-            <span class="settings-label">Dark Mode</span>
-            <div class="settings-description">Switch between light and dark theme</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="themeToggle" onchange="handleThemeToggle()">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <span class="settings-label">AI Model</span>
-        <div class="settings-description">Select the primary AI provider for responses</div>
-        <select class="model-selector" id="modelSelector" onchange="handleModelChange()">
-          <option value="auto">Auto (Best Available)</option>
-          <option value="groq">Groq - Llama 3.3 70B</option>
-          <option value="openrouter">OpenRouter - DeepSeek R1</option>
-          <option value="bytez">Bytez - Llama 3.1 8B</option>
-          <option value="chutes">Chutes - Mistral Small 3.1</option>
-        </select>
-      </div>
-
-      <div class="settings-section">
-        <div class="toggle-row">
-          <div>
-            <span class="settings-label">
-              Web Research
-              <span class="setting-status" id="researchStatus">Active</span>
-            </span>
-            <div class="settings-description">Enable real-time web search for context-aware responses</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="researchToggle" checked onchange="handleResearchToggle()">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <div class="toggle-row">
-          <div>
-            <span class="settings-label">
-              Debate AI
-              <span class="setting-status" id="debateSettingStatus">Active</span>
-            </span>
-            <div class="settings-description">Enable multi-perspective analysis with multiple AI models</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="debateToggle" checked onchange="handleDebateToggle()">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="model-checkboxes" id="debateModels">
-          <label class="model-checkbox selected" id="debate-groq">
-            <input type="checkbox" checked onchange="handleDebateModelChange('groq')">
-            <span class="model-checkbox-label">Groq<br><small>Llama 3.3 70B</small></span>
-          </label>
-          <label class="model-checkbox selected" id="debate-openrouter">
-            <input type="checkbox" checked onchange="handleDebateModelChange('openrouter')">
-            <span class="model-checkbox-label">OpenRouter<br><small>DeepSeek R1</small></span>
-          </label>
-          <label class="model-checkbox" id="debate-bytez">
-            <input type="checkbox" onchange="handleDebateModelChange('bytez')">
-            <span class="model-checkbox-label">Bytez<br><small>Llama 3.1 8B</small></span>
-          </label>
-          <label class="model-checkbox" id="debate-chutes">
-            <input type="checkbox" onchange="handleDebateModelChange('chutes')">
-            <span class="model-checkbox-label">Chutes<br><small>Mistral Small</small></span>
-          </label>
-          <div class="model-count-hint" style="grid-column: span 2;">Select 2-4 models for debate</div>
-        </div>
-      </div>
-
-      <div class="settings-section">
-        <div class="toggle-row">
-          <div>
-            <span class="settings-label">
-              Regret AI
-              <span class="setting-status" id="regretSettingStatus">Active</span>
-            </span>
-            <div class="settings-description">Enable decision analysis and regret prediction</div>
-          </div>
-          <label class="toggle-switch">
-            <input type="checkbox" id="regretToggle" checked onchange="handleRegretToggle()">
-            <span class="toggle-slider"></span>
-          </label>
-        </div>
-        <div class="model-checkboxes" id="regretModels">
-          <label class="model-checkbox selected" id="regret-groq">
-            <input type="checkbox" checked onchange="handleRegretModelChange('groq')">
-            <span class="model-checkbox-label">Groq<br><small>Llama 3.3 70B</small></span>
-          </label>
-          <label class="model-checkbox selected" id="regret-openrouter">
-            <input type="checkbox" checked onchange="handleRegretModelChange('openrouter')">
-            <span class="model-checkbox-label">OpenRouter<br><small>DeepSeek R1</small></span>
-          </label>
-          <label class="model-checkbox" id="regret-bytez">
-            <input type="checkbox" onchange="handleRegretModelChange('bytez')">
-            <span class="model-checkbox-label">Bytez<br><small>Llama 3.1 8B</small></span>
-          </label>
-          <label class="model-checkbox" id="regret-chutes">
-            <input type="checkbox" onchange="handleRegretModelChange('chutes')">
-            <span class="model-checkbox-label">Chutes<br><small>Mistral Small</small></span>
-          </label>
-          <div class="model-count-hint" style="grid-column: span 2;">Select 2-4 models for regret analysis</div>
-        </div>
+  
+  <!-- Create Project Modal -->
+  <div class="modal-overlay" id="createProjectModal">
+    <div class="modal">
+      <h3>Create New Project</h3>
+      <input type="text" id="newProjectName" class="form-input" placeholder="Project name..." style="margin-bottom:1rem;border-radius:0.5rem;">
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeCreateProject()">Cancel</button>
+        <button class="btn btn-primary" style="width:auto;padding:0.5rem 1rem;" onclick="createProject()">Create</button>
       </div>
     </div>
   </div>
 
   <script>
-    function initApp() {
-        console.log("Initializing App Bindings...");
-        
-        const loginBtn = document.getElementById('loginBtn');
-        if (loginBtn) {
-            // Add listener without clearing onclick to ensure redundancy
-            loginBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log("Login Button Clicked");
-                handleLogin();
-            });
-        } else {
-            console.error("Login Button Not Found in DOM");
-        }
-        
-        const signupBtn = document.getElementById('signupBtn');
-        if (signupBtn) {
-            signupBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                console.log("Signup Button Clicked");
-                handleSignup();
-            });
-        }
-
-        // Allow Enter key to submit
-        const inputs = document.querySelectorAll('.login-container input');
-        inputs.forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (document.getElementById('loginForm') && document.getElementById('loginForm').classList.contains('hidden')) {
-                        handleSignup();
-                    } else {
-                        handleLogin();
-                    }
-                }
-            });
-        });
-        
-        console.log("Checking session...");
-        checkSession();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initApp);
-    } else {
-        // DOM already ready, run immediately
-        initApp();
-    }
-
-    function safeJsonParse(str, fallback) {
-        try {
-            return str ? JSON.parse(str) : fallback;
-        } catch (e) {
-            console.error("JSON Parse Error:", e);
-            return fallback;
-        }
-    }
-
-    const appSettings = {
-        model: localStorage.getItem('selectedModel') || 'auto',
-        useResearch: localStorage.getItem('useResearch') === 'true',
-        useDebate: localStorage.getItem('useDebate') === 'true',
-        debateModels: safeJsonParse(localStorage.getItem('debateModels'), ["groq", "openrouter"]),
-        useRegret: localStorage.getItem('useRegret') === 'true',
-        regretModels: safeJsonParse(localStorage.getItem('regretModels'), ["groq"])
+    // ==================== STATE ====================
+    const state = {
+      theme: localStorage.getItem('theme') || 'system',
+      projects: JSON.parse(localStorage.getItem('projects') || '[]'),
+      currentSection: 'chat'
     };
 
-    function escapeHtml(text) {
-        if (!text) return text;
-        return text
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+    // ==================== INITIALIZATION ====================
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Hike.ai initialized');
+      applyTheme();
+      checkSession();
+      bindEvents();
+    });
+
+    function bindEvents() {
+      // Login button
+      document.getElementById('loginBtn').addEventListener('click', handleLogin);
+      
+      // Signup button
+      document.getElementById('signupBtn').addEventListener('click', handleSignup);
+      
+      // Google button
+      document.getElementById('googleBtn').addEventListener('click', handleGoogleLogin);
+      
+      // Send button
+      document.getElementById('sendBtn').addEventListener('click', sendMessage);
+      
+      // Chat input enter key
+      document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+      });
+      
+      // Login form enter key
+      document.getElementById('loginPassword').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleLogin();
+      });
+      
+      // Signup form enter key
+      document.getElementById('signupPassword').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSignup();
+      });
     }
 
-    window.addEventListener('DOMContentLoaded', checkSession);
-
+    // ==================== AUTHENTICATION ====================
     async function checkSession() {
       try {
         const res = await fetch('/api/profile');
@@ -1002,41 +1039,24 @@ HTML_CONTENT = r"""
       }
     }
 
-    function showApp() {
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('mainApp').classList.add('active');
-      loadUserProjects();
-    }
-
-    function showError(msg) {
-      const errorDiv = document.getElementById('errorMessage');
-      errorDiv.textContent = msg;
-      errorDiv.classList.add('show');
-      setTimeout(() => errorDiv.classList.remove('show'), 5000);
-    }
-
     async function handleLogin() {
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginBtn');
-
+      
       if (!email || !password) {
-        showError('Please fill in all fields');
+        showError('Please enter email and password');
         return;
       }
-
-      btn.disabled = true;
-      btn.textContent = 'Signing in...';
-
+      
       try {
         const res = await fetch('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
         });
-
+        
         const data = await res.json();
-
+        
         if (res.ok) {
           showApp();
         } else {
@@ -1044,9 +1064,6 @@ HTML_CONTENT = r"""
         }
       } catch (e) {
         showError('Connection error. Please try again.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Sign In';
       }
     }
 
@@ -1054,25 +1071,21 @@ HTML_CONTENT = r"""
       const name = document.getElementById('signupName').value;
       const email = document.getElementById('signupEmail').value;
       const password = document.getElementById('signupPassword').value;
-      const btn = document.getElementById('signupBtn');
-
+      
       if (!name || !email || !password) {
         showError('Please fill in all fields');
         return;
       }
-
-      btn.disabled = true;
-      btn.textContent = 'Creating account...';
-
+      
       try {
         const res = await fetch('/api/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, password })
         });
-
+        
         const data = await res.json();
-
+        
         if (res.ok) {
           showApp();
         } else {
@@ -1080,551 +1093,236 @@ HTML_CONTENT = r"""
         }
       } catch (e) {
         showError('Connection error. Please try again.');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Create Account';
       }
     }
 
-    function toggleDark() {
-      document.body.classList.toggle("dark");
-      const isDark = document.body.classList.contains("dark");
-      const lightIcon = document.querySelector('.theme-light');
-      const darkIcon = document.querySelector('.theme-dark');
-      if (lightIcon && darkIcon) {
-        lightIcon.style.display = isDark ? 'none' : 'block';
-        darkIcon.style.display = isDark ? 'block' : 'none';
-      }
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    function handleGoogleLogin() {
+      window.location.href = '/auth/google/login';
     }
 
-    if (localStorage.getItem('theme') === 'dark') {
-      document.body.classList.add('dark');
-      const lightIcon = document.querySelector('.theme-light');
-      const darkIcon = document.querySelector('.theme-dark');
-      if (lightIcon && darkIcon) {
-        lightIcon.style.display = 'none';
-        darkIcon.style.display = 'block';
-      }
+    async function handleLogout() {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+      } catch (e) {}
+      document.getElementById('mainApp').classList.remove('active');
+      document.getElementById('loginPage').style.display = 'flex';
     }
 
-    const appSettings = {
-      model: localStorage.getItem('selectedModel') || 'auto',
-      useResearch: localStorage.getItem('useResearch') !== 'false',
-      useDebate: localStorage.getItem('useDebate') !== 'false',
-      debateModels: JSON.parse(localStorage.getItem('debateModels') || '["groq", "openrouter"]'),
-      useRegret: localStorage.getItem('useRegret') !== 'false',
-      regretModels: JSON.parse(localStorage.getItem('regretModels') || '["groq", "openrouter"]')
-    };
-
-    function openSettings() {
-      document.getElementById('settingsOverlay').classList.add('active');
-
-      document.getElementById('themeToggle').checked = document.body.classList.contains('dark');
-
-      document.getElementById('modelSelector').value = appSettings.model;
-
-      document.getElementById('researchToggle').checked = appSettings.useResearch;
-      updateResearchStatus();
-
-      document.getElementById('debateToggle').checked = appSettings.useDebate;
-      updateDebateStatus();
-      syncDebateModels();
-
-      document.getElementById('regretToggle').checked = appSettings.useRegret;
-      updateRegretStatus();
-      syncRegretModels();
+    // ==================== UI HELPERS ====================
+    function showApp() {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('mainApp').classList.add('active');
+      loadNews();
+      renderProjects();
     }
 
-    function closeSettings() {
-      document.getElementById('settingsOverlay').classList.remove('active');
+    function showError(msg) {
+      const el = document.getElementById('errorMessage');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 5000);
     }
 
-    function closeSettingsOnOverlay(event) {
-      if (event.target === document.getElementById('settingsOverlay')) {
-        closeSettings();
-      }
-    }
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        closeSettings();
-      }
-    });
-
-    function handleThemeToggle() {
-      toggleDark();
-      document.getElementById('themeToggle').checked = document.body.classList.contains('dark');
-    }
-
-    function handleModelChange() {
-      const model = document.getElementById('modelSelector').value;
-      appSettings.model = model;
-      localStorage.setItem('selectedModel', model);
-      console.log('Model changed to:', model);
-    }
-
-    function handleResearchToggle() {
-      const useResearch = document.getElementById('researchToggle').checked;
-      appSettings.useResearch = useResearch;
-      localStorage.setItem('useResearch', useResearch);
-      updateResearchStatus();
-    }
-
-    function updateResearchStatus() {
-      const statusEl = document.getElementById('researchStatus');
-      if (appSettings.useResearch) {
-        statusEl.textContent = 'Active';
-        statusEl.classList.remove('inactive');
-      } else {
-        statusEl.textContent = 'Disabled';
-        statusEl.classList.add('inactive');
-      }
-    }
-
-    function handleDebateToggle() {
-      const useDebate = document.getElementById('debateToggle').checked;
-      appSettings.useDebate = useDebate;
-      localStorage.setItem('useDebate', useDebate);
-      updateDebateStatus();
-    }
-
-    function updateDebateStatus() {
-      const statusEl = document.getElementById('debateSettingStatus');
-      const modelsEl = document.getElementById('debateModels');
-      if (appSettings.useDebate) {
-        statusEl.textContent = `${appSettings.debateModels.length} models`;
-        statusEl.classList.remove('inactive');
-        modelsEl.classList.add('visible');
-      } else {
-        statusEl.textContent = 'Disabled';
-        statusEl.classList.add('inactive');
-        modelsEl.classList.remove('visible');
-      }
-    }
-
-    function syncDebateModels() {
-      ['groq', 'openrouter', 'bytez', 'chutes'].forEach(model => {
-        const checkbox = document.querySelector(`input[name="debate-model"][value="${model}"]`);
-        const label = document.getElementById(`debate-${model}`);
-        const isSelected = appSettings.debateModels.includes(model);
-        checkbox.checked = isSelected;
-        label.classList.toggle('selected', isSelected);
-      });
-    }
-
-    function handleDebateModelChange(model) {
-      const checkbox = document.querySelector(`input[name="debate-model"][value="${model}"]`);
-      const label = document.getElementById(`debate-${model}`);
-
-      if (checkbox.checked) {
-        if (appSettings.debateModels.length < 4) {
-          appSettings.debateModels.push(model);
-          label.classList.add('selected');
-        } else {
-          checkbox.checked = false;
-          alert('Maximum 4 models allowed for debate');
-        }
-      } else {
-        if (appSettings.debateModels.length > 2) {
-          appSettings.debateModels = appSettings.debateModels.filter(m => m !== model);
-          label.classList.remove('selected');
-        } else {
-          checkbox.checked = true;
-          alert('Minimum 2 models required for debate');
-        }
-      }
-
-      localStorage.setItem('debateModels', JSON.stringify(appSettings.debateModels));
-      updateDebateStatus();
-    }
-
-    function handleRegretToggle() {
-      const useRegret = document.getElementById('regretToggle').checked;
-      appSettings.useRegret = useRegret;
-      localStorage.setItem('useRegret', useRegret);
-      updateRegretStatus();
-    }
-
-    function updateRegretStatus() {
-      const statusEl = document.getElementById('regretSettingStatus');
-      const modelsEl = document.getElementById('regretModels');
-      if (appSettings.useRegret) {
-        statusEl.textContent = `${appSettings.regretModels.length} models`;
-        statusEl.classList.remove('inactive');
-        modelsEl.classList.add('visible');
-      } else {
-        statusEl.textContent = 'Disabled';
-        statusEl.classList.add('inactive');
-        modelsEl.classList.remove('visible');
-      }
-    }
-
-    function syncRegretModels() {
-      ['groq', 'openrouter', 'bytez', 'chutes'].forEach(model => {
-        const checkbox = document.querySelector(`input[name="regret-model"][value="${model}"]`);
-        const label = document.getElementById(`regret-${model}`);
-        const isSelected = appSettings.regretModels.includes(model);
-        checkbox.checked = isSelected;
-        label.classList.toggle('selected', isSelected);
-      });
-    }
-
-    function handleRegretModelChange(model) {
-      const checkbox = document.querySelector(`input[name="regret-model"][value="${model}"]`);
-      const label = document.getElementById(`regret-${model}`);
-
-      if (checkbox.checked) {
-        if (appSettings.regretModels.length < 4) {
-          appSettings.regretModels.push(model);
-          label.classList.add('selected');
-        } else {
-          checkbox.checked = false;
-          alert('Maximum 4 models allowed for regret analysis');
-        }
-      } else {
-        if (appSettings.regretModels.length > 2) {
-          appSettings.regretModels = appSettings.regretModels.filter(m => m !== model);
-          label.classList.remove('selected');
-        } else {
-          checkbox.checked = true;
-          alert('Minimum 2 models required for regret analysis');
-        }
-      }
-
-      localStorage.setItem('regretModels', JSON.stringify(appSettings.regretModels));
-      updateRegretStatus();
-    }
-
-    function getSelectedProviders() {
-      const model = appSettings.model;
-      if (model === 'auto') {
-        return ['groq', 'openrouter'];
-      }
-      return [model];
-    }
-
-    let selectedProjectStatus = 'active';
-    let userProjects = JSON.parse(localStorage.getItem('userProjects') || '[]');
-
-    function openNewProjectModal() {
-      document.getElementById('projectModalOverlay').classList.add('active');
-      document.getElementById('projectTitle').value = '';
-      document.getElementById('projectDescription').value = '';
-      selectProjectStatus('active');
-    }
-
-    function closeProjectModal() {
-      document.getElementById('projectModalOverlay').classList.remove('active');
-    }
-
-    function closeProjectModalOnOverlay(event) {
-      if (event.target === document.getElementById('projectModalOverlay')) {
-        closeProjectModal();
-      }
-    }
-
-    function selectProjectStatus(status) {
-      selectedProjectStatus = status;
-      document.getElementById('status-active').classList.remove('active-status');
-      document.getElementById('status-paused').classList.remove('paused-status');
-
-      if (status === 'active') {
-        document.getElementById('status-active').classList.add('active-status');
-      } else {
-        document.getElementById('status-paused').classList.add('paused-status');
-      }
-    }
-
-    function createProject() {
-      const title = document.getElementById('projectTitle').value.trim();
-      const description = document.getElementById('projectDescription').value.trim();
-
-      if (!title) {
-        alert('Please enter a project title');
-        return;
-      }
-
-      const project = {
-        id: Date.now(),
-        title: title,
-        description: description,
-        status: selectedProjectStatus,
-        createdAt: new Date().toISOString(),
-        timeline: [
-          {
-            date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-            text: 'Project created',
-            type: 'positive'
-          }
-        ]
-      };
-
-      userProjects.unshift(project);
-      localStorage.setItem('userProjects', JSON.stringify(userProjects));
-      renderUserProjects();
-      closeProjectModal();
-    }
-
-    function deleteProject(projectId) {
-      if (confirm('Are you sure you want to delete this project?')) {
-        userProjects = userProjects.filter(p => p.id !== projectId);
-        localStorage.setItem('userProjects', JSON.stringify(userProjects));
-        renderUserProjects();
-      }
-    }
-
-    function renderUserProjects() {
-      const container = document.getElementById('userProjectsContainer');
-      if (userProjects.length === 0) {
-        container.innerHTML = '';
-        return;
-      }
-
-      container.innerHTML = userProjects.map(project => `
-        <div class="card">
-          <div class="project-header">
-            <span class="project-title">${escapeHtml(project.title)}</span>
-            <span class="project-status status-${project.status}">${project.status.charAt(0).toUpperCase() + project.status.slice(1)}</span>
-            <button class="project-delete-btn" onclick="deleteProject(${project.id})">Delete</button>
-          </div>
-          ${project.description ? `<div style="color: #666; font-size: 13px; margin-bottom: 12px;">${escapeHtml(project.description)}</div>` : ''}
-          <div class="project-timeline">
-            ${project.timeline.map(item => `
-              <div class="timeline-item ${item.type || ''}">
-                ${item.date} → ${escapeHtml(item.text)}
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    function loadUserProjects() {
-      renderUserProjects();
-    }
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') {
-        closeProjectModal();
-      }
-    });
-
-    function togglePassword(inputId, textElement) {
-      const input = document.getElementById(inputId);
-      if (input.type === 'password') {
-        input.type = 'text';
-        textElement.textContent = 'Hide';
-      } else {
-        input.type = 'password';
-        textElement.textContent = 'Show';
-      }
-    }
-
-    function switchToSignup() {
-      document.getElementById('loginForm').classList.add('hidden');
-      document.getElementById('signupForm').classList.remove('hidden');
-      document.getElementById('errorMessage').classList.remove('show');
-    }
-
-    function switchToLogin() {
+    function showLogin() {
       document.getElementById('signupForm').classList.add('hidden');
       document.getElementById('loginForm').classList.remove('hidden');
       document.getElementById('errorMessage').classList.remove('show');
     }
 
-    async function loadNews(forceRefresh = false) {
-      const container = document.getElementById('news-container');
-      const loading = document.getElementById('news-loading');
+    function showSignup() {
+      document.getElementById('loginForm').classList.add('hidden');
+      document.getElementById('signupForm').classList.remove('hidden');
+      document.getElementById('errorMessage').classList.remove('show');
+    }
 
-      // If we already have news and not forcing refresh, don't reload
-      if (container.children.length > 0 && !forceRefresh) return;
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide';
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show';
+      }
+    }
 
-      loading.style.display = 'block';
-      if (forceRefresh) container.innerHTML = '';
+    // ==================== SECTIONS ====================
+    function showSection(section) {
+      state.currentSection = section;
+      
+      // Update nav
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      
+      // Hide all sections
+      document.getElementById('chatSection').style.display = 'none';
+      document.getElementById('newsSection').classList.remove('active');
+      
+      if (section === 'chat') {
+        document.getElementById('navChat').classList.add('active');
+        document.getElementById('chatSection').style.display = 'flex';
+        document.getElementById('chatSection').style.flexDirection = 'column';
+        document.getElementById('chatSection').style.height = '100%';
+      } else if (section === 'news') {
+        document.getElementById('navNews').classList.add('active');
+        document.getElementById('newsSection').classList.add('active');
+        loadNews();
+      }
+    }
 
+    // ==================== CHAT ====================
+    async function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      const chat = document.getElementById('chatMessages');
+      
+      // Add user message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message user';
+      userMsg.textContent = message;
+      chat.appendChild(userMsg);
+      
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+      
+      // Add thinking message
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'message ai';
+      aiMsg.textContent = 'Thinking...';
+      chat.appendChild(aiMsg);
+      
       try {
-        const response = await fetch('/api/news/latest');
-        const articles = await response.json();
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+        
+        const data = await res.json();
+        aiMsg.textContent = data.response || 'Sorry, I could not process that.';
+      } catch (e) {
+        aiMsg.textContent = 'Sorry, there was an error. Please try again.';
+      }
+      
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-        loading.style.display = 'none';
-
+    // ==================== NEWS ====================
+    async function loadNews() {
+      const grid = document.getElementById('newsGrid');
+      
+      try {
+        const res = await fetch('/api/news/latest');
+        const articles = await res.json();
+        
         if (!articles || articles.length === 0) {
-          container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #666;">No news available at the moment.</div>';
+          grid.innerHTML = '<p style="color:var(--text-muted);">No news available.</p>';
           return;
         }
-
-        container.innerHTML = articles.map(article => {
-          const rawImage = article.urlToImage || 'https://via.placeholder.com/300x160?text=News';
-          const image = rawImage.replace(/'/g, "%27");
-          const safeUrl = (article.url || '').replace(/'/g, "%27");
-          const date = new Date(article.publishedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-
+        
+        grid.innerHTML = articles.map(article => {
+          const image = (article.urlToImage || '').replace(/'/g, '%27');
+          const url = (article.url || '#').replace(/'/g, '%27');
           return `
-            <div class="news-card" onclick="window.open('${safeUrl}', '_blank')">
-              <div class="news-image" style="background-image: url('${image}')">
-                <span class="news-badge">${article.source?.name || 'News'}</span>
-              </div>
+            <div class="news-card" onclick="window.open('${url}', '_blank')">
+              <div class="news-image" style="background-image: url('${image}')"></div>
               <div class="news-content">
-                <div class="news-title">${article.title}</div>
-                <div class="news-summary">${article.description || 'No description available.'}</div>
-                <div class="news-meta">
-                  <span class="news-source">${article.source?.name || 'Unknown Source'}</span>
-                  <span>${date}</span>
-                </div>
+                <div class="news-title">${article.title || 'Untitled'}</div>
+                <div class="news-summary">${article.description || ''}</div>
               </div>
             </div>
           `;
         }).join('');
-
-      } catch (error) {
-        console.error('Error loading news:', error);
-        loading.style.display = 'none';
-        container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #ef4444;">Failed to load news. Please try again.</div>';
-      }
-    }
-
-    function showSection(section) {
-      // Hide all sections
-      document.getElementById('section-chat').style.display = 'none';
-
-      ['projects', 'news', 'history'].forEach(sec => {
-        const el = document.getElementById('section-' + sec);
-        if (el) {
-          el.style.display = 'none';
-          el.classList.remove('active');
-        }
-        const nav = document.getElementById('nav-' + sec);
-        if (nav) nav.classList.remove('active');
-      });
-      document.getElementById('nav-chat').classList.remove('active');
-
-      // Show selected section
-      if (section === 'chat') {
-        document.getElementById('section-chat').style.display = 'flex';
-        document.getElementById('nav-chat').classList.add('active');
-      } else {
-        const el = document.getElementById('section-' + section);
-        if (el) {
-          el.style.display = 'block';
-          el.classList.add('active');
-          document.getElementById('nav-' + section).classList.add('active');
-        }
-
-        if (section === 'news') {
-          loadNews();
-        }
-      }
-    }
-
-    function showChat() {
-      showSection('chat');
-    }
-
-    async function send() {
-      const input = document.getElementById("input");
-      const message = input.value.trim();
-      if (!message) return;
-
-      const chat = document.getElementById("chat");
-      const sendBtn = document.getElementById("sendBtn");
-
-      const userMsg = document.createElement("div");
-      userMsg.className = "message user";
-      userMsg.textContent = message;
-      chat.appendChild(userMsg);
-
-      input.value = "";
-      input.style.height = 'auto';
-      sendBtn.disabled = true;
-      chat.scrollTop = chat.scrollHeight;
-
-      document.getElementById('debateStatus').textContent = 'Thinking...';
-      document.getElementById('empathyStatus').textContent = 'Analyzing...';
-      document.getElementById('regretStatus').textContent = 'Predicting...';
-      document.getElementById('newsStatus').textContent = 'Searching...';
-
-      const aiMsg = document.createElement("div");
-      aiMsg.className = "message ai";
-      aiMsg.textContent = "Analyzing your request across all systems...";
-      chat.appendChild(aiMsg);
-      chat.scrollTop = chat.scrollHeight;
-
-      try {
-
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message,
-            selected_model: appSettings.model,
-            use_research: appSettings.useResearch,
-            use_debate: appSettings.useDebate,
-            debate_models: appSettings.debateModels,
-            use_regret: appSettings.useRegret,
-            regret_models: appSettings.regretModels
-          })
-        });
-        const data = await response.json();
-
-        aiMsg.textContent = data.response;
-
-        const orchestration = data.orchestration || {};
-        const details = data.details || {};
-
-        let confidenceScore = 25;
-        if (orchestration.research?.available) confidenceScore += 25;
-        if (orchestration.debate?.available) confidenceScore += 25;
-        if (orchestration.regret) confidenceScore += 25;
-
-        document.getElementById('confidenceFill').style.width = confidenceScore + '%';
-
-        if (orchestration.regret?.regret) {
-          document.getElementById('regretFill').style.width = (orchestration.regret.regret * 10) + '%';
-        }
-
-        document.getElementById('debateStatus').textContent =
-          orchestration.debate?.available ? `${orchestration.debate.providers?.length || 0} models` : 'Ready';
-        document.getElementById('empathyStatus').textContent = details.emotion || 'Normal';
-        document.getElementById('regretStatus').textContent =
-          orchestration.regret ? (orchestration.regret.regret > 5 ? 'High Risk' : 'Low Risk') : 'Ready';
-        document.getElementById('newsStatus').textContent =
-          details.used_research ? 'Research Active' : 'Monitoring';
-
       } catch (e) {
-        aiMsg.textContent = "Sorry, I encountered an error processing your request. Please try again.";
-        console.error(e);
-
-        document.getElementById('debateStatus').textContent = 'Error';
-        document.getElementById('empathyStatus').textContent = 'Error';
-        document.getElementById('regretStatus').textContent = 'Error';
-        document.getElementById('newsStatus').textContent = 'Error';
-      } finally {
-        sendBtn.disabled = false;
-        chat.scrollTop = chat.scrollHeight;
+        grid.innerHTML = '<p style="color:#ef4444;">Failed to load news.</p>';
       }
     }
 
-    document.getElementById('input').addEventListener('input', function () {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    });
+    // ==================== PROJECTS ====================
+    function toggleProjects() {
+      const list = document.getElementById('projectsList');
+      const chevron = document.getElementById('projectsChevron');
+      list.classList.toggle('hidden');
+      chevron.style.transform = list.classList.contains('hidden') ? '' : 'rotate(90deg)';
+    }
 
-    document.getElementById('input').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        send();
+    function renderProjects() {
+      const list = document.getElementById('projectsList');
+      const createBtn = list.querySelector('.project-item');
+      list.innerHTML = '';
+      list.appendChild(createBtn);
+      
+      state.projects.forEach(project => {
+        const item = document.createElement('div');
+        item.className = 'project-item';
+        item.innerHTML = `
+          <span class="project-item-name">${project}</span>
+          <button class="project-delete" onclick="deleteProject('${project}', event)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1rem;height:1rem;">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function openCreateProject() {
+      document.getElementById('createProjectModal').classList.add('active');
+      document.getElementById('newProjectName').focus();
+    }
+
+    function closeCreateProject() {
+      document.getElementById('createProjectModal').classList.remove('active');
+      document.getElementById('newProjectName').value = '';
+    }
+
+    function createProject() {
+      const name = document.getElementById('newProjectName').value.trim();
+      if (name) {
+        state.projects.push(name);
+        localStorage.setItem('projects', JSON.stringify(state.projects));
+        renderProjects();
+        closeCreateProject();
       }
+    }
+
+    function deleteProject(name, event) {
+      event.stopPropagation();
+      state.projects = state.projects.filter(p => p !== name);
+      localStorage.setItem('projects', JSON.stringify(state.projects));
+      renderProjects();
+    }
+
+    // ==================== SETTINGS ====================
+    function toggleSettings() {
+      document.getElementById('settingsPanel').classList.toggle('hidden');
+    }
+
+    function setTheme(theme) {
+      state.theme = theme;
+      localStorage.setItem('theme', theme);
+      applyTheme();
+      
+      // Update active states
+      document.querySelectorAll('.theme-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.closest('.theme-btn').classList.add('active');
+    }
+
+    function applyTheme() {
+      const isDark = state.theme === 'dark' || 
+        (state.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      
+      document.body.classList.toggle('dark', isDark);
+    }
+
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+      if (state.theme === 'system') applyTheme();
     });
   </script>
 </body>
-
 </html>
 """
 
