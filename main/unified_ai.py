@@ -2814,7 +2814,7 @@ HTML_CONTENT = r"""
         container.innerHTML = articles.map(article => {
           const rawImage = article.urlToImage || 'https://via.placeholder.com/300x160?text=News';
           const image = rawImage.replace(/'/g, "%27");
-          const safeUrl = (article.url || '').replace(/'/g, "\\'");
+          const safeUrl = (article.url || '').replace(/'/g, "%27");
           const date = new Date(article.publishedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
           return `
