@@ -1868,6 +1868,10 @@ LANDING_HTML = """
 async def favicon():
     return Response(content=b"", media_type="image/x-icon")
 
+@app.get("/.well-known/{path:path}", include_in_schema=False)
+async def wellknown(path: str):
+    return Response(content="{}", media_type="application/json")
+
 @app.get("/", response_class=HTMLResponse)
 def landing(request: Request):
     return HTMLResponse(content=HTML_CONTENT)
