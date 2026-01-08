@@ -102,6 +102,16 @@ SECRET_KEY = os.getenv("SECRET_KEY", "default-insecure-secret-key-do-not-use-in-
 SESSION_SECRET = os.getenv("SESSION_SECRET", "default-session-secret")
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///unified_ai.db")
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+IS_PRODUCTION = os.getenv("ENVIRONMENT", "development").lower() == "production"
+
+# Security: Enforce secure secrets in production
+if IS_PRODUCTION:
+    if SECRET_KEY == "default-insecure-secret-key-do-not-use-in-prod":
+        raise ValueError("CRITICAL: SECRET_KEY must be set in production!")
+    if SESSION_SECRET == "default-session-secret":
+        raise ValueError("CRITICAL: SESSION_SECRET must be set in production!")
+    if len(SECRET_KEY) < 32:
+        raise ValueError("CRITICAL: SECRET_KEY must be at least 32 characters!")
 
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY")
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -1939,10 +1949,28 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization", "X-CSRF-Token"],
 )
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
+
+# Security: Only allow specific hosts in production
+ALLOWED_HOSTS = ["*"] if not IS_PRODUCTION else [
+    "localhost", "127.0.0.1",
+    "hike-ai.onrender.com",  # Add your production domain
+]
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
 app.add_middleware(SecurityMiddleware)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET)
+
+# Security: Add security headers
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    if IS_PRODUCTION:
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+    return response
 
 LANDING_HTML = """
 <!DOCTYPE html>
@@ -2032,7 +2060,7 @@ def api_login(body: LoginRequest, response: Response, db: Session = Depends(get_
         raise HTTPException(401, detail="Invalid credentials")
     
     session_id = create_session(email)
-    response.set_cookie(key="session_id", value=session_id, httponly=True, max_age=SESSION_EXPIRE_HOURS * 3600, samesite="lax")
+    response.set_cookie(key="session_id", value=session_id, httponly=True, max_age=SESSION_EXPIRE_HOURS * 3600, samesite="lax", secure=IS_PRODUCTION)
     return {"message": "Login successful"}
 
 @app.post("/api/signup")
@@ -2053,7 +2081,7 @@ def api_signup(body: SignupRequest, response: Response, db: Session = Depends(ge
     db.commit()
     
     session_id = create_session(email)
-    response.set_cookie(key="session_id", value=session_id, httponly=True, max_age=SESSION_EXPIRE_HOURS * 3600, samesite="lax")
+    response.set_cookie(key="session_id", value=session_id, httponly=True, max_age=SESSION_EXPIRE_HOURS * 3600, samesite="lax", secure=IS_PRODUCTION)
     return {"message": "Signup successful"}
 
 @app.get("/api/logout")
@@ -2087,7 +2115,7 @@ async def google_callback(request: Request, response: Response, db: Session = De
             
         session_id = create_session(email)
         resp = RedirectResponse("/")
-        resp.set_cookie(key="session_id", value=session_id, httponly=True, max_age=SESSION_EXPIRE_HOURS * 3600, samesite="lax")
+        resp.set_cookie(key="session_id", value=session_id, httponly=True, max_age=SESSION_EXPIRE_HOURS * 3600, samesite="lax", secure=IS_PRODUCTION)
         return resp
         
     except Exception as e:
@@ -2104,14 +2132,16 @@ def get_news_summary():
     return {"summary": news_system.summarize_text(txt), "count": len(recent)}
 
 class ChatMessage(BaseModel):
-    message: str
+    message: str = Field(..., min_length=1, max_length=10000)
+    project: Optional[str] = Field(None, max_length=100)
     token: Optional[str] = None
-    selected_model: str = "auto"
+    selected_model: str = Field("auto", pattern="^(auto|groq|openrouter|gemini|bytez|chutes)$")
+    empathy_model: str = Field("groq", pattern="^(groq|openrouter|gemini|bytez|chutes)$")
     use_research: bool = True
     use_debate: bool = True
-    debate_models: List[str] = ["groq", "openrouter"]
+    debate_models: List[str] = Field(default=["groq", "openrouter"], max_length=4)
     use_regret: bool = True
-    regret_models: List[str] = ["groq", "openrouter"]
+    regret_models: List[str] = Field(default=["groq", "openrouter"], max_length=4)
 
 @app.post("/api/chat")
 async def chat_endpoint(data: ChatMessage, db: Session = Depends(get_db), _ = Depends(verify_rate_limit)):
