@@ -1,15 +1,3 @@
-"""
-Unified AI System - Hike.ai
-A comprehensive AI platform with chat, news, debate, and analysis features.
-"""
-
-# Fix for semaphore leak warning on macOS
-import multiprocessing
-try:
-    multiprocessing.set_start_method('spawn', force=True)
-except RuntimeError:
-    pass
-
 import os
 import time
 import json
@@ -22,6 +10,11 @@ import threading
 import hashlib
 import secrets
 import httpx
+import multiprocessing
+try:
+    multiprocessing.set_start_method('spawn', force=True)
+except RuntimeError:
+    pass
 try:
     import redis
     REDIS_AVAILABLE = True
