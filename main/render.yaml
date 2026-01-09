@@ -4,52 +4,48 @@ services:
     runtime: python
     plan: free
     branch: main
-    rootDir: main
-    buildCommand: python -m pip install --upgrade pip && pip install -r requirements.txt
-    startCommand: uvicorn unified_ai:app --host 0.0.0.0 --port 10000
+    rootDir: backend/main
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: uvicorn unified_ai:app --host 0.0.0.0 --port $PORT
     autoDeploy: true
     numInstances: 1
     healthCheckPath: /
     envVars:
+      - key: ENVIRONMENT
+        value: production
       - key: SECRET_KEY
         generateValue: true
       - key: SESSION_SECRET
         generateValue: true
       - key: DATABASE_URL
-        fromDatabase:
-          name: hike-db
-          property: connectionString
-      - key: GOOGLE_API_KEY
+        value: sqlite:///unified_ai.db
+      - key: GEMINI_API_KEY
         sync: false
       - key: GROQ_API_KEY
         sync: false
       - key: OPENROUTER_API_KEY
         sync: false
-      - key: NEWSAPI_KEY
-        sync: false
-      - key: TAVILY_API_KEY
+      - key: BYTEZ_API_KEY
         sync: false
       - key: CHUTES_API_KEY
         sync: false
-      - key: BYTEZ_API_KEY
+      - key: NEWSAPI_KEY
+        sync: false
+      - key: TAVILY_API_KEY
         sync: false
       - key: GOOGLE_CLIENT_ID
         sync: false
       - key: GOOGLE_CLIENT_SECRET
         sync: false
       - key: GOOGLE_REDIRECT_URI
-        sync: false
+        value: https://hike-ai.onrender.com/auth/google/callback
+      - key: BACKEND_URL
+        value: https://hike-ai.onrender.com
       - key: PYTHON_VERSION
         value: "3.11.9"
-      - key: BACKEND_URL
-        fromService:
-          name: hike-ai
-          type: web
-          property: host
-
-databases:
-  - name: hike-db
-    databaseName: hike_ai
-    user: hike_user
-    plan: free
-    ipAllowList: []
+      - key: MAX_OUTPUT_TOKENS
+        value: "150"
+      - key: MAX_QUERY_LENGTH
+        value: "2000"
+      - key: FETCH_INTERVAL
+        value: "60"
