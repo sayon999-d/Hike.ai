@@ -481,7 +481,7 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     function bindEvents() {
       document.getElementById('loginBtn').addEventListener('click', handleLogin);
       document.getElementById('signupBtn').addEventListener('click', handleSignup);
-      document.getElementById('googleBtn').addEventListener('click', () => window.location.href='/auth/google/login');
+      document.getElementById('googleBtn').addEventListener('click', () => window.location.href='/auth/google');
       document.getElementById('chatInput').addEventListener('keypress', e => { if(e.key==='Enter') sendMessage(); });
       document.getElementById('loginPassword').addEventListener('keypress', e => { if(e.key==='Enter') handleLogin(); });
       document.getElementById('newProjectName').addEventListener('keypress', e => { if(e.key==='Enter') createProject(); });
