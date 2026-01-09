@@ -341,9 +341,9 @@ HTML_CONTENT = r"""<!DOCTYPE html>
           <div class="settings-section">
             <div class="settings-label">Theme</div>
             <div class="theme-btns">
-              <button class="theme-btn" onclick="setTheme('light')">Light</button>
-              <button class="theme-btn active" onclick="setTheme('dark')">Dark</button>
-              <button class="theme-btn" onclick="setTheme('system')">System</button>
+              <button class="theme-btn" onclick="setTheme('light', event)">Light</button>
+              <button class="theme-btn active" onclick="setTheme('dark', event)">Dark</button>
+              <button class="theme-btn" onclick="setTheme('system', event)">System</button>
             </div>
           </div>
           <div class="settings-section">
@@ -532,7 +532,10 @@ HTML_CONTENT = r"""<!DOCTYPE html>
         if(d.sources && d.sources.length > 0) {
           html += '<div style="margin-top:1rem;padding-top:0.75rem;border-top:1px solid var(--border);font-size:0.8rem;"><strong>Sources:</strong><ul style="margin:0.5rem 0 0 1rem;padding:0;">';
           d.sources.forEach(s => {
-            html += '<li style="margin:0.25rem 0;"><a href="'+escapeHtml(s.url)+'" target="_blank" style="color:var(--blue);text-decoration:none;">'+escapeHtml(s.title || s.url)+'</a></li>';
+            const safeUrl = sanitizeUrl(s.url);
+            if(safeUrl) {
+              html += '<li style="margin:0.25rem 0;"><a href="'+escapeHtml(safeUrl)+'" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:none;">'+escapeHtml(s.title || s.url)+'</a></li>';
+            }
           });
           html += '</ul></div>';
         }
@@ -550,6 +553,15 @@ HTML_CONTENT = r"""<!DOCTYPE html>
     function escapeHtml(text) {
       if(!text) return '';
       return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function sanitizeUrl(url) {
+      if(!url) return '';
+      try {
+        const parsed = new URL(url, window.location.origin);
+        if(parsed.protocol === 'http:' || parsed.protocol === 'https:') return url;
+        return '';
+      } catch(e) { return ''; }
     }
 
 
@@ -581,7 +593,35 @@ HTML_CONTENT = r"""<!DOCTYPE html>
 
     async function loadNews() {
       const grid=document.getElementById('newsGrid');
-      try { const r=await fetch('/api/news/latest'), articles=await r.json(); if(!articles||articles.length===0){grid.innerHTML='<p>No news.</p>';return;} grid.innerHTML='<div class="news-grid">'+articles.map(a=>'<div class="news-card" onclick="window.open(\''+a.url+'\',\'_blank\')"><div class="news-image" style="'+(a.urlToImage?'background-image:url(\''+a.urlToImage+'\')':'background:#374151')+'"></div><div class="news-content"><div class="news-title">'+a.title+'</div><div class="news-summary">'+(a.description||'')+'</div></div></div>').join('')+'</div>'; } catch(e){grid.innerHTML='<p style="color:#ef4444;">Failed.</p>';}
+      try {
+        const r=await fetch('/api/news/latest'), articles=await r.json();
+        if(!articles||articles.length===0){grid.innerHTML='<p>No news.</p>';return;}
+        grid.innerHTML='';
+        const newsGrid=document.createElement('div');
+        newsGrid.className='news-grid';
+        articles.forEach(a=>{
+          const safeUrl=sanitizeUrl(a.url);
+          const safeImageUrl=sanitizeUrl(a.urlToImage);
+          const card=document.createElement('div');
+          card.className='news-card';
+          if(safeUrl){card.style.cursor='pointer';card.addEventListener('click',()=>{const w=window.open(safeUrl,'_blank','noopener,noreferrer');if(w)w.opener=null;});}
+          const img=document.createElement('div');
+          img.className='news-image';
+          if(safeImageUrl){img.style.backgroundImage='url("'+safeImageUrl.replace(/"/g,'')+'")';}else{img.style.background='#374151';}
+          const content=document.createElement('div');
+          content.className='news-content';
+          const title=document.createElement('div');
+          title.className='news-title';
+          title.textContent=a.title||'';
+          const summary=document.createElement('div');
+          summary.className='news-summary';
+          summary.textContent=a.description||'';
+          content.appendChild(title);content.appendChild(summary);
+          card.appendChild(img);card.appendChild(content);
+          newsGrid.appendChild(card);
+        });
+        grid.appendChild(newsGrid);
+      } catch(e){grid.innerHTML='<p style="color:#c00;">Failed to load news.</p>';}
     }
 
     // Projects
@@ -659,7 +699,7 @@ HTML_CONTENT = r"""<!DOCTYPE html>
 
     // Settings
     function toggleSettings() { document.getElementById('settingsPanel').classList.toggle('hidden'); }
-    function setTheme(t) { state.theme=t; localStorage.setItem('theme',t); applyTheme(); document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); event.target.classList.add('active'); }
+    function setTheme(t, evt) { state.theme=t; localStorage.setItem('theme',t); applyTheme(); document.querySelectorAll('.theme-btn').forEach(b=>b.classList.remove('active')); if(evt && evt.target) evt.target.classList.add('active'); }
     function applyTheme() { document.body.classList.toggle('dark', state.theme==='dark'||(state.theme==='system'&&window.matchMedia('(prefers-color-scheme:dark)').matches)); }
     function setDefaultModel(m) { state.defaultModel=m; localStorage.setItem('defaultModel',m); }
     function setEmpathyModel(m) { state.empathyModel=m; localStorage.setItem('empathyModel',m); }
@@ -1998,7 +2038,15 @@ async def favicon():
 
 @app.get("/.well-known/{path:path}", include_in_schema=False)
 async def wellknown(path: str):
-    return Response(content="{}", media_type="application/json")
+    known_paths = {
+        "security.txt": ("Contact: security@hike.ai\nPreferred-Languages: en", "text/plain"),
+        "apple-app-site-association": ("{}", "application/json"),
+        "assetlinks.json": ("[]", "application/json"),
+    }
+    if path in known_paths:
+        content, media_type = known_paths[path]
+        return Response(content=content, media_type=media_type)
+    raise HTTPException(status_code=404, detail="Not found")
 
 @app.get("/", response_class=HTMLResponse)
 def landing(request: Request):
