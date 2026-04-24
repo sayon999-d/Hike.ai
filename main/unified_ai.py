@@ -48,7 +48,7 @@ except ImportError:
     SENTENCE_TRANSFORMERS_AVAILABLE = False
     SentenceTransformer = None
 
-from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Float
+from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime, Float, text
 from sqlalchemy.orm import sessionmaker, declarative_base, Session
 
 try:
@@ -98,6 +98,8 @@ load_dotenv(find_dotenv())
 SECRET_KEY = os.getenv("SECRET_KEY", "default-insecure-secret-key-do-not-use-in-prod")
 SESSION_SECRET = os.getenv("SESSION_SECRET", "default-session-secret")
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///unified_ai.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 IS_PRODUCTION = os.getenv("ENVIRONMENT", "development").lower() == "production"
 
@@ -719,7 +721,32 @@ HTML_CONTENT = r"""<!DOCTYPE html>
 </html>
 """
 
-engine = create_engine(DATABASE_URL)
+def _create_db_engine(url: str, retries: int = 3):
+    """Create DB engine with retry logic and SQLite fallback."""
+    for attempt in range(1, retries + 1):
+        try:
+            eng = create_engine(
+                url,
+                pool_pre_ping=True,
+                pool_recycle=300,
+                connect_args={} if "sqlite" in url else {"connect_timeout": 10},
+            )
+            # Test the connection
+            with eng.connect() as conn:
+                conn.execute(text("SELECT 1"))
+            logger.info(f"Database connected successfully on attempt {attempt}")
+            return eng
+        except Exception as e:
+            logger.warning(f"DB connection attempt {attempt}/{retries} failed: {e}")
+            if attempt < retries:
+                time.sleep(2 * attempt)  # Exponential backoff
+    
+    # Fallback to SQLite so the app can still start
+    fallback_url = "sqlite:///unified_ai_fallback.db"
+    logger.error(f"All DB connection attempts failed. Falling back to SQLite: {fallback_url}")
+    return create_engine(fallback_url)
+
+engine = _create_db_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -778,7 +805,18 @@ class DecisionRecord(Base):
     reflection = Column(Text, nullable=True)
     timestamp = Column(Float)
 
-Base.metadata.create_all(engine)
+try:
+    Base.metadata.create_all(engine)
+    logger.info("Database tables created/verified successfully")
+except Exception as e:
+    logger.error(f"Failed to create database tables: {e}")
+    # If using PostgreSQL and it failed, retry with SQLite fallback
+    if "sqlite" not in str(engine.url):
+        logger.warning("Retrying with SQLite fallback...")
+        engine = create_engine("sqlite:///unified_ai_fallback.db")
+        SessionLocal.configure(bind=engine)
+        Base.metadata.create_all(engine)
+        logger.info("SQLite fallback tables created successfully")
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -1242,7 +1280,6 @@ class DeterministicOrchestrator:
         logger.info("Deterministic Orchestrator initialized (no LLM dependencies)")
     
     def _check_circuit(self, agent: str) -> bool:
-        """Check if circuit breaker allows agent execution."""
         cb = self._circuit_breakers[agent]
         
         if cb["open"]:
@@ -1256,7 +1293,6 @@ class DeterministicOrchestrator:
         return True
     
     def _record_failure(self, agent: str):
-        """Record agent failure for circuit breaker."""
         cb = self._circuit_breakers[agent]
         cb["failures"] += 1
         cb["last_failure"] = time.time()
@@ -1266,17 +1302,10 @@ class DeterministicOrchestrator:
             logger.warning(f"Circuit breaker OPEN for {agent} after {cb['failures']} failures")
     
     def _record_success(self, agent: str):
-        """Record agent success, reset failure count."""
         cb = self._circuit_breakers[agent]
         cb["failures"] = 0
     
     def analyze_context(self, user_message: str, conversation_history: List[Dict] = None, user_id: str = "anonymous") -> Dict:
-        """
-        Analyze user message using deterministic rules.
-        Returns structured instructions for all systems.
-        
-        This method uses NO LLM calls - purely Python logic.
-        """
         intent_result = self.intent_classifier.classify_intent(user_message)
         intent = intent_result["intent"]
         intent_confidence = intent_result["confidence"]
@@ -1371,7 +1400,6 @@ class DeterministicOrchestrator:
         return intent == "news" or any(kw in msg_lower for kw in news_keywords)
     
     def _should_debate(self, intent: str, msg_lower: str, confidence: float, user_id: str) -> bool:
-        """Determine if multi-model debate is needed."""
         allowed, _ = self.budget_manager.check_budget(user_id, "debate")
         if not allowed:
             return False
@@ -1391,7 +1419,6 @@ class DeterministicOrchestrator:
         return False
     
     def _should_analyze_regret(self, intent: str, msg_lower: str, user_id: str) -> bool:
-        """Determine if regret analysis is needed."""
         allowed, _ = self.budget_manager.check_budget(user_id, "regret")
         if not allowed:
             return False
@@ -1407,7 +1434,6 @@ class DeterministicOrchestrator:
         return intent == "decision" or any(kw in msg_lower for kw in decision_keywords)
     
     def _extract_research_query(self, message: str, intent: str) -> str:
-        """Extract an optimized research query from the message."""
         fillers = ["please", "can you", "could you", "i want to know", "tell me", "help me"]
         query = message.lower()
         for filler in fillers:
@@ -1419,7 +1445,6 @@ class DeterministicOrchestrator:
         return query[:200] if query else message[:200]
     
     def _extract_news_keywords(self, message: str) -> str:
-        """Extract news-relevant keywords from message."""
         stopwords = {"the", "a", "an", "is", "are", "was", "were", "what", "about", "news", "latest", "tell", "me"}
         words = message.lower().split()
         keywords = [w.strip("?.,!") for w in words if w.lower() not in stopwords and len(w) > 2]
@@ -1427,7 +1452,6 @@ class DeterministicOrchestrator:
         return " ".join(keywords[:5])
     
     def _select_debate_providers(self, user_id: str) -> List[str]:
-        """Select available debate providers based on configuration and budget."""
         available_providers = []
         
         provider_configs = [
@@ -1449,7 +1473,6 @@ class DeterministicOrchestrator:
             return ["groq", "openrouter"]
     
     def _get_empathy_instruction(self, emotion: str, intent: str) -> str:
-        """Get empathy instruction based on emotion and intent."""
         instructions = {
             "sadness": "Respond with warmth and validation. Acknowledge their pain without minimizing it.",
             "anger": "Validate their frustration. Help them feel heard before offering any perspective.",
@@ -1469,7 +1492,6 @@ class DeterministicOrchestrator:
         return base
     
     def _get_synthesis_instruction(self, intent: str, has_research: bool, has_debate: bool, has_regret: bool) -> str:
-        """Generate instruction for synthesizing the final response."""
         parts = ["Create a helpful, conversational response that:"]
         
         parts.append("1. Directly addresses the user's message")
@@ -1496,10 +1518,6 @@ class DeterministicOrchestrator:
                            empathy_response: str = None,
                            regret_data: Dict = None,
                            user_id: str = "anonymous") -> str:
-        """
-        Synthesize all AI responses into a coherent final response.
-        Uses deterministic rules to combine responses - NO LLM for synthesis.
-        """
         intent = orchestration.get("intent", "casual")
         parts = []
         
@@ -1564,7 +1582,6 @@ class DeterministicOrchestrator:
         return result
     
     def get_orchestration_summary(self, orchestration: Dict) -> Dict:
-        """Get a human-readable summary of orchestration decisions."""
         return {
             "intent": orchestration.get("intent"),
             "confidence": orchestration.get("intent_confidence"),
@@ -1682,10 +1699,6 @@ class NewsSystem:
 news_system = NewsSystem()
 
 class EmpatheticSystem:
-    """
-    Empathetic AI system that uses the user-selected model.
-    Supports: Groq, OpenRouter, Bytez, Chutes (based on user settings)
-    """
     def __init__(self):
         self.providers = {
             "groq": {"url": "https://api.groq.com/openai/v1/chat/completions", "model": "llama-3.3-70b-versatile", "key": GROQ_API_KEY},
@@ -1992,17 +2005,15 @@ app.add_middleware(
     allow_headers=["Content-Type", "Authorization", "X-CSRF-Token"],
 )
 
-# Security: Only allow specific hosts in production
 ALLOWED_HOSTS = ["*"] if not IS_PRODUCTION else [
     "localhost", "127.0.0.1",
-    "hike-ai.onrender.com",  # Add your production domain
+    "hike-ai.onrender.com",
 ]
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=ALLOWED_HOSTS)
 app.add_middleware(SecurityMiddleware)
 app.add_middleware(GZipMiddleware, minimum_size=1000)
 app.add_middleware(SessionMiddleware, secret_key=SESSION_SECRET)
 
-# Security: Add security headers
 @app.middleware("http")
 async def add_security_headers(request: Request, call_next):
     response = await call_next(request)
@@ -2195,15 +2206,6 @@ class ChatMessage(BaseModel):
 
 @app.post("/api/chat")
 async def chat_endpoint(data: ChatMessage, db: Session = Depends(get_db), _ = Depends(verify_rate_limit)):
-    """
-    Orchestrated chat endpoint that coordinates all AI systems:
-    - Gemini: Analyzes context and orchestrates other AIs
-    - Tavily: Real-time research and data
-    - News: Relevant news from NewsAPI
-    - Debate: Multi-perspective analysis (Groq, OpenRouter, Bytez, Chutes - no Gemini)
-    - Empathy: User-selected model for empathetic response
-    - Regret: Decision analysis using selected models
-    """
     user = "anonymous"
     message = data.message
     
